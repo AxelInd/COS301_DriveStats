@@ -1,5 +1,5 @@
 Axel	 	: Documentation, Presentations
-Zander	: Programming
-Nick		: Programming
-Tim		: GUI, Unit Testing, Field Testing, Compliance 			  checking, Research
-William	: Unit Testing, Field Testing, Version Control, Unit 		  programming, Research
+Zander		: .NET Programming
+Nick		: Mobile Programming
+Tim		: Unit Testing, HTML, Field Testing, Compliance checking, Research
+William	: 	:GUI, Unit Testing, Field Testing, Version Control, Unit programming, Research
