@@ -1,2 +1,1 @@
-Stil testing this right now.   
-Guys do not mind this i am just having problems with my git contributions not showing so I am just testing if the problem is fixed
+Phone resolution: 1920x1080-pixel
