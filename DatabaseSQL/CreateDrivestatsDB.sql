@@ -13,6 +13,7 @@ Create TYPE tripData as
   speed int,
   recTime character varying(5),
   maxAcelerometer character varying(50)
+  
 );
 
 Create TABLE trips
@@ -30,6 +31,7 @@ CREATE TABLE friends
   ID serial NOT NULL,
   userID int references users(ID),
   friendID int references users(ID),
-  currentStatus status
+  currentStatus status,
+  CONSTRAINT "Friends_pkey" PRIMARY KEY (ID)
 );
 
