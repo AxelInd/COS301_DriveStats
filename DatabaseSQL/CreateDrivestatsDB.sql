@@ -12,8 +12,9 @@ Create TYPE tripData as
   longitude character varying(40),
   speed int,
   recTime character varying(5),
-  maxAcelerometer character varying(50)
-  
+  maxXAcelerometer double,
+  maxYAcelerometer double,
+  maxZAcelerometer double
 );
 
 Create TABLE trips
