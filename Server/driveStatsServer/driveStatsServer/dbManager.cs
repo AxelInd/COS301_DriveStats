@@ -21,6 +21,15 @@ namespace driveStatsServer
             mySession = mySessionfactory.OpenSession();
         }
 
+        
+        /**
+         * @return average score of all users
+         **/
+        public double getAverageScore() 
+        {
+            //to do 
+            return 5;
+        }
         public void addUser(User u)
         {
             try

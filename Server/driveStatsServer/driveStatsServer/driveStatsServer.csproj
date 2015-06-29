@@ -82,6 +82,7 @@
     <None Include="Service References\testRefrence\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </None>
     <Content Include="Styles\Site.css" />
     <Content Include="Default.aspx" />
@@ -89,7 +90,9 @@
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.1.js" />
     <Content Include="Scripts\jquery-1.4.1.min.js" />
-    <EmbeddedResource Include="User.hbm.xml" />
+    <EmbeddedResource Include="User.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -144,6 +147,7 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="friends.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -152,6 +156,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="scoreCard.cs" />
     <Compile Include="Service References\testRefrence\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -165,6 +170,7 @@
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
     <Compile Include="tripData.cs" />
+    <Compile Include="userTrip.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>

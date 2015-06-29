@@ -9,8 +9,8 @@
 
 Create TYPE tripData as
 (
-  latitude character varying(40),
-  longitude character varying(40),
+  latitude character varying(12),
+  longitude character varying(12),
   speed double,
   recTime character varying(5),
   maxXAcelerometer double,
@@ -23,8 +23,8 @@ Create TABLE trips
   ID serial NOT NULL,
   userID int references users(ID),
   tripDate character varying(40),
-  startLatitude character varying(40),
-  startLongitude character varying(40),
+  startLatitude character varying(11),
+  startLongitude character varying(11),
   recordedData tripData[],
   CONSTRAINT "Trips_pkey" PRIMARY KEY (ID)
 );
