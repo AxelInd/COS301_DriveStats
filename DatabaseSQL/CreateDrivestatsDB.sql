@@ -2,7 +2,8 @@
 (
   ID serial NOT NULL,
   email character varying(60) NOT NULL,
-  joindate character varying(50) NOT NULL,
+  joinDate character varying(50) NOT NULL,
+  averageScore real,
   CONSTRAINT "User_pkey" PRIMARY KEY (ID)
 );
 
@@ -10,7 +11,7 @@ Create TYPE tripData as
 (
   latitude character varying(40),
   longitude character varying(40),
-  speed int,
+  speed double,
   recTime character varying(5),
   maxXAcelerometer double,
   maxYAcelerometer double,
@@ -21,6 +22,9 @@ Create TABLE trips
 (
   ID serial NOT NULL,
   userID int references users(ID),
+  tripDate character varying(40),
+  startLatitude character varying(40),
+  startLongitude character varying(40),
   recordedData tripData[],
   CONSTRAINT "Trips_pkey" PRIMARY KEY (ID)
 );

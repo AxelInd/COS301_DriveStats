@@ -1,0 +1,11 @@
+c:\users\zander\documents\visual studio 2010\Projects\driveStatsServer\driveStatsServer\bin\driveStatsServer.dll
+c:\users\zander\documents\visual studio 2010\Projects\driveStatsServer\driveStatsServer\bin\driveStatsServer.pdb
+c:\users\zander\documents\visual studio 2010\Projects\driveStatsServer\driveStatsServer\bin\Iesi.Collections.dll
+c:\users\zander\documents\visual studio 2010\Projects\driveStatsServer\driveStatsServer\bin\Mono.Security.dll
+c:\users\zander\documents\visual studio 2010\Projects\driveStatsServer\driveStatsServer\bin\NHibernate.dll
+c:\users\zander\documents\visual studio 2010\Projects\driveStatsServer\driveStatsServer\bin\Npgsql.dll
+c:\users\zander\documents\visual studio 2010\Projects\driveStatsServer\driveStatsServer\bin\Npgsql.EntityFramework.dll
+c:\users\zander\documents\visual studio 2010\Projects\driveStatsServer\driveStatsServer\bin\Npgsql.EntityFrameworkLegacy.dll
+c:\users\zander\documents\visual studio 2010\Projects\driveStatsServer\driveStatsServer\obj\Debug\driveStatsServer.csprojResolveAssemblyReference.cache
+c:\users\zander\documents\visual studio 2010\Projects\driveStatsServer\driveStatsServer\obj\Debug\driveStatsServer.dll
+c:\users\zander\documents\visual studio 2010\Projects\driveStatsServer\driveStatsServer\obj\Debug\driveStatsServer.pdb
