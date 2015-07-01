@@ -1,0 +1,25 @@
+Discussion
+
+* Issues related to ORM mapping of arrays
+* Getting accelerometer data outside of normal ranges
+* How to nromalise algorithm against database
+
+
+Decisions
+* Dropped ORM mapping and arrays, normalised database instead.
+* No build environment is necessary (server side) as Visual Studio is the only functional C# platform
+* Branch creation for each function
+
+
+
+Ongoing Issues
+* Getting full team together
+* Github URL appears to disappear spontaneously
+* No viable build environment
+* Trouble getting speed limits for roads
+* Google login
+
+
+
+Member of the day
+Zander
