@@ -1,5 +1,5 @@
-Axel	 	: Documentation, Presentations
-Zander		: .NET Programming
-Nick		: Mobile Programming
+Axel	 	: Documentation, Presentations, Algorithm, Scrum Master
+Zander	: Server side programming
+Nick		: Android programming
 Tim		: Unit Testing, HTML, Field Testing, Compliance checking, Research
-William	: 	:GUI, Unit Testing, Field Testing, Version Control, Unit programming, Research
+William	: GUI, Unit Testing, Field Testing, Unit programming, Research, Android programming

@@ -1,2 +1,11 @@
-May 19 : first meeting
-May 29 : first demonstration 15:30
+May 19	 first meeting
+May 29	first demonstration 15:30
+June 28	forst sprint commences
+July 4	First sprint ends
+July 5	Second sprint commences
+July 11	Second sprint ends
+July 12	third sprint commences
+July 18	third sprint ends
+July 20	Post-testing phase 1 begins
+July 24	Second university demo
+July 30	Post-testing phase 1 ends
