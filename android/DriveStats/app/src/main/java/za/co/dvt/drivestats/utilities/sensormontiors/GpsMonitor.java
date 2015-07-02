@@ -9,33 +9,50 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
+import za.co.dvt.drivestats.utilities.Constants;
 
 /**
  * Created by Nicholas on 2015-07-01.
  */
 public class GpsMonitor implements Monitor, LocationListener {
-    private LocationManager manager;
 
-    private Sensor gps;
+    private final LocationManager locationManager;
 
-    private SensorState state = SensorState.getInstance();
+    // The minimum distance to change Updates in meters
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
+
+    // The minimum time between updates in milliseconds
+    private static final long MIN_TIME_BW_UPDATES = 1; // 1 minute
 
     public GpsMonitor(Context context) {
-        manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            //TODO: what happens if the location service is off? Request it to be on
-        }
-        if (!manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            //TODO: what happens if the network service is off? Request it to be on
-        } else {
-
-        }
-
+        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES
+                , MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
     }
 
     @Override
     public void stop() {
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 
@@ -46,26 +63,6 @@ public class GpsMonitor implements Monitor, LocationListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        //TODO: What happened with this method?
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
 
     }
 }

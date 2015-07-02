@@ -50,13 +50,13 @@ public class TripActivity extends AppCompatActivity {
 
     @OnClick(R.id.settings)
     public void settingsClick() {
-        //TODO: confirm this is working
         startActivity(new Intent(this, SettingsActivity.class));
     }
 
     @Override
     protected void onStop() {
         //TODO: Confirm this happens when it has to
+        super.onStop();
         OfflineUtilities.writeSettings();
     }
 }

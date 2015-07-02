@@ -11,7 +11,7 @@ public class Constants {
 
     public static final String offlineFilePath = "";
 
-    public static final int sensorSleepTime = 0;
+    public static final int gpsSleepTime = 1000;
 
     public static final int uploadSleepTime = 0;
 }
