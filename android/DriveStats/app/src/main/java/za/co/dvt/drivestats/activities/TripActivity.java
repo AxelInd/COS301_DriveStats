@@ -44,7 +44,7 @@ public class TripActivity extends AppCompatActivity {
     @OnClick(R.id.toggleTrip)
     public void toggleTrip(View view) {
         //TODO: confirm this is working
-        if (((ToggleButton) view).isChecked()) manager.start();
+        if (((ToggleButton) view).isChecked()) manager.start(getApplicationContext());
         else manager.stop();
     }
 

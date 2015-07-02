@@ -18,8 +18,7 @@
         android:layout_centerHorizontal="true"
         android:checked="false"
         android:textOff="@string/start_trip"
-        android:textOn="@string/stop_trip"
-        android:maxWidth="iddp" />
+        android:textOn="@string/stop_trip" />
 
     <Button
         android:layout_width="wrap_content"

@@ -1,5 +1,6 @@
 package za.co.dvt.drivestats.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,7 +39,11 @@ public class SignInActivity extends AppCompatActivity {
 
     @OnClick(R.id.signInUsingGoogle)
     public void signInUsingGoogle() {
-        if (checkOffline()) singUp();
+        if (!checkOffline()) {
+            if (!singUp()) return; //TODO: What happens if you cannot sign up
+        }
+        startActivity(new Intent(this, TripActivity.class));
+
     }
 
     private boolean checkOffline() {
