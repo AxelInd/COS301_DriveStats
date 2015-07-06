@@ -1,1 +1,2 @@
 Phone resolution: 1920x1080-pixel
+Just testing commiting on windows bash for git ignore this.:;:
