@@ -7,19 +7,11 @@ using System.Web.UI.WebControls;
 
 namespace driveStatsServer
 {
-    public partial class _Default : System.Web.UI.Page
+    public partial class _Default : Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
 
-        }
-
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            mobileClientConnection temp = new mobileClientConnection();
-
-            
-            Label1.Text = temp.login("temp").ToString();
         }
     }
 }

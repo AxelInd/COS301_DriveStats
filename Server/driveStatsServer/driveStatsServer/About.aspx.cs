@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace driveStatsServer
 {
-    public partial class About : System.Web.UI.Page
+    public partial class About : Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

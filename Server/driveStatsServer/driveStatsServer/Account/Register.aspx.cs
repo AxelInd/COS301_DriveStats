@@ -5,12 +5,12 @@ using System.Web;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Microsoft.AspNet.Membership.OpenAuth;
 
 namespace driveStatsServer.Account
 {
-    public partial class Register : System.Web.UI.Page
+    public partial class Register : Page
     {
-
         protected void Page_Load(object sender, EventArgs e)
         {
             RegisterUser.ContinueDestinationPageUrl = Request.QueryString["ReturnUrl"];
@@ -18,15 +18,14 @@ namespace driveStatsServer.Account
 
         protected void RegisterUser_CreatedUser(object sender, EventArgs e)
         {
-            FormsAuthentication.SetAuthCookie(RegisterUser.UserName, false /* createPersistentCookie */);
+            FormsAuthentication.SetAuthCookie(RegisterUser.UserName, createPersistentCookie: false);
 
             string continueUrl = RegisterUser.ContinueDestinationPageUrl;
-            if (String.IsNullOrEmpty(continueUrl))
+            if (!OpenAuth.IsLocalUrl(continueUrl))
             {
                 continueUrl = "~/";
             }
             Response.Redirect(continueUrl);
         }
-
     }
 }

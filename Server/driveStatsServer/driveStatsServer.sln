@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "driveStatsServer", "driveStatsServer\driveStatsServer.csproj", "{9CF08AA7-06B0-466A-8E46-A70DCB1DD456}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "driveStatsServer", "driveStatsServer\driveStatsServer.csproj", "{7F3B39BC-79AC-4AA0-B977-08AF7D7B157E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9CF08AA7-06B0-466A-8E46-A70DCB1DD456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9CF08AA7-06B0-466A-8E46-A70DCB1DD456}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9CF08AA7-06B0-466A-8E46-A70DCB1DD456}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9CF08AA7-06B0-466A-8E46-A70DCB1DD456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F3B39BC-79AC-4AA0-B977-08AF7D7B157E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F3B39BC-79AC-4AA0-B977-08AF7D7B157E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F3B39BC-79AC-4AA0-B977-08AF7D7B157E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F3B39BC-79AC-4AA0-B977-08AF7D7B157E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

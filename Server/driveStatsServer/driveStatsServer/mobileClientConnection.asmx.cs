@@ -13,8 +13,7 @@ namespace driveStatsServer
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
     [System.Web.Script.Services.ScriptService]
-    // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
-    // 
+    
     public class mobileClientConnection : System.Web.Services.WebService
     {
 
@@ -23,16 +22,21 @@ namespace driveStatsServer
         {
             return "Hello World";
         }
-        [WebMethod]
-        public Boolean login(string email)
-        {
-            dbManager temp = new dbManager();
 
-            User u = new User();
-            u.email = "new@test.temp";
-            u.joinDate = DateTime.Now.ToShortDateString();
-            temp.addUser(u);
-            return true;
+        [WebMethod]
+        public string login(string email)
+        {
+            dbManager db = new dbManager();
+            return db.getUserID(email);
         }
+
+        [WebMethod]
+        public string scoreTest()
+        {
+            dbManager db = new dbManager();
+            return db.getAverageScore().ToString();
+        }
+
+        
     }
 }

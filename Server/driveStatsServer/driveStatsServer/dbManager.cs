@@ -2,48 +2,98 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using NHibernate;
-using NHibernate.Cfg;
 
 namespace driveStatsServer
 {
     public class dbManager
     {
-        private Configuration myConfig;
-        private ISessionFactory mySessionfactory;
-        private ISession mySession;
-
-        public dbManager()
+        public double getAverageScore()
         {
-            myConfig = new Configuration();
-            myConfig.Configure();
-            mySessionfactory = myConfig.BuildSessionFactory();
-            mySession = mySessionfactory.OpenSession();
+            double score = 0;
+            using (var context = new driveStatsEntities())
+            {
+                score = (double) context.users.Select(u => u.averageScore).Average();
+            }
+            return score;
         }
 
-        
-        /**
-         * @return average score of all users
-         **/
-        public double getAverageScore() 
+        public string getUserID (string email)
         {
-            //to do 
-            return 5;
+            string id = "-1";
+            using (var context = new driveStatsEntities())
+            {
+                var query = context.users.Where(s => s.email == email);
+                var dbuser = query.FirstOrDefault<user>();
+                if (dbuser == null)
+                {
+                    addUser(email);
+                    var queryNew = context.users.Where(s => s.email == email);
+                    var dbuserNew = query.FirstOrDefault<user>();
+                    id = dbuserNew.ID.ToString();
+                }
+                else
+                {
+                    id = dbuser.ID.ToString();
+                }
+            }
+            return id;
         }
-        public void addUser(User u)
+
+        private void addUser(string email)
+        {
+            user newUser = new user();
+            newUser.email = email;
+            newUser.joinDate = DateTime.Now.ToShortDateString();
+            newUser.averageScore = 0;
+            using (var context = new driveStatsEntities())
+            {
+                context.users.Add(newUser);
+                context.SaveChanges();
+            }
+        }
+
+        public void addUserTrip(trip ut)
+        {
+            using (var context = new driveStatsEntities())
+            {
+                context.trips.Add(ut);
+                context.SaveChanges();
+            }
+        }
+
+        public trip getUserTrip(int id)
         {
             try
             {
-                using (mySession.BeginTransaction())
+                using (var context = new driveStatsEntities())
                 {
-                    mySession.Save(u);
-                    mySession.Transaction.Commit();
+                    var query = context.trips.Where(t => t.ID == id);
+                    var result = query.First();
+                    return result;
                 }
-
             }
-            finally
+            catch (Exception ex)
             {
-                mySession.Close();
+                return null;
+            }
+            
+        }
+
+        public void inserTripData(tripData td)
+        {
+            using (var context = new driveStatsEntities())
+            {
+                context.tripDatas.Add(td);
+                context.SaveChanges();
+            }
+        }
+
+        public factor getFactors()
+        {
+            using (var context = new driveStatsEntities())
+            {
+                var query = context.factors.First();
+                return query;
             }
         }
     }
