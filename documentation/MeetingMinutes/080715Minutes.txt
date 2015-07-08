@@ -1,0 +1,4 @@
+Very important changes and executive decisions made
+	Database changed to Microsoft's SQL server (R2) 2008
+	ORM has been changed to Entity Framework
+	IDE Changed to Visual Studio 2012
