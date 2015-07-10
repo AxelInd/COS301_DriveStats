@@ -2,6 +2,8 @@ package za.co.dvt.drivestats.utilities;
 
 import java.util.Properties;
 
+import za.co.dvt.drivestats.threadmanagment.ThreadManager;
+
 /**
  * Created by Nicholas on 2015-07-01.
  */
@@ -23,6 +25,8 @@ public class Settings {
 
     public void setWifiOnlyMode(boolean wifiOnlyMode) {
         this.wifiOnlyMode = wifiOnlyMode;
+        if (wifiOnlyMode) ThreadManager.getInstance().runUploadThread();
+        else ThreadManager.getInstance().stopUploadThread();
     }
 
     public static Settings getInstance() {
@@ -36,6 +40,6 @@ public class Settings {
     }
 
     public void initSettings(Properties properties) {
-        wifiOnlyMode = properties.getProperty(WIFI_ONLY_MODE, "T").equals("T") ? true : false;
+        wifiOnlyMode = properties.getProperty(WIFI_ONLY_MODE, "T").equals("T");
     }
 }

@@ -7,11 +7,11 @@ public class Constants {
 
     //TODO: init all the constants
 
-    public static final String settingsFilePath = "";
+    public static final String SETTINGS_FILE_PATH = "";
 
-    public static final String offlineFilePath = "";
+    public static final String OFFLINE_FILE_PATH = "";
 
-    public static final int gpsSleepTime = 1000;
+    public static final int OFFLINE_WRITE_INTERVAL = 1000;
 
-    public static final int uploadSleepTime = 0;
+    public static final int UPLOAD_INTERVAL = 3000;
 }

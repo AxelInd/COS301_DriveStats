@@ -5,21 +5,21 @@ package za.co.dvt.drivestats.threadmanagment.sensorthread;
  */
 public class SensorState {
 
-    private Float maxXDeflection;
+    private Float maxXDeflection = new Float(0);
 
-    private Float maxYDeflection;
+    private Float maxYDeflection = new Float(0);
 
-    private Float maxZDeflection;
+    private Float maxZDeflection = new Float(0);
 
     private double maxSpeed;
 
-    private String location;
+    private double[] location;
 
-    private Boolean xLock = new Boolean(true);
-    private Boolean yLock = new Boolean(true);
-    private Boolean zLock = new Boolean(true);
-    private Boolean speedLock = new Boolean(true);
-    private Boolean locationLock = new Boolean(true);
+    private byte[] xLock = new byte[0];
+    private byte[] yLock = new byte[0];
+    private byte[] zLock = new byte[0];
+    private byte[] speedLock = new byte[0];
+    private byte[] locationLock = new byte[0];
 
     private static final SensorState Instance = new SensorState();
 
@@ -71,20 +71,28 @@ public class SensorState {
         }
     }
 
-    public double getMaxSpeed() {
-        return maxSpeed;
+    public double getSpeed() {
+        synchronized (speedLock) {
+            return maxSpeed;
+        }
     }
 
-    public void setMaxSpeed(double maxSpeed) {
-        this.maxSpeed = maxSpeed;
+    public void setSpeed(double maxSpeed) {
+        synchronized (speedLock) {
+            this.maxSpeed = maxSpeed;
+        }
     }
 
-    public String getLocation() {
-        //TODO: reformat the location to conform with standards
-        return location;
+    public double[] getLocation() {
+        synchronized (locationLock) {
+            //TODO: reformat the location to conform with standards
+            return location;
+        }
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLocation(double... location) {
+        synchronized (locationLock) {
+            this.location = location;
+        }
     }
 }

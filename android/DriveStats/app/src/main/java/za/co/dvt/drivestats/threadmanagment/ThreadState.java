@@ -7,18 +7,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ThreadState {
 
-    private AtomicBoolean running = new AtomicBoolean(false);
+    private static final AtomicBoolean running = new AtomicBoolean(false);
 
-    public boolean isRunning() {
+    public static boolean isRunning() {
         return running.get();
     }
 
-    public void start() {
-        running.set(true);
+    public static boolean tryStart() {
+        return running.compareAndSet(false, true);
     }
 
-    public void stop() {
-        running.set(false);
+    public static boolean tryStop() {
+        return running.compareAndSet(true, false);
     }
 
 }

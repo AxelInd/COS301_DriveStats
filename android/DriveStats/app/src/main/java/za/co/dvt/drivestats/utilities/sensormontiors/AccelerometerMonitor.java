@@ -3,15 +3,18 @@ package za.co.dvt.drivestats.utilities.sensormontiors;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import za.co.dvt.drivestats.threadmanagment.exceptions.AccelerometerServiceUnavailableException;
+import za.co.dvt.drivestats.threadmanagment.exceptions.MonitorException;
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
 
 /**
  * Created by Nicholas on 2015-07-01.
  */
 public class AccelerometerMonitor
-        implements Monitor {
+        implements Monitor, SensorEventListener {
 
     private SensorManager manager;
 
@@ -22,7 +25,7 @@ public class AccelerometerMonitor
     public AccelerometerMonitor(Context context) {
         manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         accelerometer = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        if (accelerometer == null) throw new RuntimeException("SHIT"); //TODO: Handle what happens when they don't have accelerometer
+        if (accelerometer == null) throw new AccelerometerServiceUnavailableException("Unable to access accelerometer.");
         else manager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 

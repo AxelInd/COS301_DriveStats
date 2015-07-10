@@ -2,13 +2,10 @@ package za.co.dvt.drivestats.utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.Properties;
 
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
@@ -21,7 +18,7 @@ public class OfflineUtilities {
     public static void readSettings() {
         InputStream stream = null;
         try {
-             stream = new FileInputStream(new File(Constants.settingsFilePath));
+             stream = new FileInputStream(new File(Constants.SETTINGS_FILE_PATH));
             Properties properties = new Properties();
             properties.load(stream);
             Settings.getInstance().initSettings(properties);
@@ -42,7 +39,7 @@ public class OfflineUtilities {
         OutputStream stream = null;
         try {
             Properties properties = Settings.getInstance().toProperty();
-            stream = new FileOutputStream(new File(Constants.settingsFilePath));
+            stream = new FileOutputStream(new File(Constants.SETTINGS_FILE_PATH));
             properties.store(stream, "");
         } catch (IOException e) {
                 // TODO: handle IOException
