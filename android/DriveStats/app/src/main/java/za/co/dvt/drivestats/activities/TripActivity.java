@@ -7,9 +7,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -19,7 +20,6 @@ import za.co.dvt.drivestats.threadmanagment.ThreadManager;
 import za.co.dvt.drivestats.threadmanagment.ThreadState;
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
 import za.co.dvt.drivestats.utilities.OfflineUtilities;
-import za.co.dvt.drivestats.utilities.Settings;
 
 
 public class TripActivity extends AppCompatActivity {
@@ -69,7 +69,11 @@ public class TripActivity extends AppCompatActivity {
     private SensorState state = SensorState.getInstance();
 
     @OnClick(R.id.refresh)
-    public void refresh() {
+    public void refreshClick(View view) {
+        runner();
+    }
+
+    private void runner() {
         runningText.setText(ThreadState.isRunning() ? "Running" : "Not Running");
         if (ThreadState.isRunning()) {
             xMotionText.setText(Float.toString(state.getMaxXDeflection()));

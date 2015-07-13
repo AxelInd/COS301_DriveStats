@@ -27,16 +27,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Refresh"
-        android:id="@+id/refresh"
-        android:minWidth="200dp"
-        android:minHeight="80dp"
-        android:layout_above="@+id/settings"
-        android:layout_centerHorizontal="true" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,5 +68,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/speed"
         android:layout_below="@+id/location"
+        android:layout_centerHorizontal="true" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New ToggleButton"
+        android:id="@+id/refresh"
+        android:layout_above="@+id/settings"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

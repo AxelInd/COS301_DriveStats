@@ -11,9 +11,9 @@ public class SensorState {
 
     private Float maxZDeflection = new Float(0);
 
-    private double maxSpeed;
+    private double maxSpeed = 0;
 
-    private double[] location;
+    private double[] location = {0, 0};
 
     private byte[] xLock = new byte[0];
     private byte[] yLock = new byte[0];
@@ -34,8 +34,8 @@ public class SensorState {
     }
 
     public float getMaxXDeflection() {
+        float value = maxXDeflection;
         synchronized (xLock) {
-            float value = maxXDeflection;
             maxXDeflection = 0f;
             return value;
         }
@@ -48,8 +48,10 @@ public class SensorState {
     }
 
     public float getMaxYDeflection() {
+        float max = maxYDeflection;
         synchronized (yLock) {
-            return maxYDeflection;
+            maxYDeflection = 0f;
+            return max;
         }
     }
 
@@ -60,8 +62,10 @@ public class SensorState {
     }
 
     public float getMaxZDeflection() {
+        float max = maxZDeflection;
         synchronized (zLock) {
-            return maxZDeflection;
+            maxZDeflection = 0f;
+            return max;
         }
     }
 
