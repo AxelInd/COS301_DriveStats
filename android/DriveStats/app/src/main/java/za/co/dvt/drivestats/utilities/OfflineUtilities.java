@@ -1,19 +1,59 @@
 package za.co.dvt.drivestats.utilities;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
-
-import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
 
 /**
  * Created by Nicholas on 2015-06-29.
  */
 public class OfflineUtilities {
+
+
+    public synchronized static void writeToOfflineStorage(FileOutputStream writer, String line) {
+        try {
+            writer.write(line.getBytes());
+        } catch (IOException e) {
+            //TODO: Handle IO exception
+        }
+    }
+
+    public synchronized static List<String> readFromOfflineStorage(FileInputStream file) {
+//        BufferedReader reader = null;
+//        try {
+//            reader = new BufferedReader(new FileReader(file));
+//            String line;
+//            List<String> stateList = new ArrayList<>();
+//            while((line = reader.readLine()) != null) {
+//                stateList.add(line);
+//            }
+//            return stateList;
+//        } catch (IOException e) {
+//            //TODO: Handle exception
+//            e.printStackTrace();
+//        } finally {
+//            if (reader != null) try {
+//                reader.close();
+//            } catch (IOException e) {
+//                //TODO: Handle exception
+//                e.printStackTrace();
+//            }
+//        }
+        //TODO: read byte array into string array and see how that works
+        return null;
+    }
 
     public static void readSettings() {
         InputStream stream = null;
@@ -57,15 +97,6 @@ public class OfflineUtilities {
     public static boolean getUserProfile() {
         //TODO: update the user profile and return true or return false if there is no offline user profile
         return true;
-    }
-
-    public static void writeToFile(SensorState sensorState) {
-        //TODO: Write the sate to the file system using the path on the constants class
-    }
-
-    public static String readFile() {
-        //TODO: Read the file contents and return the string value of the contents
-        return "";
     }
 
 }

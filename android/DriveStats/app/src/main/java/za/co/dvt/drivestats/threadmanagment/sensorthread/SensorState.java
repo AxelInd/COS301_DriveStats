@@ -1,8 +1,6 @@
 package za.co.dvt.drivestats.threadmanagment.sensorthread;
 
-/**
- * Created by Nicholas on 2015-06-29.
- */
+
 public class SensorState {
 
     private Float maxXDeflection = new Float(0);
@@ -77,6 +75,7 @@ public class SensorState {
 
     public double getSpeed() {
         synchronized (speedLock) {
+            //TODO: Convert from M/s to KPH
             return maxSpeed;
         }
     }

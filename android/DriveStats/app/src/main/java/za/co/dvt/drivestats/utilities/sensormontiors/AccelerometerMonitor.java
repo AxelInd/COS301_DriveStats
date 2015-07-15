@@ -6,6 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import za.co.dvt.drivestats.threadmanagment.exceptions.AccelerometerServiceUnavailableException;
 import za.co.dvt.drivestats.threadmanagment.exceptions.MonitorException;
@@ -23,7 +24,10 @@ public class AccelerometerMonitor
 
     private SensorState state = SensorState.getInstance();
 
+    private final Context context;
+
     public AccelerometerMonitor(Context context) {
+        this.context = context;
         manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         accelerometer = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (accelerometer == null) throw new AccelerometerServiceUnavailableException("Unable to access accelerometer.");

@@ -11,7 +11,10 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
+import android.view.WindowManager;
 
+import za.co.dvt.drivestats.activities.TripActivity;
 import za.co.dvt.drivestats.threadmanagment.exceptions.LocationServiceUnavailableException;
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
 
@@ -35,46 +38,8 @@ public class GpsMonitor implements Monitor, LocationListener {
     public GpsMonitor(Context context) {
         this.context = context;
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        if (canUseGpsService()) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES
-                    , MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-        }
-    }
-
-    private boolean canUseGpsService() {
-        if (!resourcesAvailable()) {
-            askNicely();
-            if (!resourcesAvailable()) {
-                throw new LocationServiceUnavailableException("Cannot track users location");
-            }
-        }
-        return true;
-    }
-
-    private boolean resourcesAvailable() {
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-    }
-
-    private void askNicely() {
-        String title = "";
-        String message = "";
-        AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        alert.setTitle(title);
-        alert.setMessage(message);
-
-        alert.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-            }
-        });
-
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES
+                , MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
     }
 
     @Override
@@ -89,15 +54,17 @@ public class GpsMonitor implements Monitor, LocationListener {
         //TODO: Make sure this is the right way around
         state.setLocation(location.getLatitude(), location.getLongitude());
         state.setSpeed(location.getSpeed());
+        Log.d("Testing", "Location: " + location.getLatitude() + ", " + location.getLongitude());
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        if(provider.equals(LocationManager.GPS_PROVIDER)) {
-            askNicely();
-            if (!resourcesAvailable()) {
-                throw new LocationServiceUnavailableException("GPS service has been switched off");
-            }
+        if (provider.equals(LocationManager.GPS_PROVIDER)) {
+//            askNicely();
+            //TODO: If the GPS is turned off during the trip?
+//            if (!resourcesAvailable()) {
+//                throw new LocationServiceUnavailableException("GPS service has been switched off");
+//            }
         }
     }
 

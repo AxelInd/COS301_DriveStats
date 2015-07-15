@@ -16,7 +16,7 @@ import za.co.dvt.drivestats.utilities.UserProfile;
 
 
 public class SignInActivity extends AppCompatActivity {
-//    private static final int STATE_DEFAULT = 0;
+    //    private static final int STATE_DEFAULT = 0;
 //    private static final int STATE_SIGN_IN = 1;
 //    private static final int STATE_IN_PROGRESS = 2;
 //
@@ -95,6 +95,9 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
+        if (checkOffline()) {
+            startActivity(new Intent(this, TripActivity.class));
+        }
     }
 
 //    private GoogleApiClient buildGoogleApiClient() {
@@ -131,11 +134,8 @@ public class SignInActivity extends AppCompatActivity {
 
     @OnClick(R.id.signInUsingGoogle)
     public void signInUsingGoogle() {
-        if (!checkOffline()) {
-            if (!singUp()) return; //TODO: What happens if you cannot sign up
-        }
-        startActivity(new Intent(this, TripActivity.class));
-
+        if (!singUp()) this.finish(); //TODO: What happens if you cannot sign up
+        else this.finish();
     }
 
     private boolean checkOffline() {

@@ -36,7 +36,6 @@ public class ThreadManager {
         //TODO: Create and launch the sensor monitoring thread
         try {
             monitors.add(SensorUtilities.getAccelerometerMonitor(context));
-            Log.d("Testing", "Accelerometers running");
             monitors.add(SensorUtilities.getGpsMonitor(context));
             monitors.add(SensorUtilities.getOfflineWriter());
         } catch (LocationServiceUnavailableException e) {
