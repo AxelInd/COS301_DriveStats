@@ -1,21 +1,12 @@
 package za.co.dvt.drivestats.utilities.sensormontiors;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
-import android.view.WindowManager;
 
-import za.co.dvt.drivestats.activities.TripActivity;
-import za.co.dvt.drivestats.threadmanagment.exceptions.LocationServiceUnavailableException;
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
 
 /**
@@ -54,6 +45,7 @@ public class GpsMonitor implements Monitor, LocationListener {
         //TODO: Make sure this is the right way around
         state.setLocation(location.getLatitude(), location.getLongitude());
         state.setSpeed(location.getSpeed());
+
         Log.d("Testing", "Location: " + location.getLatitude() + ", " + location.getLongitude());
     }
 

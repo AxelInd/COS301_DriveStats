@@ -37,7 +37,7 @@ public class ThreadManager {
         try {
             monitors.add(SensorUtilities.getAccelerometerMonitor(context));
             monitors.add(SensorUtilities.getGpsMonitor(context));
-            monitors.add(SensorUtilities.getOfflineWriter());
+            monitors.add(SensorUtilities.getOfflineWriter(context));
         } catch (LocationServiceUnavailableException e) {
             //TODO: User isn't setting GPS to be on?? Show message or something
             Log.d("Exception", "This happened: " + e.getMessage());

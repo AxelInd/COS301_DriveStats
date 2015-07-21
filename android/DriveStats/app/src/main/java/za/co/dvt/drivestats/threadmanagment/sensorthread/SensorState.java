@@ -3,99 +3,79 @@ package za.co.dvt.drivestats.threadmanagment.sensorthread;
 
 public class SensorState {
 
-    private Float maxXDeflection = new Float(0);
+    private volatile float maxXDeflection = 0f;
 
-    private Float maxYDeflection = new Float(0);
+    private volatile float maxYDeflection = 0f;
 
-    private Float maxZDeflection = new Float(0);
+    private volatile float maxZDeflection = 0f;
 
-    private double maxSpeed = 0;
+    private volatile double maxSpeed = 0d;
 
-    private double[] location = {0, 0};
-
-    private byte[] xLock = new byte[0];
-    private byte[] yLock = new byte[0];
-    private byte[] zLock = new byte[0];
-    private byte[] speedLock = new byte[0];
-    private byte[] locationLock = new byte[0];
+    private volatile double[] location = {0d, 0d};
 
     private static final SensorState Instance = new SensorState();
 
-    private SensorState() {}
+    private SensorState() {
+    }
 
     public static SensorState getInstance() {
         return Instance;
     }
 
     private float maxDeflection(float current, float compare) {
-        return Math.max(Math.abs(current), Math.abs(compare));
+        if (Math.abs(current) > Math.abs(compare)) return current;
+        else return compare;
     }
 
-    public float getMaxXDeflection() {
-        float value = maxXDeflection;
-        synchronized (xLock) {
-            maxXDeflection = 0f;
-            return value;
-        }
+    public float getCorrectedMaxXDeflection() {
+        float latestReading = roundAccelerometerTwoDecimals(maxXDeflection);
+        maxXDeflection = 0f;
+        return latestReading;
     }
 
     public void setMaxXDeflection(float maxXDeflection) {
-        synchronized (xLock) {
-            this.maxXDeflection = maxDeflection(this.maxXDeflection, maxXDeflection);
-        }
+        this.maxXDeflection = maxDeflection(this.maxXDeflection, maxXDeflection);
     }
 
-    public float getMaxYDeflection() {
-        float max = maxYDeflection;
-        synchronized (yLock) {
-            maxYDeflection = 0f;
-            return max;
-        }
+    public float getCorrectedMaxYDeflection() {
+        float latestReading = roundAccelerometerTwoDecimals(maxYDeflection);
+        maxYDeflection = 0f;
+        return latestReading;
     }
 
     public void setMaxYDeflection(float maxYDeflection) {
-        synchronized (yLock) {
-            this.maxYDeflection = maxDeflection(this.maxYDeflection, maxYDeflection);
-        }
+        this.maxYDeflection = maxDeflection(this.maxYDeflection, maxYDeflection);
     }
 
-    public float getMaxZDeflection() {
-        float max = maxZDeflection;
-        synchronized (zLock) {
-            maxZDeflection = 0f;
-            return max;
-        }
+    public float getCorrectedMaxZDeflection() {
+        float latestReading = roundAccelerometerTwoDecimals(maxZDeflection);
+        maxZDeflection = 0f;
+        return latestReading;
     }
 
     public void setMaxZDeflection(float maxZDeflection) {
-        synchronized (zLock) {
-            this.maxZDeflection = maxDeflection(this.maxZDeflection, maxZDeflection);
-        }
+        this.maxZDeflection = maxDeflection(this.maxZDeflection, maxZDeflection);
+    }
+
+    private float roundAccelerometerTwoDecimals(float number) {
+        return Math.round(number * 1000f) / 1000f;
     }
 
     public double getSpeed() {
-        synchronized (speedLock) {
-            //TODO: Convert from M/s to KPH
-            return maxSpeed;
-        }
+        //TODO: Convert from M/s to KPH
+        return Math.round(maxSpeed * 100) / 100;
     }
 
     public void setSpeed(double maxSpeed) {
-        synchronized (speedLock) {
-            this.maxSpeed = maxSpeed;
-        }
+        this.maxSpeed = maxSpeed;
     }
 
     public double[] getLocation() {
-        synchronized (locationLock) {
-            //TODO: reformat the location to conform with standards
-            return location;
-        }
+        //TODO: reformat the location to conform with standards
+        return location;
     }
 
     public void setLocation(double... location) {
-        synchronized (locationLock) {
-            this.location = location;
-        }
+        this.location = location;
     }
 }
