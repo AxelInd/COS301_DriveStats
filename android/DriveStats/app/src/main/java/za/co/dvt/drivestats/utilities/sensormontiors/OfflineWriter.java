@@ -1,15 +1,18 @@
 package za.co.dvt.drivestats.utilities.sensormontiors;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import static java.util.concurrent.TimeUnit.SECONDS;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
 import za.co.dvt.drivestats.utilities.Constants;
 import za.co.dvt.drivestats.utilities.OfflineUtilities;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * Created by Nicholas on 2015-07-13.
@@ -25,8 +28,13 @@ public class OfflineWriter implements Monitor {
 
     private static FileOutputStream FILE_WRITER;
 
+    private Context context;
+
     public OfflineWriter(Context context) {
         startWriting();
+        this.context = context;
+
+        Log.d("Testing", context.getFilesDir().getAbsolutePath());
         try {
             //TODO: Provide file name
             FILE_WRITER = context.openFileOutput(Constants.OFFLINE_FILE_NAME, Context.MODE_APPEND);
@@ -55,13 +63,29 @@ public class OfflineWriter implements Monitor {
         }).start();
     }
 
+    private double [] lastLocation;
+
     private String getStateString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(SENSOR_STATE.getLocation()).append(Constants.OFFLINE_FILE_DELINEATION);
-        builder.append(SENSOR_STATE.getSpeed()).append(Constants.OFFLINE_FILE_DELINEATION);
-        builder.append(SENSOR_STATE.getMaxXDeflection()).append(Constants.OFFLINE_FILE_DELINEATION);
-        builder.append(SENSOR_STATE.getMaxYDeflection()).append(Constants.OFFLINE_FILE_DELINEATION);
-        builder.append(SENSOR_STATE.getMaxZDeflection()).append(Constants.OFFLINE_FILE_DELINEATION);
+        double[] currentLocation = SENSOR_STATE.getLocation();
+
+        //If location hasn't changed then nothing can have changed
+        if (lastLocation != null
+                && lastLocation[0] == currentLocation[0]
+                && lastLocation[1] == currentLocation[1]) {
+            return "-";
+        }
+
+        builder.append(Arrays.toString(SENSOR_STATE.getLocation()))
+                .append(Constants.OFFLINE_FILE_DELINEATION)
+                .append(SENSOR_STATE.getSpeed())
+                .append(Constants.OFFLINE_FILE_DELINEATION)
+                .append(SENSOR_STATE.getCorrectedMaxXDeflection())
+                .append(Constants.OFFLINE_FILE_DELINEATION)
+                .append(SENSOR_STATE.getCorrectedMaxYDeflection())
+                .append(Constants.OFFLINE_FILE_DELINEATION)
+                .append(SENSOR_STATE.getCorrectedMaxZDeflection())
+                .append(Constants.OFFLINE_FILE_DELINEATION);
         return builder.toString();
     }
 

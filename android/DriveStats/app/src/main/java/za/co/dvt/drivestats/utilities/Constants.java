@@ -9,7 +9,8 @@ public class Constants {
 
     public static final String OFFLINE_FILE_DELINEATION = ";";
 
-    public static final String OFFLINE_FILE_NAME = "";
+    //TODO: Make this final?
+    public static String OFFLINE_FILE_NAME = "offlineStorage.dat";
 
     public static final String SETTINGS_FILE_PATH = "";
 

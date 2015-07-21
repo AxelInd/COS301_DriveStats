@@ -35,7 +35,11 @@ public class SensorUtilities  {
 
     public static Monitor getOfflineWriter(Context context) {
         try {
+<<<<<<< HEAD
             return new OfflineWriter(context);
+=======
+            //return new OfflineWriter();
+>>>>>>> 31b32bb703b8f6aa2def75a6d59ce94df60ea6dd
         } catch (Throwable e) {
             throw new MonitorException(e);
         }

@@ -1,18 +1,13 @@
 package za.co.dvt.drivestats.utilities;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import android.util.Log;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -23,10 +18,13 @@ public class OfflineUtilities {
 
 
     public synchronized static void writeToOfflineStorage(FileOutputStream writer, String line) {
+
         try {
+            line += "\n";
             writer.write(line.getBytes());
         } catch (IOException e) {
             //TODO: Handle IO exception
+            Log.d("ERROR", "IO Exception " + e.getMessage());
         }
     }
 
@@ -96,7 +94,7 @@ public class OfflineUtilities {
 
     public static boolean getUserProfile() {
         //TODO: update the user profile and return true or return false if there is no offline user profile
-        return true;
+        return false;
     }
 
 }

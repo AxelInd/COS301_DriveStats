@@ -21,8 +21,8 @@ import za.co.dvt.drivestats.R;
 import za.co.dvt.drivestats.threadmanagment.ThreadManager;
 import za.co.dvt.drivestats.threadmanagment.ThreadState;
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
+import za.co.dvt.drivestats.utilities.Constants;
 import za.co.dvt.drivestats.utilities.OfflineUtilities;
-
 
 public class TripActivity extends AppCompatActivity {
 
@@ -33,9 +33,6 @@ public class TripActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip);
         ButterKnife.bind(this);
-//        if (!OfflineUtilities.getUserProfile()) {
-//            getApplicationContext().startActivity(new Intent(TripActivity.class, SignInActivity.class));
-//        }
     }
 
     @Override
@@ -53,8 +50,8 @@ public class TripActivity extends AppCompatActivity {
 
     @OnClick(R.id.toggleTrip)
     public void toggleTrip(View view) {
-        //TODO: confirm this is working
         if (((ToggleButton) view).isChecked() && checkGpsService()) {
+            Constants.OFFLINE_FILE_NAME = "offlineStorage-" + System.currentTimeMillis() + ".dat";
             manager.start(getApplicationContext());
         }
         else {
@@ -125,9 +122,9 @@ public class TripActivity extends AppCompatActivity {
     private void runner() {
         runningText.setText(ThreadState.isRunning() ? "Running" : "Not Running");
         if (ThreadState.isRunning()) {
-            xMotionText.setText(Float.toString(state.getMaxXDeflection()));
-            yMotionText.setText(Float.toString(state.getMaxYDeflection()));
-            zMotionText.setText(Float.toString(state.getMaxZDeflection()));
+            xMotionText.setText(Float.toString(state.getCorrectedMaxXDeflection()));
+            yMotionText.setText(Float.toString(state.getCorrectedMaxYDeflection()));
+            zMotionText.setText(Float.toString(state.getCorrectedMaxZDeflection()));
             speedText.setText(Double.toString(state.getSpeed()));
             double[] location = state.getLocation();
             if (location != null && location.length <= 2) {

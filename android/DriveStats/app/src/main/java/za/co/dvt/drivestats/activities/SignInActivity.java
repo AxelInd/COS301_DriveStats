@@ -2,17 +2,22 @@ package za.co.dvt.drivestats.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.apache.http.Header;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import za.co.dvt.drivestats.R;
-//import za.co.dvt.drivestats.utilities.CloudUtilities;
+import za.co.dvt.drivestats.utilities.CloudRequest;
 import za.co.dvt.drivestats.utilities.OfflineUtilities;
-import za.co.dvt.drivestats.utilities.UserProfile;
+
+//import za.co.dvt.drivestats.utilities.CloudUtilities;
 
 
 public class SignInActivity extends AppCompatActivity {
@@ -90,6 +95,9 @@ public class SignInActivity extends AppCompatActivity {
 //    private ArrayAdapter<String> mCirclesAdapter;
 //    private ArrayList<String> mCirclesList;
 //
+
+    private static final String SERVER_URL = "http://10.0.0.16:4567";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,16 +142,70 @@ public class SignInActivity extends AppCompatActivity {
 
     @OnClick(R.id.signInUsingGoogle)
     public void signInUsingGoogle() {
-        if (!singUp()) this.finish(); //TODO: What happens if you cannot sign up
-        else this.finish();
+        //TODO: Make the could utils sign in using google method return the email address
+//        return CloudUtilities.signUpUsingGoogle();
+        String emailAddress = "ntrpilot@gmail.com";
+        singUp(emailAddress);
     }
 
     private boolean checkOffline() {
         return OfflineUtilities.getUserProfile();
     }
 
-    private boolean singUp() {
-//        return CloudUtilities.signUpUsingGoogle();
-        return true;
+    private void singUp(String emailAddress) {
+        CloudRequest request = new CloudRequest(CloudRequest.Action.GET_USER_ID);
+        request.addParameter(CloudRequest.Parameter.EMAIL, emailAddress);
+        request.post(createHandler());
+
+        //TODO: Remove if not needed
+//        RequestParams params = new RequestParams();
+//        params.add("email", emailAddress);
+//        AsyncHttpClient client = new AsyncHttpClient();
+//        //TODO: Make sure there isn't a better AsyncHttpResponseHandler that doesn't use Header[]
+//        client.post(SERVER_URL, params, new AsyncHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+//                String response = new String(responseBody);
+//                successfulLogin(statusCode, response);
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+//                String response = "There is no message";
+//                if (responseBody != null) {
+//                    response = new String(responseBody);
+//                }
+//                unsuccessfulLogin(statusCode, response);
+//            }
+//        });
+    }
+
+    private AsyncHttpResponseHandler createHandler() {
+        return new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String response = new String(responseBody);
+                successfulLogin(statusCode, response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                String response = "There is no message";
+                if (responseBody != null) {
+                    response = new String(responseBody);
+                }
+                unsuccessfulLogin(statusCode, response);
+            }
+        };
+    }
+
+    private void successfulLogin(int code, String response) {
+        //TODO: extract the ID, make it int and do stuff with it.
+        Toast.makeText(getApplicationContext(), "Success (" + code + ")! this server said: " + response, Toast.LENGTH_LONG).show();
+    }
+
+    private void unsuccessfulLogin(int code, String response) {
+        //TODO: extract the ID, make it int and do stuff with it.
+        Toast.makeText(getApplicationContext(), "Failure(" + code + ")! this server said: " + response, Toast.LENGTH_LONG).show();
     }
 }
