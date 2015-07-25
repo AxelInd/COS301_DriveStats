@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="driveStatsServer.Azure" schemaVersion="2015-04.2.6" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+  <WebRole name="driveStatsServer">
+    <LocalResources>
+      <LocalStorage name="DiagnosticStore" sizeInMB="4096" cleanOnRoleRecycle="false" />
+    </LocalResources>
+    <ConfigurationSettings>
+      <Setting name="CloudToolsDiagnosticAgentVersion" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteDebugger.ClientThumbprint" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteDebugger.Connector.Enabled" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteDebugger.Connector.Version" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteDebugger.ServerThumbprint" />
+      <Setting name="Profiling.ProfilingConnectionString" />
+    </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Endpoint1" protocol="http" port="80" localPort="80" />
+      <InstanceInputEndpoint name="Microsoft.WindowsAzure.Plugins.RemoteDebugger.Connector" localPort="30398" protocol="tcp">
+        <AllocatePublicPortFrom>
+          <FixedPortRange min="30400" max="30424" />
+        </AllocatePublicPortFrom>
+      </InstanceInputEndpoint>
+      <InstanceInputEndpoint name="Microsoft.WindowsAzure.Plugins.RemoteDebugger.FileUpload" localPort="32398" protocol="tcp">
+        <AllocatePublicPortFrom>
+          <FixedPortRange min="32400" max="32424" />
+        </AllocatePublicPortFrom>
+      </InstanceInputEndpoint>
+      <InstanceInputEndpoint name="Microsoft.WindowsAzure.Plugins.RemoteDebugger.Forwarder" localPort="31398" protocol="tcp">
+        <AllocatePublicPortFrom>
+          <FixedPortRange min="31400" max="31424" />
+        </AllocatePublicPortFrom>
+      </InstanceInputEndpoint>
+    </Endpoints>
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteDebugger.TransportValidation" storeLocation="LocalMachine" storeName="My" />
+    </Certificates>
+  </WebRole>
+</ServiceDefinition>

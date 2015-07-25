@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="driveStatsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="friend">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userID" Type="Int32" />
+    <Property Name="friendID" Type="Int32" />
+    <Property Name="currentStatus" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="user" Relationship="Self.FK__friends__friendI__117F9D94" FromRole="friends" ToRole="users" />
+    <NavigationProperty Name="user1" Relationship="Self.FK__friends__userID__108B795B" FromRole="friends" ToRole="users" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="tripData">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="tripID" Type="Int32" />
+    <Property Name="latitude" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="longitude" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="speed" Type="Double" />
+    <Property Name="recTime" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="maxXAcelerometer" Type="Double" />
+    <Property Name="maxYAcelerometer" Type="Double" />
+    <Property Name="maxZAcelerometer" Type="Double" />
+    <NavigationProperty Name="trip" Relationship="Self.FK__tripData__tripID__0BC6C43E" FromRole="tripData" ToRole="trips" />
+  </EntityType>
+  <EntityType Name="trip">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userID" Type="Int32" />
+    <Property Name="tripDate" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+    <Property Name="startLatitude" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="startLongitude" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tripDatas" Relationship="Self.FK__tripData__tripID__0BC6C43E" FromRole="trips" ToRole="tripData" />
+    <NavigationProperty Name="user" Relationship="Self.FK__trips__userID__07020F21" FromRole="trips" ToRole="users" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="email" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="joinDate" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="averageScore" Type="Double" />
+    <NavigationProperty Name="friends" Relationship="Self.FK__friends__friendI__117F9D94" FromRole="users" ToRole="friends" />
+    <NavigationProperty Name="friends1" Relationship="Self.FK__friends__userID__108B795B" FromRole="users" ToRole="friends" />
+    <NavigationProperty Name="trips" Relationship="Self.FK__trips__userID__07020F21" FromRole="users" ToRole="trips" />
+  </EntityType>
+  <Association Name="FK__friends__friendI__117F9D94">
+    <End Role="users" Type="Self.user" Multiplicity="0..1" />
+    <End Role="friends" Type="Self.friend" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="friends">
+        <PropertyRef Name="friendID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__friends__userID__108B795B">
+    <End Role="users" Type="Self.user" Multiplicity="0..1" />
+    <End Role="friends" Type="Self.friend" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="friends">
+        <PropertyRef Name="userID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__tripData__tripID__0BC6C43E">
+    <End Role="trips" Type="Self.trip" Multiplicity="0..1" />
+    <End Role="tripData" Type="Self.tripData" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="trips">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="tripData">
+        <PropertyRef Name="tripID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__trips__userID__07020F21">
+    <End Role="users" Type="Self.user" Multiplicity="0..1" />
+    <End Role="trips" Type="Self.trip" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="trips">
+        <PropertyRef Name="userID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="driveStatsEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="friends" EntityType="Self.friend" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="tripDatas" EntityType="Self.tripData" />
+    <EntitySet Name="trips" EntityType="Self.trip" />
+    <EntitySet Name="users" EntityType="Self.user" />
+    <AssociationSet Name="FK__friends__friendI__117F9D94" Association="Self.FK__friends__friendI__117F9D94">
+      <End Role="users" EntitySet="users" />
+      <End Role="friends" EntitySet="friends" />
+    </AssociationSet>
+    <AssociationSet Name="FK__friends__userID__108B795B" Association="Self.FK__friends__userID__108B795B">
+      <End Role="users" EntitySet="users" />
+      <End Role="friends" EntitySet="friends" />
+    </AssociationSet>
+    <AssociationSet Name="FK__tripData__tripID__0BC6C43E" Association="Self.FK__tripData__tripID__0BC6C43E">
+      <End Role="trips" EntitySet="trips" />
+      <End Role="tripData" EntitySet="tripDatas" />
+    </AssociationSet>
+    <AssociationSet Name="FK__trips__userID__07020F21" Association="Self.FK__trips__userID__07020F21">
+      <End Role="users" EntitySet="users" />
+      <End Role="trips" EntitySet="trips" />
+    </AssociationSet>
+    <EntitySet Name="factors" EntityType="driveStatsModel.factor" />
+  </EntityContainer>
+  <EntityType Name="factor">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="maxXFactor" Type="Single" />
+    <Property Name="maxYFactor" Type="Single" />
+    <Property Name="maxZFactor" Type="Single" />
+    <Property Name="speedFactor" Type="Single" />
+    <Property Name="timeFactor" Type="Single" />
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+  </EntityType>
+</Schema>

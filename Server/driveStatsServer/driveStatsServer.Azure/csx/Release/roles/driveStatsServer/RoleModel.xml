@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RoleModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="driveStatsServer" version="2.6.6496.2" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+  <Startup>
+    <Task commandLine="WindowsAzureDiagnosticsStartup.exe Profiling Sampling" executionContext="elevated" relativePath="plugins\Profiling">
+      <Environment>
+        <Variable name="RdModuleName" value="Profiling" />
+        <Variable name="WaRoleType" value="IISWebRole" />
+      </Environment>
+    </Task>
+    <Task commandLine="WindowsAzureDiagnosticsAgent.exe Profiling Sampling" executionContext="elevated" taskType="foreground" relativePath="plugins\Profiling">
+      <Environment>
+        <Variable name="RdModuleName" value="Profiling" />
+        <Variable name="WaRoleType" value="IISWebRole" />
+      </Environment>
+    </Task>
+    <Task commandLine="Connector\Microsoft.VisualStudio.WindowsAzure.RemoteDebugger.Connector.exe" executionContext="elevated" taskType="background" relativePath="plugins\RemoteDebuggerConnector">
+      <Environment>
+        <Variable name="RdModuleName" value="RemoteDebuggerConnector" />
+        <Variable name="WaRoleType" value="IISWebRole" />
+      </Environment>
+    </Task>
+  </Startup>
+  <Runtime>
+    <Environment>
+      <Variable name="_AZURE_INTELLITRACE_ENABLED_" value="1" />
+      <Variable name="COR_ENABLE_PROFILING" value="1" />
+      <Variable name="VSTS_PROFILER_NOT_CLEAR_ENVVARS" value="1" />
+      <Variable name="COR_PROFILER" value="{44a86cad-f7ee-429c-83eb-f3cde3b87b70}" />
+      <Variable name="COR_LINE_PROFILING" value="1" />
+    </Environment>
+    <EntryPoint>
+      <NetFxEntryPoint assemblyName="driveStatsServer.dll" targetFrameworkVersion="v4.0" />
+    </EntryPoint>
+  </Runtime>
+  <ConfigurationSettings>
+    <Setting name="ProfilingConnectionString" nameSpace="Profiling" />
+    <Setting name="Connector.Enabled" nameSpace="Microsoft.WindowsAzure.Plugins.RemoteDebugger" />
+    <Setting name="Connector.Version" nameSpace="Microsoft.WindowsAzure.Plugins.RemoteDebugger" />
+    <Setting name="ClientThumbprint" nameSpace="Microsoft.WindowsAzure.Plugins.RemoteDebugger" />
+    <Setting name="ServerThumbprint" nameSpace="Microsoft.WindowsAzure.Plugins.RemoteDebugger" />
+  </ConfigurationSettings>
+  <Properties>
+    <Property name="TargetFrameworkVersion" value="v4.5" />
+    <Property name="RoleType" value="Web" />
+    <Property name="RoleName" value="driveStatsServer" />
+    <Property name="ProjectName" value="driveStatsServer" />
+    <Property name="Configuration" value="Release" />
+    <Property name="Platform" value="AnyCPU" />
+    <Property name="SetConfiguration" value="Configuration=Release" />
+    <Property name="SetPlatform" value="Platform=AnyCPU" />
+    <Property name="RoleTargetFramework" value="v4.5" />
+    <Property name="OutputDir" value="C:\Users\Zander\documents\visual studio 2012\Projects\driveStatsServer\driveStatsServer.Azure\obj\Release\driveStatsServer\" />
+    <Property name="EntryPoint" value="driveStatsServer.dll" />
+    <Property name="SourceDir" value="C:\Users\Zander\documents\visual studio 2012\Projects\driveStatsServer\driveStatsServer\" />
+    <Property name="SitePhysicalPath" value="C:\Users\Zander\documents\visual studio 2012\Projects\driveStatsServer\driveStatsServer.Azure\obj\Release\driveStatsServer\" />
+    <Property name="RolePlugins" value="C:\Users\Zander\documents\visual studio 2012\Projects\driveStatsServer\driveStatsServer.Azure\obj\\Release\Profiling" />
+    <Property name="TargetRuntimeVersion" value="v4.0" />
+  </Properties>
+  <Sites>
+    <Site name="Web" physicalDirectory="C:\Users\Zander\documents\visual studio 2012\Projects\driveStatsServer\driveStatsServer.Azure\obj\Release\driveStatsServer\">
+      <Bindings>
+        <Binding name="Endpoint1" endpointName="Endpoint1" />
+      </Bindings>
+    </Site>
+  </Sites>
+</RoleModel>

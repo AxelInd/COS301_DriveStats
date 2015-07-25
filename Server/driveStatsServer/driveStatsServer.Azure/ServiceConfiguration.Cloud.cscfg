@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="driveStatsServer.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="driveStatsServer">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=drivestats;AccountKey=VqN4Cg70tRe3RfGk7ZF1TeolEQsABjCL8rvV447QXm6gCgR7QnumnbP/U6XR9Hd9Nc0enkffzMw7LEsbhYPbvQ==" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

@@ -96,5 +96,11 @@ namespace driveStatsServer
                 return query;
             }
         }
+
+        public double getSpeedData()
+        {
+            return 0;
+        }
+
     }
 }

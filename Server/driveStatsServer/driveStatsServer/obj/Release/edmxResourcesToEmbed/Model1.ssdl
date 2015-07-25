@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="driveStatsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'driveStats.dbo.factors' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="factors">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="maxXFactor" Type="real" />
+    <Property Name="maxYFactor" Type="real" />
+    <Property Name="maxZFactor" Type="real" />
+    <Property Name="speedFactor" Type="real" />
+    <Property Name="timeFactor" Type="real" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="friends">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userID" Type="int" />
+    <Property Name="friendID" Type="int" />
+    <Property Name="currentStatus" Type="varchar" MaxLength="3" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="tripData">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="tripID" Type="int" />
+    <Property Name="latitude" Type="varchar" MaxLength="12" />
+    <Property Name="longitude" Type="varchar" MaxLength="12" />
+    <Property Name="speed" Type="float" />
+    <Property Name="recTime" Type="varchar" MaxLength="5" />
+    <Property Name="maxXAcelerometer" Type="float" />
+    <Property Name="maxYAcelerometer" Type="float" />
+    <Property Name="maxZAcelerometer" Type="float" />
+  </EntityType>
+  <EntityType Name="trips">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userID" Type="int" />
+    <Property Name="tripDate" Type="varchar" MaxLength="40" />
+    <Property Name="startLatitude" Type="varchar" MaxLength="12" />
+    <Property Name="startLongitude" Type="varchar" MaxLength="12" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="email" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="joinDate" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="averageScore" Type="float" />
+  </EntityType>
+  <Association Name="FK__friends__friendI__117F9D94">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="friends" Type="Self.friends" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="friends">
+        <PropertyRef Name="friendID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__friends__userID__108B795B">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="friends" Type="Self.friends" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="friends">
+        <PropertyRef Name="userID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__tripData__tripID__0BC6C43E">
+    <End Role="trips" Type="Self.trips" Multiplicity="0..1" />
+    <End Role="tripData" Type="Self.tripData" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="trips">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="tripData">
+        <PropertyRef Name="tripID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__trips__userID__07020F21">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="trips" Type="Self.trips" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="trips">
+        <PropertyRef Name="userID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="driveStatsModelStoreContainer">
+    <EntitySet Name="friends" EntityType="Self.friends" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tripData" EntityType="Self.tripData" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="trips" EntityType="Self.trips" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="factors" EntityType="Self.factors" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[factors].[maxXFactor] AS [maxXFactor], 
+[factors].[maxYFactor] AS [maxYFactor], 
+[factors].[maxZFactor] AS [maxZFactor], 
+[factors].[speedFactor] AS [speedFactor], 
+[factors].[timeFactor] AS [timeFactor], 
+[factors].[ID] AS [ID]
+FROM [dbo].[factors] AS [factors]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__friends__friendI__117F9D94" Association="Self.FK__friends__friendI__117F9D94">
+      <End Role="users" EntitySet="users" />
+      <End Role="friends" EntitySet="friends" />
+    </AssociationSet>
+    <AssociationSet Name="FK__friends__userID__108B795B" Association="Self.FK__friends__userID__108B795B">
+      <End Role="users" EntitySet="users" />
+      <End Role="friends" EntitySet="friends" />
+    </AssociationSet>
+    <AssociationSet Name="FK__tripData__tripID__0BC6C43E" Association="Self.FK__tripData__tripID__0BC6C43E">
+      <End Role="trips" EntitySet="trips" />
+      <End Role="tripData" EntitySet="tripData" />
+    </AssociationSet>
+    <AssociationSet Name="FK__trips__userID__07020F21" Association="Self.FK__trips__userID__07020F21">
+      <End Role="users" EntitySet="users" />
+      <End Role="trips" EntitySet="trips" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
