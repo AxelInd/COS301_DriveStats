@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RoleModule namespace="Profiling" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+  <Startup>
+    <Task commandLine="WindowsAzureDiagnosticsStartup.exe Profiling Sampling" executionContext="elevated" taskType="simple" />
+    <Task commandLine="WindowsAzureDiagnosticsAgent.exe Profiling Sampling" executionContext="elevated" taskType="foreground" />
+  </Startup>
+  <Runtime>
+    <Environment>
+      <Variable name="_AZURE_INTELLITRACE_ENABLED_" value="1" />
+      <Variable name="COR_ENABLE_PROFILING" value="1" />
+      <Variable name="VSTS_PROFILER_NOT_CLEAR_ENVVARS" value="1" />
+      <Variable name="COR_PROFILER" value="{44a86cad-f7ee-429c-83eb-f3cde3b87b70}" />
+      <Variable name="COR_LINE_PROFILING" value="1" />
+    </Environment>
+  </Runtime>
+  <ConfigurationSettings>
+    <Setting name="ProfilingConnectionString" />
+  </ConfigurationSettings>
+</RoleModule>

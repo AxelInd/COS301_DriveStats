@@ -37,6 +37,23 @@ namespace driveStatsServer
             return db.getAverageScore().ToString();
         }
 
+        [WebMethod]
+        public void startTrip() //userID, startLatitude, startLongitude
+        {
+            
+        }
+
+        [WebMethod]
+        public void addTripData(string data)//tripID latitued, longitude, speed, recTime, maxX, maxY, maxZ
+        {
+
+        }
+
+        [WebMethod]
+        public void stopTrip()//tripID 
+        {
+
+        }
         
     }
 }

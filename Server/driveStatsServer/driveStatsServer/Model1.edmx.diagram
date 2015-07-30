@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="7c0e69a79b9b4eafae39a5007d6c9ba8" Name="Diagram1">
         <EntityTypeShape EntityType="driveStatsModel.friend" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="driveStatsModel.sysdiagram" Width="1.5" PointX="7.375" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="driveStatsModel.sysdiagram" Width="1.5" PointX="7.375" PointY="2.125" IsExpanded="true" />
         <EntityTypeShape EntityType="driveStatsModel.tripData" Width="1.5" PointX="5.25" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="driveStatsModel.trip" Width="1.5" PointX="3" PointY="4.375" IsExpanded="true" />
         <EntityTypeShape EntityType="driveStatsModel.user" Width="1.5" PointX="0.75" PointY="2.875" IsExpanded="true" />
