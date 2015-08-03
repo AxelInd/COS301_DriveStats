@@ -19,16 +19,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:enabled="false"
-        android:layout_above="@+id/sign_in_status"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="78dp" />
+        android:layout_marginBottom="78dp"
+        android:layout_centerVertical="true" />
 
-    <TextView
-        android:id="@+id/sign_in_status"
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/status_signed_out"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:text="@string/by_pass"
+        android:id="@+id/byPass"
+        android:layout_alignTop="@+id/signInUsingGoogle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="58dp" />
 
 </RelativeLayout>

@@ -8,11 +8,20 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.ResponseHandlerInterface;
+
+import org.apache.http.Header;
+
+import java.io.IOException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,8 +30,9 @@ import za.co.dvt.drivestats.R;
 import za.co.dvt.drivestats.threadmanagment.ThreadManager;
 import za.co.dvt.drivestats.threadmanagment.ThreadState;
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
+import za.co.dvt.drivestats.threadmanagment.uploadingthread.UploadUtility;
+import za.co.dvt.drivestats.utilities.CloudRequest;
 import za.co.dvt.drivestats.utilities.Constants;
-import za.co.dvt.drivestats.utilities.OfflineUtilities;
 
 public class TripActivity extends AppCompatActivity {
 
@@ -53,13 +63,44 @@ public class TripActivity extends AppCompatActivity {
         if (((ToggleButton) view).isChecked() && checkGpsService()) {
             Constants.OFFLINE_FILE_NAME = "offlineStorage-" + System.currentTimeMillis() + ".dat";
             manager.start(getApplicationContext());
-        }
-        else {
-            if (((ToggleButton) view).isChecked()) {
-                ((ToggleButton) view).setChecked(false);
+        } else {
+            try {
+                if (((ToggleButton) view).isChecked()) {
+                    ((ToggleButton) view).setChecked(false);
+                }
+                if (ThreadState.isRunning()) {
+                    manager.stop();
+                    UploadUtility.uploadTrip(getApplicationContext(), createHandler());
+                }
+            } catch (IOException e) {
+                //TODO: handle IOException
+                e.printStackTrace();
             }
-            manager.stop();
         }
+    }
+
+    @OnClick(R.id.testConnection)
+    public void testConnection() {
+        CloudRequest request = new CloudRequest(CloudRequest.Action.HELLO_WORLD);
+        request.post(createHandler());
+    }
+
+    private ResponseHandlerInterface createHandler() {
+        return new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                Toast.makeText(getApplicationContext(), "Trip uploaded to the server.", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                for (Header header : headers) {
+                    Log.d("Testing", header.getName() + " : " + header.getValue());
+                }
+                Log.d("Testing", new String(responseBody));
+                Toast.makeText(getApplicationContext(), "Trip not uploaded to the server. Returned with code: " + statusCode, Toast.LENGTH_LONG).show();
+            }
+        };
     }
 
     // This is because for some reason any alert message and activity change can only take place in another activity
@@ -148,6 +189,6 @@ public class TripActivity extends AppCompatActivity {
     protected void onStop() {
         //TODO: Confirm this happens when it has to
         super.onStop();
-        OfflineUtilities.writeSettings();
+        za.co.dvt.drivestats.utilities.Settings.getInstance().saveSettings(getApplicationContext());
     }
 }

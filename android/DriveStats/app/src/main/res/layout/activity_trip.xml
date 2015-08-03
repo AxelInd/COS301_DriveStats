@@ -70,11 +70,20 @@
         android:layout_below="@+id/location"
         android:layout_centerHorizontal="true" />
 
-    <ToggleButton
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New ToggleButton"
+        android:text="Refresh"
         android:id="@+id/refresh"
         android:layout_above="@+id/settings"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test Connection"
+        android:id="@+id/testConnection"
+        android:layout_above="@+id/settings"
+        android:layout_alignEnd="@+id/zMotion" />
+
 </RelativeLayout>

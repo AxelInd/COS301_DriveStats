@@ -40,7 +40,7 @@ public class ThreadManager {
             monitors.add(SensorUtilities.getOfflineWriter(context));
         } catch (LocationServiceUnavailableException e) {
             //TODO: User isn't setting GPS to be on?? Show message or something
-            Log.d("Exception", "This happened: " + e.getMessage());
+            Log.d("Exception", "This happened: " + e.getClass());
             stop();
         } catch (AccelerometerServiceUnavailableException e) {
             // TODO: BOLOX user cannot use the application or has done something funny and their accelerometer is not usable
@@ -51,7 +51,8 @@ public class ThreadManager {
             Log.d("Exception", "This happened: " + e.getMessage());
             stop();
         } catch (Throwable t) {
-            Log.d("Exception", "This happened: " + t.getMessage());
+            Log.d("Exception", "This happened: " + t.getClass());
+            t.printStackTrace();
         }
     }
 

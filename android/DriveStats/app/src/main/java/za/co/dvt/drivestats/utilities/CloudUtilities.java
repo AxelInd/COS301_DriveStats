@@ -1,8 +1,6 @@
 package za.co.dvt.drivestats.utilities;
 
 
-import za.co.dvt.drivestats.R;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -15,8 +13,8 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import com.google.android.gms.common.ConnectionResult;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -28,6 +26,8 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
 import java.util.Set;
+
+import za.co.dvt.drivestats.R;
 
 import static za.co.dvt.drivestats.R.layout.activity_sign_in;
 
@@ -108,7 +108,6 @@ public class CloudUtilities  extends FragmentActivity implements
        setContentView(activity_sign_in);
 
         mSignInButton = (SignInButton) findViewById(R.id.signInUsingGoogle);
-        mStatus = (TextView) findViewById(R.id.sign_in_status);
 
         // Button listener
         mSignInButton.setOnClickListener(this);
@@ -154,7 +153,7 @@ public class CloudUtilities  extends FragmentActivity implements
     }
 
     @Override
-  protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(SAVED_PROGRESS, mSignInProgress);
     }
