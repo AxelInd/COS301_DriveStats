@@ -26,12 +26,14 @@ import java.io.IOException;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import za.co.dvt.drivestats.Injection.Inject;
 import za.co.dvt.drivestats.R;
+import za.co.dvt.drivestats.resources.datasending.CallBack;
+import za.co.dvt.drivestats.services.CloudService;
 import za.co.dvt.drivestats.threadmanagment.ThreadManager;
 import za.co.dvt.drivestats.threadmanagment.ThreadState;
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
 import za.co.dvt.drivestats.threadmanagment.uploadingthread.UploadUtility;
-import za.co.dvt.drivestats.utilities.CloudRequest;
 import za.co.dvt.drivestats.utilities.Constants;
 
 public class TripActivity extends AppCompatActivity {
@@ -43,6 +45,7 @@ public class TripActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip);
         ButterKnife.bind(this);
+        Inject.setCurrentContext(this);
     }
 
     @Override
@@ -81,8 +84,13 @@ public class TripActivity extends AppCompatActivity {
 
     @OnClick(R.id.testConnection)
     public void testConnection() {
-        CloudRequest request = new CloudRequest(CloudRequest.Action.HELLO_WORLD);
-        request.post(createHandler());
+        CloudService service = Inject.cloudService();
+        service.getUserId("ntrpilot@gmail.com", new CallBack() {
+            @Override
+            public void callBack(String... values) {
+                Toast.makeText(getApplicationContext(), values[0], Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private ResponseHandlerInterface createHandler() {
