@@ -2,3 +2,13 @@
 {
 	font-size: 100px;
 }
+
+body
+{
+	
+	background-image: url("LogoEnlarged.png");
+	background-size:100% 100%;
+	background-repeat:no-repeat;
+	background-attachment:fixed;
+	
+}

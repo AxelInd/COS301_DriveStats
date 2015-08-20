@@ -1,0 +1,21 @@
+
+#logo
+{
+	background-image: url("LogoEnlarged.png");
+	background-size:100% 100%;
+	background-repeat:no-repeat;
+	/*background-attachment:fixed;*/
+	margin:auto;
+	position:absolute;
+    top: 0;
+    left: 0;
+    width:100%;
+    height:60%;
+	
+}
+
+#gConnect
+{
+margin-top: 400px;
+	margin-left: 20px;
+}
