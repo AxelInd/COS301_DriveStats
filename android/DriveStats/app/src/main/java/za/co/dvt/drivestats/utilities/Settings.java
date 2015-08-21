@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import za.co.dvt.drivestats.Injection.Inject;
 import za.co.dvt.drivestats.threadmanagment.ThreadManager;
+import za.co.dvt.drivestats.utilities.exceptions.SystemException;
 
 /**
  * Created by Nicholas on 2015-07-01.
@@ -22,7 +24,8 @@ public class Settings {
 
     private boolean wifiOnlyMode = false;
 
-    private Settings() {}
+    private Settings() {
+    }
 
     public boolean isWifiOnlyMode() {
         return wifiOnlyMode;
@@ -38,25 +41,25 @@ public class Settings {
         return instance;
     }
 
-    public void loadSettings(Context context) {
+    public void saveSettings() {
         try {
+            Context context = Inject.currentContext();
+            FileOutputStream writer = context.openFileOutput(Settings.SETTINGS_PROPERTIES_FILE_NAME, context.MODE_PRIVATE);
+            Settings.getInstance().toProperty().store(writer, "Save settings");
+        } catch (IOException e) {
+            throw new SystemException("Could not save settings.");
+        }
+    }
+
+    public void loadSettings() {
+        try {
+            Context context = Inject.currentContext();
             InputStream reader = context.openFileInput(Settings.SETTINGS_PROPERTIES_FILE_NAME);
             Properties properties = new Properties();
             properties.load(reader);
             Settings.getInstance().initSettings(properties);
         } catch (IOException e) {
-            //TODO: Handle IOException
-            e.printStackTrace();
-        }
-    }
-
-    public void saveSettings(Context context) {
-        try {
-            FileOutputStream writer = context.openFileOutput(Settings.SETTINGS_PROPERTIES_FILE_NAME, context.MODE_PRIVATE);
-            Settings.getInstance().toProperty().store(writer, "Save settings");
-        } catch (IOException e) {
-            //TODO: Handle IOException
-            e.printStackTrace();
+            throw new SystemException("Could not load settings.");
         }
     }
 

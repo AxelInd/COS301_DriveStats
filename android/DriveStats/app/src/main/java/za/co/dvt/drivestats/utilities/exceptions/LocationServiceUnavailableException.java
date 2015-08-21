@@ -1,4 +1,4 @@
-package za.co.dvt.drivestats.threadmanagment.exceptions;
+package za.co.dvt.drivestats.utilities.exceptions;
 
 /**
  * Created by Nicholas on 2015-07-07.

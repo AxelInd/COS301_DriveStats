@@ -1,16 +1,15 @@
 package za.co.dvt.drivestats.threadmanagment;
 
-import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import za.co.dvt.drivestats.threadmanagment.exceptions.AccelerometerServiceUnavailableException;
-import za.co.dvt.drivestats.threadmanagment.exceptions.LocationServiceUnavailableException;
-import za.co.dvt.drivestats.threadmanagment.exceptions.MonitorException;
 import za.co.dvt.drivestats.utilities.SensorUtilities;
 import za.co.dvt.drivestats.utilities.Settings;
+import za.co.dvt.drivestats.utilities.exceptions.AccelerometerServiceUnavailableException;
+import za.co.dvt.drivestats.utilities.exceptions.LocationServiceUnavailableException;
+import za.co.dvt.drivestats.utilities.exceptions.MonitorException;
 import za.co.dvt.drivestats.utilities.sensormontiors.Monitor;
 
 /**
@@ -32,12 +31,12 @@ public class ThreadManager {
         return instance;
     }
 
-    private void runSensorMonitor(Context context) {
+    private void runSensorMonitor() {
         //TODO: Create and launch the sensor monitoring thread
         try {
-            monitors.add(SensorUtilities.getAccelerometerMonitor(context));
-            monitors.add(SensorUtilities.getGpsMonitor(context));
-            monitors.add(SensorUtilities.getOfflineWriter(context));
+            monitors.add(SensorUtilities.getAccelerometerMonitor());
+            monitors.add(SensorUtilities.getGpsMonitor());
+            monitors.add(SensorUtilities.getOfflineWriter());
         } catch (LocationServiceUnavailableException e) {
             //TODO: User isn't setting GPS to be on?? Show message or something
             Log.d("Exception", "This happened: " + e.getClass());
@@ -69,9 +68,9 @@ public class ThreadManager {
         }
     }
 
-    public void start(Context context) {
+    public void start() {
         if (ThreadState.tryStart()) {
-            runSensorMonitor(context);
+            runSensorMonitor();
             if (!Settings.getInstance().isWifiOnlyMode()) {
                 runUploadThread();
             }

@@ -2,7 +2,7 @@ package za.co.dvt.drivestats.utilities;
 
 import android.content.Context;
 
-import za.co.dvt.drivestats.threadmanagment.exceptions.MonitorException;
+import za.co.dvt.drivestats.utilities.exceptions.MonitorException;
 import za.co.dvt.drivestats.utilities.sensormontiors.AccelerometerMonitor;
 import za.co.dvt.drivestats.utilities.sensormontiors.GpsMonitor;
 import za.co.dvt.drivestats.utilities.sensormontiors.Monitor;
@@ -14,9 +14,9 @@ import za.co.dvt.drivestats.utilities.sensormontiors.OfflineWriter;
 public class SensorUtilities  {
 
 
-    public static Monitor getAccelerometerMonitor(Context context) {
+    public static Monitor getAccelerometerMonitor() {
         try {
-            return new AccelerometerMonitor(context);
+            return new AccelerometerMonitor();
         } catch (MonitorException e) {
             //TODO: What happens when there is no accelerometers
             //Show message or something
@@ -24,18 +24,18 @@ public class SensorUtilities  {
         }
     }
 
-    public static Monitor getGpsMonitor(Context context) {
+    public static Monitor getGpsMonitor() {
         try {
-            return new GpsMonitor(context);
+            return new GpsMonitor();
         } catch (MonitorException e) {
             //TODO: User is not putting the GPS one show message or something.
             throw e;
         }
     }
 
-    public static Monitor getOfflineWriter(Context context) {
+    public static Monitor getOfflineWriter() {
         try {
-            return new OfflineWriter(context);
+            return new OfflineWriter();
         } catch (Throwable e) {
             throw new MonitorException(e);
         }

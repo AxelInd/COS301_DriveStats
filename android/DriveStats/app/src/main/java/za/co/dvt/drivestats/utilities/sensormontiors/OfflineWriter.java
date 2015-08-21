@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import za.co.dvt.drivestats.Injection.Inject;
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
 import za.co.dvt.drivestats.utilities.Constants;
 import za.co.dvt.drivestats.utilities.OfflineUtilities;
@@ -28,16 +29,13 @@ public class OfflineWriter implements Monitor {
 
     private static FileOutputStream FILE_WRITER;
 
-    private Context context;
-
-    public OfflineWriter(Context context) {
+    public OfflineWriter() {
         startWriting();
-        this.context = context;
 
-        Log.d("Testing", context.getFilesDir().getAbsolutePath());
+        Log.d("Testing", Inject.currentContext().getFilesDir().getAbsolutePath());
         try {
             //TODO: Provide file name
-            FILE_WRITER = context.openFileOutput(Constants.OFFLINE_FILE_NAME, Context.MODE_APPEND);
+            FILE_WRITER = Inject.currentContext().openFileOutput(Constants.OFFLINE_FILE_NAME, Context.MODE_APPEND);
         } catch (FileNotFoundException e) {
             //TODO: Handle File not found
             e.printStackTrace();

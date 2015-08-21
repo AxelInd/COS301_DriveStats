@@ -28,4 +28,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.0'
     compile 'com.loopj.android:android-async-http:1.4.7'
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile files('lib/ksoap2-android-assembly-2.6.5-jar-with-dependencies.jar')
+    compile files('lib/junit-3.8.1.jar')
+    compile files('lib/junit-4.8.2.jar')
 }

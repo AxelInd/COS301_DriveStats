@@ -15,7 +15,7 @@ import com.google.android.gms.plus.model.people.Person;
 
 import java.util.Set;
 
-import za.co.dvt.drivestats.threadmanagment.exceptions.MonitorException;
+import za.co.dvt.drivestats.utilities.exceptions.MonitorException;
 
 /**
  * Created by Nicholas on 2015-07-21.

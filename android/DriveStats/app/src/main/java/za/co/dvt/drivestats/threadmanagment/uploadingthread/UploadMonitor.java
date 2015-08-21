@@ -1,5 +1,7 @@
 package za.co.dvt.drivestats.threadmanagment.uploadingthread;
 
+import java.io.IOException;
+
 import za.co.dvt.drivestats.utilities.Compressor;
 
 /**
@@ -14,7 +16,13 @@ public class UploadMonitor {
     }
 
     private String compress(String fileContents) {
-        return Compressor.compress(fileContents);
+        try {
+            return Compressor.compress(fileContents.getBytes());
+        } catch (IOException e) {
+            //TODO: Handle IOException
+            e.printStackTrace();
+            return "";
+        }
     }
 
     private void uplaod() {

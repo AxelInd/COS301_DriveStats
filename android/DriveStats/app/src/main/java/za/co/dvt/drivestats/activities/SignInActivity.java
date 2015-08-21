@@ -14,6 +14,7 @@ import org.apache.http.Header;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import za.co.dvt.drivestats.Injection.Inject;
 import za.co.dvt.drivestats.R;
 import za.co.dvt.drivestats.utilities.CloudRequest;
 import za.co.dvt.drivestats.utilities.OfflineUtilities;
@@ -27,6 +28,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
+        Inject.setCurrentContext(this);
         if (checkOffline()) {
             gotoTripContext();
         }
