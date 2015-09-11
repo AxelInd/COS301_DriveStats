@@ -1,0 +1,10 @@
+- Requirements management
+- Architecture design
+- Design of application functionality
+- Algorithmic innovation
+- Implementation/code quality
+- Quality assurance and testing
+- Usability engineering
+- Open-source software and software reuse
+- Overall software engineering excellence
+- Professionalism
