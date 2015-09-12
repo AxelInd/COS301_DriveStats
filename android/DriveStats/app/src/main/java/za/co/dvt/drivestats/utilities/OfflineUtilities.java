@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import za.co.dvt.drivestats.Injection.Inject;
 import za.co.dvt.drivestats.utilities.exceptions.SystemException;
 
 public class OfflineUtilities {
@@ -68,8 +69,12 @@ public class OfflineUtilities {
     //==============================================
 
     public static boolean getUserProfile() {
-        //TODO: update the user profile and return true or return false if there is no offline user profile
-        return false;
+        try {
+            Inject.userProfile().readUserProfile();
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
 }

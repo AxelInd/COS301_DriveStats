@@ -10,6 +10,7 @@ import za.co.dvt.drivestats.resources.network.request.Email;
 import za.co.dvt.drivestats.resources.network.request.TripInfo;
 import za.co.dvt.drivestats.resources.network.response.TripScore;
 import za.co.dvt.drivestats.resources.network.response.UserId;
+import za.co.dvt.drivestats.utilities.Constants;
 import za.co.dvt.drivestats.utilities.UserProfile;
 
 /**
@@ -22,8 +23,8 @@ public class NetworkService {
             @Override
             public void invoke(UserId result) {
                 UserProfile profile = Inject.userProfile();
-                profile.setEmailAddress(emailAddress);
                 profile.setUserId(result.getUserId());
+                profile.saveUserProfile();
                 callback.invoke(result);
             }
         });
@@ -35,7 +36,7 @@ public class NetworkService {
         final HttpRequest<TripScore> uploadRequest = new HttpPostRequest<>(new TripInfo(), TripScore.class, Methods.ADD_TRIP, new Callback<TripScore>() {
             @Override
             public void invoke(TripScore result) {
-//                Inject.currentContext().deleteFile(Constants.OFFLINE_FILE_NAME);
+                Inject.currentContext().deleteFile(Constants.OFFLINE_FILE_NAME);
                 callback.invoke(result);
             }
         });

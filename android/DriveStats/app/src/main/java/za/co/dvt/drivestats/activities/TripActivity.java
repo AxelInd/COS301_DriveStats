@@ -1,6 +1,9 @@
 package za.co.dvt.drivestats.activities;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,35 +11,20 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.ResponseHandlerInterface;
-
-import org.apache.http.Header;
-
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import za.co.dvt.drivestats.Injection.Inject;
 import za.co.dvt.drivestats.R;
 import za.co.dvt.drivestats.resources.network.Callback;
-import za.co.dvt.drivestats.resources.network.Methods;
-import za.co.dvt.drivestats.resources.network.httpcoms.HttpGetRequest;
-import za.co.dvt.drivestats.resources.network.httpcoms.HttpRequest;
-import za.co.dvt.drivestats.resources.network.request.Email;
 import za.co.dvt.drivestats.resources.network.response.TripScore;
-import za.co.dvt.drivestats.resources.network.response.UserId;
 import za.co.dvt.drivestats.services.network.NetworkService;
 import za.co.dvt.drivestats.threadmanagment.ThreadManager;
 import za.co.dvt.drivestats.threadmanagment.ThreadState;
-import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
 import za.co.dvt.drivestats.utilities.Constants;
 
 public class TripActivity extends AppCompatActivity {
@@ -78,41 +66,24 @@ public class TripActivity extends AppCompatActivity {
                 NetworkService.uploadTrip(new Callback<TripScore>() {
                     @Override
                     public void invoke(TripScore result) {
-                        Toast.makeText(Inject.currentContext(), "Score " + result.getAddTripResult(), Toast.LENGTH_LONG).show();
+                        PendingIntent intent = PendingIntent.getActivity(
+                                Inject.currentContext(),
+                                (int) System.currentTimeMillis(),
+                                new Intent(Inject.currentContext(), SignInActivity.class),
+                                0);
+
+                        Notification notification = new Notification.Builder(Inject.currentContext())
+                                .setContentTitle("Trip score: " + result.getAddTripResult())
+                                .setContentText("Your trip was successfully uploaded")
+                                .setSmallIcon(Inject.currentContext().getApplicationInfo().icon)
+                                .setContentIntent(intent)
+                                .setAutoCancel(true)
+                                .build();
+                        ((NotificationManager) getSystemService(Inject.currentContext().NOTIFICATION_SERVICE)).notify(0, notification);
                     }
                 });
             }
         }
-    }
-
-    @OnClick(R.id.testConnection)
-    public void testConnection() {
-        Email email = new Email("ntrpilot@gmail.com");
-        HttpRequest<UserId> request = new HttpGetRequest<>(email, UserId.class, Methods.USER_LOGIN, new Callback<UserId>() {
-            @Override
-            public void invoke(UserId result) {
-                Toast.makeText(Inject.currentContext(), result.getLoginResult(), Toast.LENGTH_LONG).show();
-            }
-        });
-        request.execute();
-    }
-
-    private ResponseHandlerInterface createHandler() {
-        return new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                Toast.makeText(getApplicationContext(), "Trip uploaded to the server.", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                for (Header header : headers) {
-                    Log.d("Testing", header.getName() + " : " + header.getValue());
-                }
-                Log.d("Testing", new String(responseBody));
-                Toast.makeText(getApplicationContext(), "Trip not uploaded to the server. Returned with code: " + statusCode, Toast.LENGTH_LONG).show();
-            }
-        };
     }
 
     // This is because for some reason any alert message and activity change can only take place in another activity
@@ -150,46 +121,6 @@ public class TripActivity extends AppCompatActivity {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-    }
-
-    @Bind(R.id.xMotion)
-    TextView xMotionText;
-    @Bind(R.id.yMotion)
-    TextView yMotionText;
-    @Bind(R.id.zMotion)
-    TextView zMotionText;
-    @Bind(R.id.location)
-    TextView locationText;
-    @Bind(R.id.speed)
-    TextView speedText;
-    @Bind(R.id.isRunning)
-    TextView runningText;
-
-    private SensorState state = SensorState.getInstance();
-
-    @OnClick(R.id.refresh)
-    public void refreshClick(View view) {
-        runner();
-    }
-
-    private void runner() {
-        runningText.setText(ThreadState.isRunning() ? "Running" : "Not Running");
-        if (ThreadState.isRunning()) {
-            xMotionText.setText(Float.toString(state.getCorrectedMaxXDeflection()));
-            yMotionText.setText(Float.toString(state.getCorrectedMaxYDeflection()));
-            zMotionText.setText(Float.toString(state.getCorrectedMaxZDeflection()));
-            speedText.setText(Double.toString(state.getSpeed()));
-            double[] location = state.getLocation();
-            if (location != null && location.length <= 2) {
-                locationText.setText(Double.toString(location[0]) + ", " + Double.toString(location[1]));
-            }
-        } else {
-            xMotionText.setText("");
-            yMotionText.setText("");
-            zMotionText.setText("");
-            speedText.setText("");
-            locationText.setText("");
-        }
     }
 
     @OnClick(R.id.settings)
