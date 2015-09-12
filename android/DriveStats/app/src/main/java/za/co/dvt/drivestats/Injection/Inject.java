@@ -2,8 +2,6 @@ package za.co.dvt.drivestats.Injection;
 
 import android.content.Context;
 
-import za.co.dvt.drivestats.services.CloudService;
-import za.co.dvt.drivestats.services.SoapCloudService;
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
 import za.co.dvt.drivestats.utilities.Settings;
 import za.co.dvt.drivestats.utilities.UserProfile;
@@ -21,10 +19,6 @@ public class Inject {
 
     public static void setCurrentContext(Context currentContext) {
         Inject.currentContext = currentContext;
-    }
-
-    public static CloudService cloudService() {
-        return new SoapCloudService();
     }
 
     public static Settings settings() {

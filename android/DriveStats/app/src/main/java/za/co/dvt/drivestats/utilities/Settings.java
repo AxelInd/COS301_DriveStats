@@ -33,8 +33,6 @@ public class Settings {
 
     public void setWifiOnlyMode(boolean wifiOnlyMode) {
         this.wifiOnlyMode = wifiOnlyMode;
-        if (wifiOnlyMode) ThreadManager.getInstance().runUploadThread();
-        else ThreadManager.getInstance().stopUploadThread();
     }
 
     public static Settings getInstance() {

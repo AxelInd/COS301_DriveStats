@@ -21,19 +21,22 @@ import com.loopj.android.http.ResponseHandlerInterface;
 
 import org.apache.http.Header;
 
-import java.io.IOException;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import za.co.dvt.drivestats.Injection.Inject;
 import za.co.dvt.drivestats.R;
-import za.co.dvt.drivestats.resources.datasending.CallBack;
-import za.co.dvt.drivestats.services.CloudService;
+import za.co.dvt.drivestats.resources.network.Callback;
+import za.co.dvt.drivestats.resources.network.Methods;
+import za.co.dvt.drivestats.resources.network.httpcoms.HttpGetRequest;
+import za.co.dvt.drivestats.resources.network.httpcoms.HttpRequest;
+import za.co.dvt.drivestats.resources.network.request.Email;
+import za.co.dvt.drivestats.resources.network.response.TripScore;
+import za.co.dvt.drivestats.resources.network.response.UserId;
+import za.co.dvt.drivestats.services.network.NetworkService;
 import za.co.dvt.drivestats.threadmanagment.ThreadManager;
 import za.co.dvt.drivestats.threadmanagment.ThreadState;
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
-import za.co.dvt.drivestats.threadmanagment.uploadingthread.UploadUtility;
 import za.co.dvt.drivestats.utilities.Constants;
 
 public class TripActivity extends AppCompatActivity {
@@ -67,30 +70,31 @@ public class TripActivity extends AppCompatActivity {
             Constants.OFFLINE_FILE_NAME = "offlineStorage-" + System.currentTimeMillis() + ".dat";
             manager.start();
         } else {
-            try {
-                if (((ToggleButton) view).isChecked()) {
-                    ((ToggleButton) view).setChecked(false);
-                }
-                if (ThreadState.isRunning()) {
-                    manager.stop();
-                    UploadUtility.uploadTrip(getApplicationContext(), createHandler());
-                }
-            } catch (IOException e) {
-                //TODO: handle IOException
-                e.printStackTrace();
+            if (((ToggleButton) view).isChecked()) {
+                ((ToggleButton) view).setChecked(false);
+            }
+            if (ThreadState.isRunning()) {
+                manager.stop();
+                NetworkService.uploadTrip(new Callback<TripScore>() {
+                    @Override
+                    public void invoke(TripScore result) {
+                        Toast.makeText(Inject.currentContext(), "Score " + result.getAddTripResult(), Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         }
     }
 
     @OnClick(R.id.testConnection)
     public void testConnection() {
-        CloudService service = Inject.cloudService();
-        service.getUserId("ntrpilot@gmail.com", new CallBack() {
+        Email email = new Email("ntrpilot@gmail.com");
+        HttpRequest<UserId> request = new HttpGetRequest<>(email, UserId.class, Methods.USER_LOGIN, new Callback<UserId>() {
             @Override
-            public void callBack(String... values) {
-                Toast.makeText(getApplicationContext(), values[0], Toast.LENGTH_LONG).show();
+            public void invoke(UserId result) {
+                Toast.makeText(Inject.currentContext(), result.getLoginResult(), Toast.LENGTH_LONG).show();
             }
         });
+        request.execute();
     }
 
     private ResponseHandlerInterface createHandler() {

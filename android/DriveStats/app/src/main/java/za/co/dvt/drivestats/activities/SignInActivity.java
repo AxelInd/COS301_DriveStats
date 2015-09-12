@@ -16,7 +16,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import za.co.dvt.drivestats.Injection.Inject;
 import za.co.dvt.drivestats.R;
-import za.co.dvt.drivestats.utilities.CloudRequest;
+import za.co.dvt.drivestats.resources.network.Callback;
+import za.co.dvt.drivestats.resources.network.response.UserId;
+import za.co.dvt.drivestats.services.network.NetworkService;
 import za.co.dvt.drivestats.utilities.OfflineUtilities;
 import za.co.dvt.drivestats.utilities.sensormontiors.GoogleUtilities;
 
@@ -65,7 +67,12 @@ public class SignInActivity extends AppCompatActivity {
     //TODO: Remove this method
     @OnClick(R.id.byPass)
     public void goThrough() {
-        gotoTripContext();
+        NetworkService.login("ntrpilot@gmail.com", new Callback<UserId>() {
+            @Override
+            public void invoke(UserId result) {
+                gotoTripContext();
+            }
+        });
     }
 
     private boolean checkOffline() {
@@ -73,9 +80,9 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void singUp(String emailAddress) {
-        CloudRequest request = new CloudRequest(CloudRequest.Action.GET_USER_ID);
-        request.addParameter(CloudRequest.Parameter.EMAIL, emailAddress);
-        request.post(createHandler());
+//        AsyncRestRequest request = new AsyncRestRequest(AsyncRestRequest.Action.GET_USER_ID);
+//        request.addParameter(AsyncRestRequest.Parameter.EMAIL, emailAddress);
+//        request.post(createHandler());
     }
 
     private AsyncHttpResponseHandler createHandler() {

@@ -5,8 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import za.co.dvt.drivestats.utilities.SensorUtilities;
-import za.co.dvt.drivestats.utilities.Settings;
+import za.co.dvt.drivestats.services.sensors.SensorService;
 import za.co.dvt.drivestats.utilities.exceptions.AccelerometerServiceUnavailableException;
 import za.co.dvt.drivestats.utilities.exceptions.LocationServiceUnavailableException;
 import za.co.dvt.drivestats.utilities.exceptions.MonitorException;
@@ -21,8 +20,6 @@ public class ThreadManager {
 
     private List<Monitor> monitors = new ArrayList<>(EXPECTED_NUMBER_OF_MONITORS);
 
-    private Monitor uploadMonitor = null;
-
     private static final ThreadManager instance = new ThreadManager();
 
     private ThreadManager() { }
@@ -34,9 +31,9 @@ public class ThreadManager {
     private void runSensorMonitor() {
         //TODO: Create and launch the sensor monitoring thread
         try {
-            monitors.add(SensorUtilities.getAccelerometerMonitor());
-            monitors.add(SensorUtilities.getGpsMonitor());
-            monitors.add(SensorUtilities.getOfflineWriter());
+            monitors.add(SensorService.getAccelerometerMonitor());
+            monitors.add(SensorService.getGpsMonitor());
+            monitors.add(SensorService.getOfflineWriter());
         } catch (LocationServiceUnavailableException e) {
             //TODO: User isn't setting GPS to be on?? Show message or something
             Log.d("Exception", "This happened: " + e.getClass());
@@ -55,37 +52,20 @@ public class ThreadManager {
         }
     }
 
-    public void runUploadThread() {
-        if (ThreadState.isRunning()) {
-            uploadMonitor = null; // TODO: create the real monitor and start
-        }
-    }
-
-    public void stopUploadThread() {
-        if (ThreadState.isRunning() && uploadMonitor != null) {
-            uploadMonitor.stop();
-            uploadMonitor = null;
-        }
-    }
 
     public void start() {
         if (ThreadState.tryStart()) {
             runSensorMonitor();
-            if (!Settings.getInstance().isWifiOnlyMode()) {
-                runUploadThread();
-            }
         }
     }
 
     public void stop() {
         if (ThreadState.tryStop()) {
-            stopUploadThread();
             for (Monitor monitor : monitors) {
                 try {
                     monitor.stop();
                 } catch (Throwable e) {
-                    //TODO: If something goes wrong I don't want the loop to terminate
-                    //Not sure what to do here
+                    // Do nothing
                 }
             }
             monitors = new ArrayList<>(EXPECTED_NUMBER_OF_MONITORS);

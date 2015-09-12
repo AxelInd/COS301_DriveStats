@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import za.co.dvt.drivestats.utilities.exceptions.SystemException;
+
 public class OfflineUtilities {
 
     /**
@@ -29,24 +31,21 @@ public class OfflineUtilities {
         }
     }
 
-    /**
-     * Takes the offline file input stream, reads all the data into a byte array and
-     * compresses it using {@link Compressor#compress(byte[])}.
-     * <p/>
-     * This data is then sent off the the Drive Stats server using a {@link CloudRequest}
-     *
-     * @param file The input stream of the offline file storage, got from {@link android.content.Context#openFileOutput(String, int)}
-     */
-    public synchronized static String getCompressedOfflineFile(FileInputStream file) throws IOException {
-        byte[] tripBytes = fileToArr(file);
-        String compressedTrip = Compressor.compress(tripBytes);
-        return compressedTrip;
+
+    public synchronized static String getUncomplessedOfflineFile(FileInputStream file) {
+        try {
+            String dataString = new String(fileToArr(file));
+            Log.d(">>>>>>>>>> ", dataString);
+            return dataString;
+        } catch (IOException e) {
+            throw new SystemException("Problem reading file", e);
+        }
     }
 
     /**
      * Helper method
      * <p/>
-     * Used by {@link OfflineUtilities#getCompressedOfflineFile(FileInputStream)}
+     * Used by {@link OfflineUtilities#getUncomplessedOfflineFile(FileInputStream)}
      * Takes in the input stream for the offline storage and reads the contents into a byte array
      *
      * @param file The input stream for the offline storage {@see android.content.Context#openFileInput(String)}
