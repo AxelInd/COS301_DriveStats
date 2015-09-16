@@ -1,0 +1,3 @@
+The algorithm being reated will make use of a linear regression of existing data and NOT a feedforward neural network as previously described.
+
+Prenil has kindly offered his help in this endevour.
