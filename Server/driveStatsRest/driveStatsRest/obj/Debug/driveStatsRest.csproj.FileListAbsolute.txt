@@ -1,0 +1,13 @@
+c:\users\zander\documents\visual studio 2012\Projects\driveStatsRest\driveStatsRest\obj\Debug\driveStatsRest.csprojResolveAssemblyReference.cache
+c:\users\zander\documents\visual studio 2012\Projects\driveStatsRest\driveStatsRest\bin\driveStatsRest.dll
+c:\users\zander\documents\visual studio 2012\Projects\driveStatsRest\driveStatsRest\bin\driveStatsRest.pdb
+c:\users\zander\documents\visual studio 2012\Projects\driveStatsRest\driveStatsRest\obj\Debug\driveStatsRest.dll
+c:\users\zander\documents\visual studio 2012\Projects\driveStatsRest\driveStatsRest\obj\Debug\driveStatsRest.pdb
+c:\users\zander\documents\visual studio 2012\Projects\driveStatsRest\driveStatsRest\bin\EntityFramework.dll
+c:\users\zander\documents\visual studio 2012\Projects\driveStatsRest\driveStatsRest\bin\EntityFramework.SqlServer.dll
+c:\users\zander\documents\visual studio 2012\Projects\driveStatsRest\driveStatsRest\bin\EntityFramework.xml
+c:\users\zander\documents\visual studio 2012\Projects\driveStatsRest\driveStatsRest\bin\EntityFramework.SqlServer.xml
+C:\Users\Zander\documents\visual studio 2012\Projects\driveStatsRest\driveStatsRest\bin\EntityFramework.BulkInsert.dll
+C:\Users\Zander\documents\visual studio 2012\Projects\driveStatsRest\driveStatsRest\bin\EntityFramework.MappingAPI.dll
+C:\Users\Zander\documents\visual studio 2012\Projects\driveStatsRest\driveStatsRest\bin\EntityFramework.BulkInsert.pdb
+C:\Users\Zander\documents\visual studio 2012\Projects\driveStatsRest\driveStatsRest\bin\EntityFramework.MappingAPI.pdb

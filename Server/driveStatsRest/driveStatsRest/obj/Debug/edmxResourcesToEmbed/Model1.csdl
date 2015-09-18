@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="drivestatsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="tripData">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="tripID" Type="Int32" />
+    <Property Name="latitude" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="longitude" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="speed" Type="String" />
+    <Property Name="maxXAcelerometer" Type="String" />
+    <Property Name="maxYAcelerometer" Type="String" />
+    <Property Name="maxZAcelerometer" Type="String" />
+  </EntityType>
+  <EntityType Name="trip">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userID" Type="Int32" />
+    <Property Name="tripDate" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="user" Relationship="Self.FK__trips__userID__38996AB5" FromRole="trips" ToRole="users" />
+    <Property Name="startTime" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="score" Type="Double" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="email" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="joinDate" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="averageScore" Type="Double" />
+    <NavigationProperty Name="trips" Relationship="Self.FK__trips__userID__38996AB5" FromRole="users" ToRole="trips" />
+  </EntityType>
+  <Association Name="FK__trips__userID__38996AB5">
+    <End Role="users" Type="Self.user" Multiplicity="0..1" />
+    <End Role="trips" Type="Self.trip" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="trips">
+        <PropertyRef Name="userID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="drivestatsEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tripDatas" EntityType="Self.tripData" />
+    <EntitySet Name="trips" EntityType="Self.trip" />
+    <EntitySet Name="users" EntityType="Self.user" />
+    <AssociationSet Name="FK__trips__userID__38996AB5" Association="Self.FK__trips__userID__38996AB5">
+      <End Role="users" EntitySet="users" />
+      <End Role="trips" EntitySet="trips" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
