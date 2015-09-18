@@ -26,8 +26,10 @@ public class AccelerometerMonitor
 
     public AccelerometerMonitor() {
         manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+//        accelerometer = manager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         accelerometer = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        if (accelerometer == null) throw new AccelerometerServiceUnavailableException("Unable to access accelerometer.");
+        if (accelerometer == null)
+            throw new AccelerometerServiceUnavailableException("Unable to access accelerometer.");
         else manager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 

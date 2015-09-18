@@ -5,12 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
-import org.apache.http.Header;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -37,7 +33,9 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void gotoTripContext() {
-        startActivity(new Intent(this, TripActivity.class));
+        Intent tripIntent = new Intent(Inject.currentContext(), TripActivity.class);
+        tripIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(tripIntent);
     }
 
     @Override
@@ -51,6 +49,11 @@ public class SignInActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) return true;
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        finish();
     }
 
     @OnClick(R.id.signInUsingGoogle)
@@ -79,38 +82,4 @@ public class SignInActivity extends AppCompatActivity {
         return OfflineUtilities.getUserProfile();
     }
 
-    private void singUp(String emailAddress) {
-//        AsyncRestRequest request = new AsyncRestRequest(AsyncRestRequest.Action.GET_USER_ID);
-//        request.addParameter(AsyncRestRequest.Parameter.EMAIL, emailAddress);
-//        request.post(createHandler());
-    }
-
-    private AsyncHttpResponseHandler createHandler() {
-        return new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String response = new String(responseBody);
-                successfulLogin(statusCode, response);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                String response = "There is no message";
-                if (responseBody != null) {
-                    response = new String(responseBody);
-                }
-                unsuccessfulLogin(statusCode, response);
-            }
-        };
-    }
-
-    private void successfulLogin(int code, String response) {
-        //TODO: extract the ID, make it int and do stuff with it.
-        Toast.makeText(getApplicationContext(), "Success (" + code + ")! this server said: " + response, Toast.LENGTH_LONG).show();
-    }
-
-    private void unsuccessfulLogin(int code, String response) {
-        //TODO: extract the ID, make it int and do stuff with it.
-        Toast.makeText(getApplicationContext(), "Failure(" + code + ")! this server said: " + response, Toast.LENGTH_LONG).show();
-    }
 }

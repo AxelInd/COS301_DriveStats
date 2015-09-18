@@ -37,6 +37,25 @@ public class TripActivity extends AppCompatActivity {
         setContentView(R.layout.activity_trip);
         ButterKnife.bind(this);
         Inject.setCurrentContext(this);
+        checkMustStop();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        checkMustStop();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        checkMustStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkMustStop();
     }
 
     @Override
@@ -52,38 +71,77 @@ public class TripActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onStop() {
+        //TODO: Confirm this happens when it has to
+        super.onStop();
+        za.co.dvt.drivestats.utilities.Settings.getInstance().saveSettings();
+    }
+
     @OnClick(R.id.toggleTrip)
     public void toggleTrip(View view) {
         if (((ToggleButton) view).isChecked() && checkGpsService()) {
-            Constants.OFFLINE_FILE_NAME = "offlineStorage-" + System.currentTimeMillis() + ".dat";
-            manager.start();
+            start();
         } else {
             if (((ToggleButton) view).isChecked()) {
                 ((ToggleButton) view).setChecked(false);
             }
             if (ThreadState.isRunning()) {
-                manager.stop();
-                NetworkService.uploadTrip(new Callback<TripScore>() {
-                    @Override
-                    public void invoke(TripScore result) {
-                        PendingIntent intent = PendingIntent.getActivity(
-                                Inject.currentContext(),
-                                (int) System.currentTimeMillis(),
-                                new Intent(Inject.currentContext(), SignInActivity.class),
-                                0);
-
-                        Notification notification = new Notification.Builder(Inject.currentContext())
-                                .setContentTitle("Trip score: " + result.getAddTripResult())
-                                .setContentText("Your trip was successfully uploaded")
-                                .setSmallIcon(Inject.currentContext().getApplicationInfo().icon)
-                                .setContentIntent(intent)
-                                .setAutoCancel(true)
-                                .build();
-                        ((NotificationManager) getSystemService(Inject.currentContext().NOTIFICATION_SERVICE)).notify(0, notification);
-                    }
-                });
+                stop();
             }
         }
+    }
+
+    @OnClick(R.id.settings)
+    public void settingsClick() {
+        startActivity(new Intent(this, SettingsActivity.class));
+    }
+
+    private void start() {
+        Constants.OFFLINE_FILE_NAME = "offlineStorage-" + System.currentTimeMillis() + ".dat";
+        manager.start();
+        Notification notification = new Notification.Builder(Inject.currentContext())
+                .setContentTitle("Drive Stats is running")
+                .setContentText("Your trip is being recorded.")
+                .setSmallIcon(Inject.currentContext().getApplicationInfo().icon)
+                .setContentIntent(getPendingIntent(false))
+                .addAction(17301551, "Stop recording", getPendingIntent(true))
+                .setOngoing(true)
+                .build();
+        ((NotificationManager) getSystemService(Inject.currentContext().NOTIFICATION_SERVICE)).notify(0, notification);
+    }
+
+    private PendingIntent getPendingIntent(boolean stop) {
+        Intent launchIntent = new Intent(Inject.currentContext(), SignInActivity.class);
+        launchIntent.putExtra("stop", stop);
+        return PendingIntent.getActivity(
+                Inject.currentContext(),
+                (int) System.currentTimeMillis(),
+                launchIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+    }
+
+    private void stop() {
+        manager.stop();
+        NetworkService.uploadTrip(new Callback<TripScore>() {
+            @Override
+            public void invoke(TripScore result) {
+                Intent intent = new Intent(Inject.currentContext(), SignInActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(
+                        Inject.currentContext(),
+                        (int) System.currentTimeMillis(),
+                        intent,
+                        PendingIntent.FLAG_CANCEL_CURRENT);
+
+                Notification notification = new Notification.Builder(Inject.currentContext())
+                        .setContentTitle("Trip score: " + result.getAddTripResult())
+                        .setContentText("Your trip was successfully uploaded")
+                        .setSmallIcon(Inject.currentContext().getApplicationInfo().icon)
+                        .setContentIntent(pendingIntent)
+                        .build();
+                ((NotificationManager) getSystemService(Inject.currentContext().NOTIFICATION_SERVICE)).notify(0, notification);
+            }
+        });
     }
 
     // This is because for some reason any alert message and activity change can only take place in another activity
@@ -123,15 +181,10 @@ public class TripActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    @OnClick(R.id.settings)
-    public void settingsClick() {
-        startActivity(new Intent(this, SettingsActivity.class));
-    }
 
-    @Override
-    protected void onStop() {
-        //TODO: Confirm this happens when it has to
-        super.onStop();
-        za.co.dvt.drivestats.utilities.Settings.getInstance().saveSettings();
+    private void checkMustStop() {
+        if (getIntent().getBooleanExtra("stop", false)) {
+            stop();
+        }
     }
 }
