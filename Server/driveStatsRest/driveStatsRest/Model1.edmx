@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="drivestatsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tripData">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tripID" Type="int" />
+          <Property Name="latitude" Type="varchar" MaxLength="20" />
+          <Property Name="longitude" Type="varchar" MaxLength="20" />
+          <Property Name="speed" Type="varchar" MaxLength="4" />
+          <Property Name="maxXAcelerometer" Type="varchar" MaxLength="8" />
+          <Property Name="maxYAcelerometer" Type="varchar" MaxLength="8" />
+          <Property Name="maxZAcelerometer" Type="varchar" MaxLength="8" />
+        </EntityType>
+        <EntityType Name="trips">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userID" Type="int" />
+          <Property Name="tripDate" Type="varchar" MaxLength="40" />
+          <Property Name="startTime" Type="varchar" MaxLength="6" />
+          <Property Name="score" Type="float" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="joinDate" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="averageScore" Type="float" />
+        </EntityType>
+        <Association Name="FK__trips__userID__5EBF139D">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="trips" Type="Self.trips" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="trips">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="drivestatsModelStoreContainer">
+          <EntitySet Name="tripData" EntityType="Self.tripData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="trips" EntityType="Self.trips" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__trips__userID__5EBF139D" Association="Self.FK__trips__userID__5EBF139D">
+            <End Role="users" EntitySet="users" />
+            <End Role="trips" EntitySet="trips" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="drivestatsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tripData">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tripID" Type="Int32" />
+          <Property Name="latitude" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="longitude" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="speed" Type="String" />
+          <Property Name="maxXAcelerometer" Type="String" />
+          <Property Name="maxYAcelerometer" Type="String" />
+          <Property Name="maxZAcelerometer" Type="String" />
+        </EntityType>
+        <EntityType Name="trip">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userID" Type="Int32" />
+          <Property Name="tripDate" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="user" Relationship="Self.FK__trips__userID__38996AB5" FromRole="trips" ToRole="users" />
+          <Property Name="startTime" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="score" Type="Double" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="joinDate" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="averageScore" Type="Double" />
+          <NavigationProperty Name="trips" Relationship="Self.FK__trips__userID__38996AB5" FromRole="users" ToRole="trips" />
+        </EntityType>
+        <Association Name="FK__trips__userID__38996AB5">
+          <End Role="users" Type="Self.user" Multiplicity="0..1" />
+          <End Role="trips" Type="Self.trip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="trips">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="drivestatsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tripDatas" EntityType="Self.tripData" />
+          <EntitySet Name="trips" EntityType="Self.trip" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <AssociationSet Name="FK__trips__userID__38996AB5" Association="Self.FK__trips__userID__38996AB5">
+            <End Role="users" EntitySet="users" />
+            <End Role="trips" EntitySet="trips" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="drivestatsModelStoreContainer" CdmEntityContainer="drivestatsEntities">
+          <EntitySetMapping Name="tripDatas">
+            <EntityTypeMapping TypeName="drivestatsModel.tripData">
+              <MappingFragment StoreEntitySet="tripData">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="tripID" ColumnName="tripID" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="speed" ColumnName="speed" />
+                <ScalarProperty Name="maxXAcelerometer" ColumnName="maxXAcelerometer" />
+                <ScalarProperty Name="maxYAcelerometer" ColumnName="maxYAcelerometer" />
+                <ScalarProperty Name="maxZAcelerometer" ColumnName="maxZAcelerometer" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="trips">
+            <EntityTypeMapping TypeName="drivestatsModel.trip">
+              <MappingFragment StoreEntitySet="trips">
+                <ScalarProperty Name="score" ColumnName="score" />
+                <ScalarProperty Name="startTime" ColumnName="startTime" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="tripDate" ColumnName="tripDate" />
+                </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="drivestatsModel.user">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="joinDate" ColumnName="joinDate" />
+                <ScalarProperty Name="averageScore" ColumnName="averageScore" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
