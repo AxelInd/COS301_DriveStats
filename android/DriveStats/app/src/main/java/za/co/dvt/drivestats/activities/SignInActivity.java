@@ -3,20 +3,22 @@ package za.co.dvt.drivestats.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.ConnectionResult;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import za.co.dvt.drivestats.Injection.Inject;
 import za.co.dvt.drivestats.R;
+import za.co.dvt.drivestats.resources.login.LoginCallback;
 import za.co.dvt.drivestats.resources.network.Callback;
 import za.co.dvt.drivestats.resources.network.response.UserId;
 import za.co.dvt.drivestats.services.network.NetworkService;
 import za.co.dvt.drivestats.utilities.OfflineUtilities;
-import za.co.dvt.drivestats.utilities.sensormontiors.GoogleUtilities;
 
 
 public class SignInActivity extends AppCompatActivity {
@@ -30,6 +32,11 @@ public class SignInActivity extends AppCompatActivity {
         if (checkOffline()) {
             gotoTripContext();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     private void gotoTripContext() {
@@ -53,16 +60,17 @@ public class SignInActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        finish();
+        super.onResume();
     }
 
     @OnClick(R.id.signInUsingGoogle)
     public void signInUsingGoogle() {
+        Inject.loginResource().authenticate(getLoginCallback());
         //TODO: Make the could utils sign in using google method return the email address
 //        return CloudUtilities.signUpUsingGoogle();
-        GoogleUtilities utilities = new GoogleUtilities(getApplicationContext());
-        GoogleApiClient client = utilities.buildGoogleApiClient();
-        client.connect();
+//        GoogleUtilities utilities = new GoogleUtilities(getApplicationContext());
+//        GoogleApiClient client = utilities.buildGoogleApiClient();
+//        client.connect();
 //        String emailAddress = "ntrpilot@gmail.com";
 //        singUp(emailAddress);
     }
@@ -82,4 +90,22 @@ public class SignInActivity extends AppCompatActivity {
         return OfflineUtilities.getUserProfile();
     }
 
+    public LoginCallback getLoginCallback() {
+        return new LoginCallback() {
+            @Override
+            public void onConnected(Bundle bundle) {
+                Log.d(">>>> Testing Login", "On connected called");
+            }
+
+            @Override
+            public void onConnectionSuspended(int i) {
+                Toast.makeText(Inject.currentContext(), "Your session has been suspended", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onConnectionFailed(ConnectionResult connectionResult) {
+                Toast.makeText(Inject.currentContext(), "Problem while logging in: " + connectionResult, Toast.LENGTH_LONG).show();
+            }
+        };
+    }
 }
