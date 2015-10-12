@@ -19,7 +19,6 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activities.SignInActivity"
-            android:launchMode="singleInstance"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

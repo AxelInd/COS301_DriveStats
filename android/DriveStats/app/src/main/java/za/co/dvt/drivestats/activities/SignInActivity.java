@@ -1,27 +1,41 @@
 package za.co.dvt.drivestats.activities;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.plus.Plus;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import za.co.dvt.drivestats.Injection.Inject;
 import za.co.dvt.drivestats.R;
-import za.co.dvt.drivestats.resources.login.LoginCallback;
 import za.co.dvt.drivestats.resources.network.Callback;
 import za.co.dvt.drivestats.resources.network.response.UserId;
 import za.co.dvt.drivestats.services.network.NetworkService;
 import za.co.dvt.drivestats.utilities.OfflineUtilities;
 
 
-public class SignInActivity extends AppCompatActivity {
+public class SignInActivity extends Activity
+        implements ConnectionCallbacks, OnConnectionFailedListener {
+
+    private static final int RC_SIGN_IN = 0;
+
+    private boolean isResolving = false;
+
+    private boolean shouldResolve = false;
+
+    private GoogleApiClient googleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +45,22 @@ public class SignInActivity extends AppCompatActivity {
         Inject.setCurrentContext(this);
         if (checkOffline()) {
             gotoTripContext();
+        } else {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(Plus.API)
+                    .addScope(Plus.SCOPE_PLUS_LOGIN)
+                    .addScope(Plus.SCOPE_PLUS_PROFILE)
+                    .addScope(new Scope(Scopes.EMAIL))
+                    .build();
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        googleApiClient.disconnect();
     }
 
     private void gotoTripContext() {
@@ -58,27 +82,35 @@ public class SignInActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     @OnClick(R.id.signInUsingGoogle)
     public void signInUsingGoogle() {
-        Inject.loginResource().authenticate(getLoginCallback());
-        //TODO: Make the could utils sign in using google method return the email address
-//        return CloudUtilities.signUpUsingGoogle();
-//        GoogleUtilities utilities = new GoogleUtilities(getApplicationContext());
-//        GoogleApiClient client = utilities.buildGoogleApiClient();
-//        client.connect();
-//        String emailAddress = "ntrpilot@gmail.com";
-//        singUp(emailAddress);
+        shouldResolve = true;
+        googleApiClient.connect();
     }
 
-    //TODO: Remove this method
-    @OnClick(R.id.byPass)
-    public void goThrough() {
-        NetworkService.login("ntrpilot@gmail.com", new Callback<UserId>() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode != RESULT_OK) {
+                shouldResolve = false;
+            }
+
+            isResolving = false;
+            googleApiClient.connect();
+        }
+    }
+
+    private boolean checkOffline() {
+        return OfflineUtilities.getUserProfile();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        shouldResolve = false;
+        String email = Plus.AccountApi.getAccountName(googleApiClient);
+        NetworkService.login(email, new Callback<UserId>() {
             @Override
             public void invoke(UserId result) {
                 gotoTripContext();
@@ -86,26 +118,28 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
-    private boolean checkOffline() {
-        return OfflineUtilities.getUserProfile();
+    @Override
+    public void onConnectionSuspended(int i) {
+        shouldResolve = true;
+        googleApiClient.connect();
     }
 
-    public LoginCallback getLoginCallback() {
-        return new LoginCallback() {
-            @Override
-            public void onConnected(Bundle bundle) {
-                Log.d(">>>> Testing Login", "On connected called");
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        if (!isResolving && shouldResolve) {
+            if (connectionResult.hasResolution()) {
+                try {
+                    connectionResult.startResolutionForResult(this, RC_SIGN_IN);
+                    isResolving = true;
+                } catch (IntentSender.SendIntentException e) {
+                    isResolving = false;
+                    googleApiClient.connect();
+                }
+            } else {
+                Toast.makeText(this, "Could not sign in using Google+", Toast.LENGTH_LONG).show();
             }
-
-            @Override
-            public void onConnectionSuspended(int i) {
-                Toast.makeText(Inject.currentContext(), "Your session has been suspended", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onConnectionFailed(ConnectionResult connectionResult) {
-                Toast.makeText(Inject.currentContext(), "Problem while logging in: " + connectionResult, Toast.LENGTH_LONG).show();
-            }
-        };
+        } else {
+            Toast.makeText(this, "Signed Out", Toast.LENGTH_LONG).show();
+        }
     }
 }
