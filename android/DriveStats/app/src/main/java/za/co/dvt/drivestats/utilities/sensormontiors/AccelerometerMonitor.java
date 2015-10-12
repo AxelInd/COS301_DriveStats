@@ -6,7 +6,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import za.co.dvt.drivestats.threadmanagment.exceptions.AccelerometerServiceUnavailableException;
+import za.co.dvt.drivestats.Injection.Inject;
+import za.co.dvt.drivestats.utilities.exceptions.AccelerometerServiceUnavailableException;
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
 
 /**
@@ -19,15 +20,16 @@ public class AccelerometerMonitor
 
     private Sensor accelerometer;
 
-    private SensorState state = SensorState.getInstance();
+    private SensorState state = Inject.sensorState();
 
-    private final Context context;
+    private final Context context = Inject.currentContext();
 
-    public AccelerometerMonitor(Context context) {
-        this.context = context;
+    public AccelerometerMonitor() {
         manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+//        accelerometer = manager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         accelerometer = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        if (accelerometer == null) throw new AccelerometerServiceUnavailableException("Unable to access accelerometer.");
+        if (accelerometer == null)
+            throw new AccelerometerServiceUnavailableException("Unable to access accelerometer.");
         else manager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
@@ -45,6 +47,6 @@ public class AccelerometerMonitor
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        //TODO: Find out if this is important
+        //Not relevant to this application
     }
 }

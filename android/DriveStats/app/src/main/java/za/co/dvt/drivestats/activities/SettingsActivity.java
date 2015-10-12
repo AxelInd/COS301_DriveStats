@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import za.co.dvt.drivestats.Injection.Inject;
 import za.co.dvt.drivestats.R;
 import za.co.dvt.drivestats.utilities.Settings;
 
@@ -26,11 +27,12 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
+        Inject.setCurrentContext(this);
         initUi();
     }
 
     private void initUi() {
-        SETTINGS.loadSettings(getApplicationContext());
+        SETTINGS.loadSettings();
         wifiOnlyCheckBox.setChecked(SETTINGS.isWifiOnlyMode());
     }
 
@@ -60,7 +62,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void saveSettings() {
-        SETTINGS.saveSettings(getApplicationContext());
+        SETTINGS.saveSettings();
     }
 
     @OnClick(R.id.chkWifiOnly)

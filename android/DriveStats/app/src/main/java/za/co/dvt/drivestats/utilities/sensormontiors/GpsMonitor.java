@@ -7,6 +7,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import za.co.dvt.drivestats.Injection.Inject;
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
 
 /**
@@ -16,7 +17,6 @@ public class GpsMonitor implements Monitor, LocationListener {
 
     private final LocationManager locationManager;
 
-    private final Context context;
 
     private final SensorState state = SensorState.getInstance();
 
@@ -26,8 +26,8 @@ public class GpsMonitor implements Monitor, LocationListener {
     // The minimum time between updates in milliseconds
     private static final long MIN_TIME_BW_UPDATES = 1;
 
-    public GpsMonitor(Context context) {
-        this.context = context;
+    public GpsMonitor() {
+        Context context = Inject.currentContext();
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES
                 , MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
