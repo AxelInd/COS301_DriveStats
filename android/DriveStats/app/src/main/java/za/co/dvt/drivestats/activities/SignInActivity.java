@@ -60,11 +60,12 @@ public class SignInActivity extends Activity
     @Override
     protected void onStop() {
         super.onStop();
-        googleApiClient.disconnect();
+        if (googleApiClient != null && googleApiClient.isConnected())
+            googleApiClient.disconnect();
     }
 
     private void gotoTripContext() {
-        Intent tripIntent = new Intent(Inject.currentContext(), TripActivity.class);
+        Intent tripIntent = new Intent(this, TripActivity.class);
         tripIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(tripIntent);
     }

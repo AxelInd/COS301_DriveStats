@@ -27,12 +27,12 @@
         </activity>
         <activity
             android:name=".activities.TripActivity"
-            android:launchMode="singleInstance"
+            android:launchMode="standard"
             android:label="@string/title_activity_trip" >
         </activity>
         <activity
             android:name=".activities.SettingsActivity"
-            android:launchMode="singleInstance"
+            android:launchMode="standard"
             android:label="SettingsActivity">
         </activity>
     </application>

@@ -3,15 +3,26 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background_blur"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context="za.co.dvt.drivestats.activities.SignInActivity">
 
-    <com.google.android.gms.common.SignInButton
+    <ImageButton
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:id="@+id/signInUsingGoogle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="78dp"
-        android:layout_centerVertical="true" />
+        android:background="@android:color/transparent"
+        android:src="@drawable/userimage"
+        android:scaleType="fitXY"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:id="@+id/imageView"
+        android:background="@android:color/transparent"
+        android:src="@drawable/logo_enlarged"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
