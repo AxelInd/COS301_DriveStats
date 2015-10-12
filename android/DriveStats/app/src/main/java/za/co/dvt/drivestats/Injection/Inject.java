@@ -2,8 +2,6 @@ package za.co.dvt.drivestats.Injection;
 
 import android.content.Context;
 
-import za.co.dvt.drivestats.resources.login.GoogleLoginResource;
-import za.co.dvt.drivestats.resources.login.LoginResource;
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
 import za.co.dvt.drivestats.utilities.Settings;
 import za.co.dvt.drivestats.utilities.UserProfile;
@@ -35,12 +33,6 @@ public class Inject {
 
     public static SensorState sensorState() {
         return SensorState.getInstance();
-    }
-
-    private static final LoginResource loginResource = new GoogleLoginResource();
-
-    public static LoginResource loginResource() {
-        return loginResource;
     }
 
 }

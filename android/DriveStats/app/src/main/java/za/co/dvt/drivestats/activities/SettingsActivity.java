@@ -1,7 +1,7 @@
 package za.co.dvt.drivestats.activities;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +15,7 @@ import za.co.dvt.drivestats.R;
 import za.co.dvt.drivestats.utilities.Settings;
 
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends Activity {
 
     private static final Settings SETTINGS = Settings.getInstance();
 
