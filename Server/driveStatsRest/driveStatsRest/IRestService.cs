@@ -36,11 +36,11 @@ namespace driveStatsRest
         string addTrip(string userID, string tripDate, string startTime,string data);
 
         [OperationContract]
-        [WebInvoke(Method = "POST",
+        [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             
             BodyStyle = WebMessageBodyStyle.Wrapped,
-            UriTemplate = "test/")]
+            UriTemplate = "test/{thing}")]
         string test(string thing);
     }
 }

@@ -33,7 +33,9 @@ namespace driveStatsRest
 
         public string addTrip(string userID, string tripDate, string startTime,string data)
         {
-            List<tripData> li = new List<tripData>();
+            try
+            {
+                List<tripData> li = new List<tripData>();
 
                 dbManager db = new dbManager();
                 trip t = new trip();
@@ -58,7 +60,7 @@ namespace driveStatsRest
                         tripData d = new tripData();
                         d.tripID = tripID;
                         line = reader.ReadLine();
-                        string lat = line.Substring(1, line.IndexOf(',')-1);
+                        string lat = line.Substring(1, line.IndexOf(',') - 1);
                         line = line.Remove(0, lat.Length + 3);
                         string lon = line.Substring(0, line.IndexOf(']'));
                         line = line.Remove(0, lon.Length + 2);
@@ -77,6 +79,7 @@ namespace driveStatsRest
                         d.maxZAcelerometer = z;
                         li.Add(d);
                     }
+
                     context.BulkInsert(li);
                     context.SaveChanges();
                     transactionScope.Complete();
@@ -86,9 +89,21 @@ namespace driveStatsRest
                     }
                 }
 
-            ScoreCalculator score = new ScoreCalculator(li,3);
-
-            return score.getscore().ToString();
+                ScoreCalculator score = new ScoreCalculator(li, 3);
+                //run thread to update score and user average
+                return score.getscore().ToString();
+            }
+            catch (Exception ex)
+            {
+                using (StreamWriter writer =
+                new StreamWriter("log.txt"))
+                        {
+                            writer.Write(ex.Message);
+                            writer.WriteLine("inner stuff");
+                            writer.WriteLine(ex.InnerException);
+                        }
+            }
+            return "0";
         }
 
         public string UploadFile(string fileName, Stream fileStream)
@@ -102,7 +117,16 @@ namespace driveStatsRest
         }
         public string test(string thing)
         {
-            return "you called: " + thing;
+            try
+            {
+                string text = System.IO.File.ReadAllText("log.txt");
+                return text;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return "no file found";
         }
 
     }
