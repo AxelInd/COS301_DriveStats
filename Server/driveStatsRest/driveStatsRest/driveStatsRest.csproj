@@ -138,7 +138,9 @@
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
     <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\drivestatsfinal.pubxml" />
     <None Include="Properties\PublishProfiles\drivestatsrest.pubxml" />
+    <None Include="Properties\PublishProfiles\finaldrivestats.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
