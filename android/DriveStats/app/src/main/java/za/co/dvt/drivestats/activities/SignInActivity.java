@@ -6,16 +6,22 @@ import android.content.IntentSender;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import za.co.dvt.drivestats.Injection.Inject;
@@ -37,15 +43,39 @@ public class SignInActivity extends Activity
 
     private GoogleApiClient googleApiClient;
 
+    @Bind(R.id.progressBar)
+    ProgressBar spinner;
+
+    @Bind(R.id.signInUsingGoogle)
+    SignInButton signUpButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
         Inject.setCurrentContext(this);
+
+        spinner.setVisibility(View.GONE);
+
         if (checkOffline()) {
             gotoTripContext();
         } else {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(Plus.API)
+                    .addScope(Plus.SCOPE_PLUS_LOGIN)
+                    .addScope(Plus.SCOPE_PLUS_PROFILE)
+                    .addScope(new Scope(Scopes.EMAIL))
+                    .build();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
@@ -64,10 +94,88 @@ public class SignInActivity extends Activity
             googleApiClient.disconnect();
     }
 
+    @OnClick(R.id.signInUsingGoogle)
+    public void signInUsingGoogle(View imageView) {
+        if (!googleApiClient.isConnected() && !googleApiClient.isConnecting() && !checkOffline()) {
+            coinFlip(imageView);
+            showSpinner(true);
+            shouldResolve = true;
+            googleApiClient.connect();
+        } else gotoTripContext();
+    }
+
+
+    private void coinFlip(final View view) {
+        final Animation flipBack = AnimationUtils.loadAnimation(this, R.anim.anim_flip_to_back);
+        final Animation back = AnimationUtils.loadAnimation(this, R.anim.anim_back);
+        final Animation flipFront = AnimationUtils.loadAnimation(this, R.anim.anim_flip_to_front);
+        final Animation front = AnimationUtils.loadAnimation(this, R.anim.anim_front);
+
+        flipBack.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.startAnimation(back);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        back.setAnimationListener(new Animation.AnimationListener() {
+            int count = 0;
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.startAnimation(flipFront);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        flipFront.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.startAnimation(front);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(flipBack);
+    }
+
+    private void showSpinner(boolean show) {
+        signUpButton.setEnabled(!show);
+        spinner.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
     private void gotoTripContext() {
         Intent tripIntent = new Intent(this, TripActivity.class);
         tripIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(tripIntent);
+        this.finish();
     }
 
     @Override
@@ -83,11 +191,6 @@ public class SignInActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.signInUsingGoogle)
-    public void signInUsingGoogle() {
-        shouldResolve = true;
-        googleApiClient.connect();
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -114,6 +217,7 @@ public class SignInActivity extends Activity
         NetworkService.login(email, new Callback<UserId>() {
             @Override
             public void invoke(UserId result) {
+                showSpinner(false);
                 gotoTripContext();
             }
         });

@@ -13,4 +13,7 @@
     <string name="wifi_only_mode">Wifi Only</string>
     <string name="wifi_only_description">Your trip data will only be uploaded when connected to wifi</string>
     <string name="by_pass">By Pass</string>
+    <string name="sign_up">Sign up using</string>
+    <string name="google_plus">Google+</string>
+    <string name="welcome">Welcome</string>
 </resources>
