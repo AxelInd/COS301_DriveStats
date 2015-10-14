@@ -5,7 +5,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 
 import za.co.dvt.drivestats.Injection.Inject;
 import za.co.dvt.drivestats.threadmanagment.sensorthread.SensorState;
@@ -35,7 +34,6 @@ public class GpsMonitor implements Monitor, LocationListener {
         if(lastKnowLocation != null) {
             state.setLocation(lastKnowLocation.getLatitude(), lastKnowLocation.getLongitude());
             state.setSpeed(lastKnowLocation.getSpeed());
-            Log.d("Testing", "This was successful: " + lastKnowLocation.getLatitude() + ", " + lastKnowLocation.getLongitude());
         }
     }
 
@@ -48,21 +46,12 @@ public class GpsMonitor implements Monitor, LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        //TODO: Make sure this is the right way around
         state.setLocation(location.getLatitude(), location.getLongitude());
         state.setSpeed(location.getSpeed());
-        Log.d("Testing", "Location: " + location.getLatitude() + ", " + location.getLongitude());
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        if (provider.equals(LocationManager.GPS_PROVIDER)) {
-//            askNicely();
-            //TODO: If the GPS is turned off during the trip?
-//            if (!resourcesAvailable()) {
-//                throw new LocationServiceUnavailableException("GPS service has been switched off");
-//            }
-        }
     }
 
     @Override

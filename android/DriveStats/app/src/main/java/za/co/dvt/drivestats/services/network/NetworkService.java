@@ -37,6 +37,7 @@ public class NetworkService {
             @Override
             public void invoke(TripScore result) {
                 Inject.currentContext().deleteFile(Constants.OFFLINE_FILE_NAME);
+                Inject.userProfile().addTrip(Double.parseDouble(result.getAddTripResult()));
                 callback.invoke(result);
             }
         });

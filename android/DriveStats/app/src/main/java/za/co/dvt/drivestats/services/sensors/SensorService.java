@@ -31,7 +31,7 @@ public class SensorService {
         }
     }
 
-    public static Monitor getOfflineWriter() {
+    public static OfflineWriter getOfflineWriter() {
         try {
             return new OfflineWriter();
         } catch (Throwable e) {

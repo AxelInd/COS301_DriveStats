@@ -16,4 +16,5 @@
     <string name="sign_up">Sign up using</string>
     <string name="google_plus">Google+</string>
     <string name="welcome">Welcome</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 </resources>

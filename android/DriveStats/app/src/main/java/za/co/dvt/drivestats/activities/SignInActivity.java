@@ -20,6 +20,7 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,6 +31,7 @@ import za.co.dvt.drivestats.resources.network.Callback;
 import za.co.dvt.drivestats.resources.network.response.UserId;
 import za.co.dvt.drivestats.services.network.NetworkService;
 import za.co.dvt.drivestats.utilities.OfflineUtilities;
+import za.co.dvt.drivestats.utilities.UserProfile;
 
 
 public class SignInActivity extends Activity
@@ -97,15 +99,22 @@ public class SignInActivity extends Activity
     @OnClick(R.id.signInUsingGoogle)
     public void signInUsingGoogle(View imageView) {
         if (!googleApiClient.isConnected() && !googleApiClient.isConnecting() && !checkOffline()) {
-            coinFlip(imageView);
-            showSpinner(true);
-            shouldResolve = true;
-            googleApiClient.connect();
+            coinFlip(imageView, new afterFlip() {
+                @Override
+                public void perform() {
+                    showSpinner(true);
+                    shouldResolve = true;
+                    googleApiClient.connect();
+                }
+            });
         } else gotoTripContext();
     }
 
+    private interface afterFlip {
+        void perform();
+    }
 
-    private void coinFlip(final View view) {
+    private void coinFlip(final View view, final afterFlip callback) {
         final Animation flipBack = AnimationUtils.loadAnimation(this, R.anim.anim_flip_to_back);
         final Animation back = AnimationUtils.loadAnimation(this, R.anim.anim_back);
         final Animation flipFront = AnimationUtils.loadAnimation(this, R.anim.anim_flip_to_front);
@@ -156,6 +165,23 @@ public class SignInActivity extends Activity
             @Override
             public void onAnimationEnd(Animation animation) {
                 view.startAnimation(front);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        front.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                callback.perform();
             }
 
             @Override
@@ -214,10 +240,17 @@ public class SignInActivity extends Activity
     public void onConnected(Bundle bundle) {
         shouldResolve = false;
         String email = Plus.AccountApi.getAccountName(googleApiClient);
+        Person user = Plus.PeopleApi.getCurrentPerson(googleApiClient);
+        UserProfile profile = Inject.userProfile();
+        if (user != null) {
+            profile.setUserName(user.getDisplayName());
+            profile.setProfilePicture(user.getImage().getUrl());
+            profile.setAverageScore(0.0);
+            profile.setNumberOfTrips(0l);
+        }
         NetworkService.login(email, new Callback<UserId>() {
             @Override
             public void invoke(UserId result) {
-                showSpinner(false);
                 gotoTripContext();
             }
         });
@@ -242,9 +275,11 @@ public class SignInActivity extends Activity
                 }
             } else {
                 Toast.makeText(this, "Could not sign in using Google+", Toast.LENGTH_LONG).show();
+                showSpinner(false);
             }
         } else {
             Toast.makeText(this, "Signed Out", Toast.LENGTH_LONG).show();
+            showSpinner(false);
         }
     }
 }

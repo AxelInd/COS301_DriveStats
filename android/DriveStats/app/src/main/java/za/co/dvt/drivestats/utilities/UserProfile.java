@@ -23,6 +23,14 @@ public class UserProfile {
 
     private Long userId;
 
+    private String userName;
+
+    private String profilePicture;
+
+    private long numberOfTrips;
+
+    private double averageScore;
+
     private static final String USER_PROFILE_FILENAME = "userprofile.prf";
 
     private static final UserProfile instance = new UserProfile();
@@ -42,10 +50,52 @@ public class UserProfile {
         this.userId = userId;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public long getNumberOfTrips() {
+        return numberOfTrips;
+    }
+
+    public void setNumberOfTrips(long numberOfTrips) {
+        this.numberOfTrips = numberOfTrips;
+    }
+
+    public double getAverageScore() {
+        return averageScore;
+    }
+
+    public void setAverageScore(double averageScore) {
+        this.averageScore = averageScore;
+    }
+
+    public void addTrip(double score) {
+        double oldAverage = averageScore * (numberOfTrips++);
+        averageScore = Math.floor((oldAverage + score) / numberOfTrips);
+        saveUserProfile();
+    }
+
     public void readUserProfile() throws IOException {
         FileInputStream stream = Inject.currentContext().openFileInput(USER_PROFILE_FILENAME);
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         setUserId(Long.parseLong(reader.readLine()));
+        setUserName(reader.readLine());
+        setProfilePicture(reader.readLine());
+        setNumberOfTrips(Long.parseLong(reader.readLine()));
+        setAverageScore(Double.parseDouble(reader.readLine()));
         reader.close();
     }
 
@@ -55,6 +105,14 @@ public class UserProfile {
             FileOutputStream fileOutputStream = Inject.currentContext().openFileOutput(USER_PROFILE_FILENAME, Context.MODE_PRIVATE);
             writer = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
             writer.write(Long.toString(getUserId()));
+            writer.newLine();
+            writer.write(getUserName());
+            writer.newLine();
+            writer.write(getProfilePicture());
+            writer.newLine();
+            writer.write(Long.toString(getNumberOfTrips()));
+            writer.newLine();
+            writer.write(Double.toString(getAverageScore()));
         } catch (IOException e) {
             throw new SystemException("Error saving User profile", e);
         } finally {

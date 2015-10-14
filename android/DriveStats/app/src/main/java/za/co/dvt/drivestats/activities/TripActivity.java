@@ -11,11 +11,15 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ToggleButton;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import za.co.dvt.drivestats.Injection.Inject;
@@ -26,10 +30,15 @@ import za.co.dvt.drivestats.services.network.NetworkService;
 import za.co.dvt.drivestats.threadmanagment.ThreadManager;
 import za.co.dvt.drivestats.threadmanagment.ThreadState;
 import za.co.dvt.drivestats.utilities.Constants;
+import za.co.dvt.drivestats.utilities.sensormontiors.OfflineWriter;
 
 public class TripActivity extends Activity {
 
     private ThreadManager manager = ThreadManager.getInstance();
+
+    private static final String EXTRA_VALUE = "mustStop";
+
+    private static boolean running = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +47,7 @@ public class TripActivity extends Activity {
         ButterKnife.bind(this);
         Inject.setCurrentContext(this);
         checkMustStop();
+        Log.d("onCreate", getIntent().getStringExtra(EXTRA_VALUE) + "");
     }
 
     @Override
@@ -53,10 +63,18 @@ public class TripActivity extends Activity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        tripButton.setImageResource(running ? R.drawable.stop_trip : R.drawable.start_trip);
+        checkMustStop();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         checkMustStop();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,23 +96,221 @@ public class TripActivity extends Activity {
         za.co.dvt.drivestats.utilities.Settings.getInstance().saveSettings();
     }
 
+
     @OnClick(R.id.toggleTrip)
     public void toggleTrip(View view) {
-        if (((ToggleButton) view).isChecked() && checkGpsService()) {
-            start();
-        } else {
-            if (((ToggleButton) view).isChecked()) {
-                ((ToggleButton) view).setChecked(false);
-            }
-            if (ThreadState.isRunning()) {
-                stop();
+        if (checkGpsService()) {
+            if (!running) {
+                start();
+                running = true;
+                mainCoinFlip(view, running);
+            } else {
+                if (ThreadState.isRunning()) {
+                    mainCoinFlip(view, !running);
+                    stop();
+                    running = false;
+                }
             }
         }
     }
 
     @OnClick(R.id.settings)
-    public void settingsClick() {
-        startActivity(new Intent(this, SettingsActivity.class));
+    public void settingsClick(View view) {
+        final Intent intent = new Intent(this, SettingsActivity.class);
+        coinFlip(view, new afterFlip() {
+            @Override
+            public void perform() {
+                startActivity(intent);
+            }
+        });
+    }
+
+    @OnClick(R.id.profile)
+    public void profileClick(View view) {
+        final Intent intent = new Intent(this, ProfileActivity.class);
+        coinFlip(view, new afterFlip() {
+            @Override
+            public void perform() {
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Bind(R.id.toggleTrip)
+    ImageButton tripButton;
+
+    private void mainCoinFlip(final View view, final boolean running) {
+        final Animation flipBack = AnimationUtils.loadAnimation(this, R.anim.anim_flip_to_back);
+        final Animation back = AnimationUtils.loadAnimation(this, R.anim.anim_back);
+        final Animation flipFront = AnimationUtils.loadAnimation(this, R.anim.anim_flip_to_front);
+        final Animation front = AnimationUtils.loadAnimation(this, R.anim.anim_front);
+        final Animation in = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        final Animation out = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+
+        flipBack.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.startAnimation(back);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        back.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.startAnimation(flipFront);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        flipFront.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.startAnimation(front);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        front.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.startAnimation(out);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        out.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                tripButton.setImageResource(running ? R.drawable.stop_trip : R.drawable.start_trip);
+                view.startAnimation(in);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(flipBack);
+    }
+
+    private void coinFlip(final View view, final afterFlip callback) {
+        final Animation flipBack = AnimationUtils.loadAnimation(this, R.anim.anim_flip_to_back);
+        final Animation back = AnimationUtils.loadAnimation(this, R.anim.anim_back);
+        final Animation flipFront = AnimationUtils.loadAnimation(this, R.anim.anim_flip_to_front);
+        final Animation front = AnimationUtils.loadAnimation(this, R.anim.anim_front);
+
+        flipBack.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.startAnimation(back);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        back.setAnimationListener(new Animation.AnimationListener() {
+            int count = 0;
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.startAnimation(flipFront);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        flipFront.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.startAnimation(front);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        front.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                callback.perform();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(flipBack);
     }
 
     private void start() {
@@ -105,7 +321,7 @@ public class TripActivity extends Activity {
                 .setContentText("Your trip is being recorded.")
                 .setSmallIcon(Inject.currentContext().getApplicationInfo().icon)
                 .setContentIntent(getPendingIntent(false))
-                .addAction(17301551, "Stop recording", getPendingIntent(true))
+                .addAction(17301552, "Stop recording", getPendingIntent(true))
                 .setOngoing(true)
                 .build();
         ((NotificationManager) getSystemService(Inject.currentContext().NOTIFICATION_SERVICE)).notify(0, notification);
@@ -113,7 +329,8 @@ public class TripActivity extends Activity {
 
     private PendingIntent getPendingIntent(boolean stop) {
         Intent launchIntent = new Intent(Inject.currentContext(), SignInActivity.class);
-        launchIntent.putExtra("stop", stop);
+        launchIntent.setAction(Intent.ACTION_SEND);
+        launchIntent.putExtra(EXTRA_VALUE, "stop");
         return PendingIntent.getActivity(
                 Inject.currentContext(),
                 (int) System.currentTimeMillis(),
@@ -122,24 +339,28 @@ public class TripActivity extends Activity {
     }
 
     private void stop() {
-        manager.stop();
-        NetworkService.uploadTrip(new Callback<TripScore>() {
+        manager.stop(new OfflineWriter.WritingStop() {
             @Override
-            public void invoke(TripScore result) {
-                Intent intent = new Intent(Inject.currentContext(), SignInActivity.class);
-                PendingIntent pendingIntent = PendingIntent.getActivity(
-                        Inject.currentContext(),
-                        (int) System.currentTimeMillis(),
-                        intent,
-                        PendingIntent.FLAG_CANCEL_CURRENT);
+            public void onStopWriting() {
+                NetworkService.uploadTrip(new Callback<TripScore>() {
+                    @Override
+                    public void invoke(TripScore result) {
+                        Intent intent = new Intent(Inject.currentContext(), SignInActivity.class);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(
+                                Inject.currentContext(),
+                                12026442,
+                                intent,
+                                PendingIntent.FLAG_CANCEL_CURRENT);
 
-                Notification notification = new Notification.Builder(Inject.currentContext())
-                        .setContentTitle("Trip score: " + result.getAddTripResult())
-                        .setContentText("Your trip was successfully uploaded")
-                        .setSmallIcon(Inject.currentContext().getApplicationInfo().icon)
-                        .setContentIntent(pendingIntent)
-                        .build();
-                ((NotificationManager) getSystemService(Inject.currentContext().NOTIFICATION_SERVICE)).notify(0, notification);
+                        Notification notification = new Notification.Builder(Inject.currentContext())
+                                .setContentTitle("Trip score: " + result.getAddTripResult())
+                                .setContentText("Your trip was successfully uploaded")
+                                .setSmallIcon(Inject.currentContext().getApplicationInfo().icon)
+                                .setContentIntent(pendingIntent)
+                                .build();
+                        ((NotificationManager) getSystemService(Inject.currentContext().NOTIFICATION_SERVICE)).notify(0, notification);
+                    }
+                });
             }
         });
     }
@@ -181,10 +402,18 @@ public class TripActivity extends Activity {
         alertDialog.show();
     }
 
-
     private void checkMustStop() {
-        if (getIntent().getBooleanExtra("stop", false)) {
-            stop();
+        Log.d(">>> Stopping: ", getIntent().getStringExtra(EXTRA_VALUE) + "");
+        if (getIntent().getBooleanExtra("stop", false) && running) {
+            if (ThreadState.isRunning()) {
+                mainCoinFlip(tripButton, !running);
+                stop();
+                running = false;
+            }
         }
+    }
+
+    private interface afterFlip {
+        void perform();
     }
 }
