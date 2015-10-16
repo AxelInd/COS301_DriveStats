@@ -1,5 +1,10 @@
 package za.co.dvt.drivestats.services.network;
 
+import android.content.Context;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import za.co.dvt.drivestats.Injection.Inject;
 import za.co.dvt.drivestats.resources.network.Callback;
 import za.co.dvt.drivestats.resources.network.Methods;
@@ -21,7 +26,7 @@ public class NetworkService {
     public static boolean login(final String emailAddress, final Callback<UserId> callback) {
         final HttpRequest<UserId> loginRequest = new HttpGetRequest<>(new Email(emailAddress), UserId.class, Methods.USER_LOGIN, new Callback<UserId>() {
             @Override
-            public void invoke(UserId result) {
+            public void invoke(UserId result) throws IOException {
                 UserProfile profile = Inject.userProfile();
                 profile.setUserId(result.getUserId());
                 profile.saveUserProfile();
@@ -33,10 +38,15 @@ public class NetworkService {
     }
 
     public static void uploadTrip(final Callback<TripScore> callback) {
-        final HttpRequest<TripScore> uploadRequest = new HttpPostRequest<>(new TripInfo(), TripScore.class, Methods.ADD_TRIP, new Callback<TripScore>() {
+        final TripInfo tripInfo = new TripInfo();
+        final HttpRequest<TripScore> uploadRequest = new HttpPostRequest<>(tripInfo, TripScore.class, Methods.ADD_TRIP, new Callback<TripScore>() {
             @Override
-            public void invoke(TripScore result) {
-                Inject.currentContext().deleteFile(Constants.OFFLINE_FILE_NAME);
+            public void invoke(TripScore result) throws IOException {
+                try{
+                    Inject.currentContext().deleteFile(Constants.OFFLINE_FILE_NAME);
+                } catch (Throwable t) {}
+                final FileOutputStream stream = Inject.currentContext().openFileOutput(Constants.OFFLINE_SCORE_FILE, Context.MODE_APPEND);
+                Inject.tripTracingService().saveTripScore(tripInfo.getTripDate(), tripInfo.getStartTime(), result.getAddTripResult(), stream);
                 callback.invoke(result);
             }
         });

@@ -12,6 +12,8 @@ public class Constants {
     //TODO: Make this final?
     public static String OFFLINE_FILE_NAME = "offlineStorage.dat";
 
+    public static String OFFLINE_SCORE_FILE = "offlineScores.dat";
+
     public static final String SETTINGS_FILE_PATH = "";
 
     public static final int UPLOAD_INTERVAL = 3000;

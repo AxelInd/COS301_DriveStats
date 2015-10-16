@@ -7,7 +7,7 @@ public enum Methods {
     USER_LOGIN("login/"),
     ADD_TRIP("addtrip/");
 
-    private static final String url = "http://finaldrivestats.cloudapp.net/RestService.svc/";
+    private static final String url = "http://drivestatstest.cloudapp.net/RestService.svc/";
 
     private final String method;
 
