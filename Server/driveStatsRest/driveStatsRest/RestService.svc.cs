@@ -80,14 +80,17 @@ namespace driveStatsRest
                     context.BulkInsert(li);
                     context.SaveChanges();
                     transactionScope.Complete();
-                    if (userID == "1")//test client
-                    {
-                        return "5.3";
-                    }
                 }
 
             ScoreCalculator score = new ScoreCalculator(li,3);
 
+            t.score = score.getscore();
+            //update
+            using (var udb = new drivestatsEntities())
+            {
+                udb.Entry(t).State = System.Data.Entity.EntityState.Modified;
+                udb.SaveChanges();
+            }
             return score.getscore().ToString();
         }
 
