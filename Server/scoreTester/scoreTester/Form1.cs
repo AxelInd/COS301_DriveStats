@@ -19,9 +19,28 @@ namespace scoreTester
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //runFromFile("dataSample2.dat");
+            runWithTestData();
+        }
+        /**
+         * UNIT TESTS
+         **/ 
+        private bool runWithTestData()
+        {
+            scoreTesterDefined st = new scoreTesterDefined();
+            return false;
+        }
+
+
+
+
+
+
+        private void runFromFile(string filename)
+        {
             int counter = 0;
             string line;
-            System.IO.StreamReader file = new System.IO.StreamReader("dataSample2.dat");
+            System.IO.StreamReader file = new System.IO.StreamReader(filename);
             List<tripData> li = new List<tripData>();
             while ((line = file.ReadLine()) != null)
             {
@@ -47,7 +66,7 @@ namespace scoreTester
                 li.Add(d);
             }
             ScoreCalculator score = new ScoreCalculator(li, 3);
-            MessageBox.Show("final score for trip is: "+score.getscore().ToString());
+            MessageBox.Show("final score for trip is: " + score.getscore().ToString());
         }
     }
 }
