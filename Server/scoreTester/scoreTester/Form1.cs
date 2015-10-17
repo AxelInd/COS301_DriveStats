@@ -19,7 +19,7 @@ namespace scoreTester
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            runFromFile("dataSample2.dat");
+            runFromFile("dataSample4.dat");
             //runWithTestData();
         }
         /**
