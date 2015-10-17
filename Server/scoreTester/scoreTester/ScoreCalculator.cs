@@ -55,6 +55,34 @@ namespace scoreTester
 
 
         }
+
+
+        /** 
+ * Returns the height of the normal distribution at the specified z-score
+ */
+        protected double getNormalProbabilityAtZ(double z)
+        {
+            return Math.Exp(-Math.Pow(z, 2) / 2) / Math.Sqrt(2 * Math.PI);
+        }
+
+        /**
+  * Returns the area under the normal curve between the z-scores z1 and z2
+  */
+        protected double getAreaUnderNormalCurve(double z1, double z2)
+        {
+    double area = 0.0;
+     int rectangles = 100000; // more rectangles = more precise, less rectangles = quicker execution
+     double width = (z2 - z1) / rectangles;
+    for(int i = 0; i < rectangles; i++)
+        area += width * getNormalProbabilityAtZ(width * i + z1);
+    return area;
+}
+
+
+
+
+
+
         protected void debugMessageBox(string message)
         {
             if (debugging==true)
@@ -77,19 +105,20 @@ namespace scoreTester
             double STANDARDDEVIATIONOFPOPULATION = 0.4;
             //getStandardDeviationScorePerSecond() this population needs to be called locally.
 
-            double score;
             double prob = normalDistribution(badThingsPerSecond, TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION);
             debugMessageBox("probability is " + prob);
             debugMessageBox("Standard deviation of scores per second is " + getStandardDeviationScorePerSecond());
             debugMessageBox("zScore is " + getZScore(TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION, badThingsPerSecond));
-            score = 5 + ((1 - prob) * 5);
-            if (badThingsPerSecond < TRUEAVERAGENUMBEROFBADTHINGSPERSECOND)
+
+            double zScore = getZScore(TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION, badThingsPerSecond);
+            double area = getAreaUnderNormalCurve(0, zScore);
+
+            if (badThingsPerSecond > TRUEAVERAGENUMBEROFBADTHINGSPERSECOND)
             {
-                prob = prob * -1;
-                score = 5 + ((prob) * 5);
+                area = area + 0.5;
             }
-            
-            return Math.Round(score,5);
+
+            return area * 10;
         }
 
         protected double getZScore(double mu, double standardDeviation, double badThingsPerSecond)

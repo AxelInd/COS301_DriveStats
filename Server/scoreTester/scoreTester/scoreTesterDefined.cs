@@ -151,8 +151,27 @@ namespace scoreTester
                 debugMessageBox(">>Z-Score fail\n" + e.StackTrace);
             }
 
+            //=============================================================================
+            //========================CALCULATE AREA UNDER CURVE===========================
+            
 
+            try
+            {
+                double ZScore = 1;
 
+                double observedNormalPob = getAreaUnderNormalCurve(0, ZScore);
+                double expectedNormalProb = 0.5414;
+
+                string to = "Area under curve\nObserved area = " + observedNormalPob + "\nExpected normal prob = " + expectedNormalProb;
+                if (observedNormalPob != expectedNormalProb)
+                {
+                    debugMessageBox(">> Z Score \n" + to);
+                }
+            }
+            catch (Exception e)
+            {
+                debugMessageBox(">>Area fail\n" + e.StackTrace);
+            }
 
 
 
