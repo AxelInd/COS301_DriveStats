@@ -111,12 +111,7 @@ namespace scoreTester
             debugMessageBox("zScore is " + getZScore(TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION, badThingsPerSecond));
 
             double zScore = getZScore(TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION, badThingsPerSecond);
-            double area = getAreaUnderNormalCurve(0, zScore);
-
-            if (badThingsPerSecond > TRUEAVERAGENUMBEROFBADTHINGSPERSECOND)
-            {
-                area = area + 0.5;
-            }
+            double area = 0.5 + getAreaUnderNormalCurve(0, zScore);
 
             return area * 10;
         }
