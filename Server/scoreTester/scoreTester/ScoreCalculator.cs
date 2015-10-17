@@ -136,6 +136,19 @@ namespace scoreTester
             
             return totalWeightOfBadThings;
         }
+
+        protected double getWeightedTotalOfOneData(int pos)
+        {
+            double weightX = 1;
+            double weightY = 0.6;
+            double weightZ = 0.4;
+            double badSpeedWeight = 7;
+
+            double totalWeightOfBadThings = weightX * getAllX()[pos] + weightY * getAllY()[pos] + weightZ * getAllZ()[pos] + badSpeedWeight * getAllSpeed()[pos];
+            return totalWeightOfBadThings;
+        }
+
+
         protected double countBadSpeed()
         {
             double SPEEDTHRESHOLD = 35;
@@ -206,7 +219,8 @@ namespace scoreTester
             for (int i = 0; i < trips.Count; i++)
             {
                 
-                allX.Add(Math.Abs(Convert.ToDouble(trips[i].maxXAcelerometer)));
+                //allX.Add(Math.Abs(Convert.ToDouble(trips[i].maxXAcelerometer)));
+                allX.Add(Convert.ToDouble(trips[i].maxXAcelerometer));
             }
             return allX;
         }
@@ -217,7 +231,8 @@ namespace scoreTester
             for (int i = 0; i < trips.Count; i++)
             {
                 
-                allY.Add(Math.Abs(Convert.ToDouble(trips[i].maxYAcelerometer)));
+                //allY.Add(Math.Abs(Convert.ToDouble(trips[i].maxYAcelerometer)));
+                allY.Add(Convert.ToDouble(trips[i].maxYAcelerometer));
             }
             return allY;
         }
@@ -226,8 +241,9 @@ namespace scoreTester
             List<double> allZ = new List<double>();
             for (int i = 0; i < trips.Count; i++)
             {
-                
-                allZ.Add(Math.Abs(Convert.ToDouble(trips[i].maxZAcelerometer)) - 9.8);
+                //9.8 refers to gravity
+                //allZ.Add(Math.Abs(Convert.ToDouble(trips[i].maxZAcelerometer)) - 9.8);
+                allZ.Add(Convert.ToDouble(trips[i].maxZAcelerometer) - 9.8);
             }
             return allZ;
         }
@@ -263,23 +279,14 @@ namespace scoreTester
             return allspeed;
         }
 
-        protected double getWeightedTotalOfOneData(int pos)
-        {
-            double weightX = 1;
-            double weightY = 0.6;
-            double weightZ = 0.4;
-            double badSpeedWeight = 7;
 
-            double totalWeightOfBadThings = weightX * getAllX()[pos] + weightY * getAllY()[pos] + weightZ * getAllZ()[pos] + badSpeedWeight * getAllSpeed()[pos];
-            return totalWeightOfBadThings;
-        }
 
         /**
  * Mean of the X acceleration
  **/
         protected double getMeanSpeed()
         {
-            return getAllSpeed().Average();
+            return average(getAllSpeed());
         }
 
         /**
@@ -287,7 +294,8 @@ namespace scoreTester
          **/
         protected double getMeanX()
         {
-            return getAllX().Average();
+            
+            return average(getAllX());
         }
 
         /**
@@ -295,7 +303,7 @@ namespace scoreTester
  **/
         protected double getMeanY()
         {
-            return getAllY().Average();
+            return average(getAllY());
         }
 
 
@@ -304,13 +312,23 @@ namespace scoreTester
 **/
         protected double getMeanZ()
         {
-            return getAllZ().Average();
+            return average(getAllZ());
+        }
+        protected double average(List<double> li)
+        {
+            double total = 0;
+
+            for (int i = 0; i < li.Count; i++)
+            {
+                total += li[i];
+            }
+            return total / li.Count;
         }
 
 
         protected double getStandardDeviation(List<double> l)
         {
-            double avg = l.Average();
+            double avg = average(l);
             return Math.Sqrt(l.Average(v => Math.Pow(v - avg, 2)));
 
         }
