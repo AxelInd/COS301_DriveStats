@@ -74,11 +74,14 @@ namespace scoreTester
             //average bad things of database as a whole
             // @TODO
             double TRUEAVERAGENUMBEROFBADTHINGSPERSECOND = 0.4;
+            double STANDARDDEVIATIONOFPOPULATION = 0.4;
+            //getStandardDeviationScorePerSecond() this population needs to be called locally.
+
             double score;
-            double prob = normalDistribution(badThingsPerSecond, TRUEAVERAGENUMBEROFBADTHINGSPERSECOND);
+            double prob = normalDistribution(badThingsPerSecond, TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION);
             debugMessageBox("probability is " + prob);
             debugMessageBox("Standard deviation of scores per second is " + getStandardDeviationScorePerSecond());
-            debugMessageBox("zScore is " + getZScore(TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, getStandardDeviationScorePerSecond(), badThingsPerSecond));
+            debugMessageBox("zScore is " + getZScore(TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION, badThingsPerSecond));
             score = 5 + ((1 - prob) * 5);
             if (badThingsPerSecond < TRUEAVERAGENUMBEROFBADTHINGSPERSECOND)
             {
@@ -92,7 +95,7 @@ namespace scoreTester
         protected double getZScore(double mu, double standardDeviation, double badThingsPerSecond)
         {
 
-            double zScore = (mu - badThingsPerSecond) / standardDeviation;
+            double zScore = (badThingsPerSecond-mu) / standardDeviation;
             return zScore;
         }
         
@@ -101,10 +104,10 @@ namespace scoreTester
         //=======================================================================================================================
 
 
-        protected double normalDistribution(double personAv, double trueAv)
+        protected double normalDistribution(double personAv, double trueAv, double standardDeviationOfPopulation)
         {
-            double normalDist1 = 1.0 / (Math.Sqrt(2 * Math.PI));
-            double normalDist2 = Math.Pow(Math.E, Math.Pow(personAv - trueAv,2)/(2*Math.Sqrt(trueAv)));
+            double normalDist1 = 1.0 / (standardDeviationOfPopulation * Math.Sqrt(2 * Math.PI));
+            double normalDist2 = Math.Pow(Math.E, Math.Pow(personAv - trueAv, 2) / (-2 * standardDeviationOfPopulation*standardDeviationOfPopulation));
             double normalDist = normalDist1 * normalDist2;
 
             return normalDist;

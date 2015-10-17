@@ -114,6 +114,46 @@ namespace scoreTester
                 debugMessageBox(">>Bad things per second failed\n" + e.StackTrace);
             }
 
+            //=============================================================================
+            //============================TESTING NORMAL DIST==============================
+            try
+            {
+                double expectedProbabilityValue = Math.Round(normalDistribution(weightedTotalofBadThingsPerSecond(),0.4,0.4), 5);
+                double observedProbabilityValue = 0.81657;
+                string to = "Expected probability value : " + expectedProbabilityValue + "\nObserved probability value : " + observedProbabilityValue;
+                if (observedProbabilityValue != expectedProbabilityValue)
+                {
+                    debugMessageBox(">> Normal distribution \n" + to);
+                }
+            }
+            catch (Exception e)
+            {
+                debugMessageBox(">>Bad things per second failed\n" + e.StackTrace);
+            }
+            //=============================================================================
+            //============================CALCULATE Z-SCORE================================
+            try
+            {
+                double badThingsPerSecond=weightedTotalofBadThingsPerSecond();
+                    double TRUEAVERAGENUMBEROFBADTHINGSPERSECOND=0.4;
+                    double STANDARDDEVIATIONOFPOPULATION = 0.4;
+                    double observedZScore = getZScore(badThingsPerSecond, TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION);
+                    double expectedZScore = 2;
+
+                    string to = "Expected z score : " + expectedZScore + "\nObserved z score : " + observedZScore;
+                    if (observedZScore != expectedZScore)
+                {
+                    debugMessageBox(">> Z Score \n" + to);
+                }
+            }
+            catch (Exception e)
+            {
+                debugMessageBox(">>Z-Score fail\n" + e.StackTrace);
+            }
+
+
+
+
 
 
         }
