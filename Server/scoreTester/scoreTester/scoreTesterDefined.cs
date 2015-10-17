@@ -103,7 +103,7 @@ namespace scoreTester
             {
                 double observedTotalofBadThingsPerSecond = Math.Round(weightedTotalofBadThingsPerSecond(), 5);
                 double expectedTotalOfBadThingsPerSecond = 1.13333;
-                string to = "Expected number of bad things : " + expectedTotalOfBadThingsPerSecond + "\nObserved total of bad things per second : " + expectedTotalOfBadThingsPerSecond;
+                string to = "Expected number of bad things : " + expectedTotalOfBadThingsPerSecond + "\nObserved total of bad things per second : " + observedTotalofBadThingsPerSecond;
                 if (observedTotalofBadThingsPerSecond != expectedTotalOfBadThingsPerSecond)
                 {
                     debugMessageBox(">> Logical failure in errors per second\n" + to);

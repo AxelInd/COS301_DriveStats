@@ -131,9 +131,23 @@ namespace scoreTester
             double weightZ = 0.4;
             double badSpeedWeight = 7;
 
-            double totalWeightOfBadThings = weightX * countBadX() + weightY * countBadY() + weightZ * countBadZ() + badSpeedWeight * countBadSpeed();
+            double totalWeightOfBadThings = 0;
+
+            List<double> allX = getAllX();
+            List<double> allY = getAllY();
+            List<double> allZ = getAllZ();
+            List<double> allSpeed = getAllZ();
+            for (int i = 0; i < trips.Count; i++)
+            {
+                totalWeightOfBadThings += weightX * xExceeded(allX[i]) + weightY * yExceeded(allY[i]) + weightZ * zExceeded(allZ[i]) + badSpeedWeight * speedExceeded(allSpeed[i]);
+            
+
+            }
+
             debugMessageBox("Weighted total of bad things is " + totalWeightOfBadThings);
             
+
+
             return totalWeightOfBadThings;
         }
 
@@ -144,73 +158,48 @@ namespace scoreTester
             double weightZ = 0.4;
             double badSpeedWeight = 7;
 
-            double totalWeightOfBadThings = weightX * getAllX()[pos] + weightY * getAllY()[pos] + weightZ * getAllZ()[pos] + badSpeedWeight * getAllSpeed()[pos];
+            double totalWeightOfBadThings = weightX * xExceeded(getAllX()[pos]) + weightY * yExceeded(getAllY()[pos]) + weightZ * zExceeded(getAllZ()[pos]) + badSpeedWeight * speedExceeded(getAllSpeed()[pos]);
             return totalWeightOfBadThings;
         }
 
-
-        protected double countBadSpeed()
+        double MAXX = 4.2;
+        double MAXY = 3;
+        double MAXZ = 2;
+        double MAXSPEED = 36;
+        protected double speedExceeded (double speed)
         {
-            double SPEEDTHRESHOLD = 35;
-            List<double> li = getAllSpeed();
-            double mean = li.Average();
+            return checkExceeded(Math.Abs(speed), MAXSPEED);
+        }
+        protected double xExceeded(double x)
+        {
+            return checkExceeded(Math.Abs(x), MAXX);
+        }
+        protected double yExceeded(double y)
+        {
+            return checkExceeded(Math.Abs(y), MAXY);
+        }
+        protected double zExceeded(double z)
+        {
+            return checkExceeded(Math.Abs(z), MAXZ);
+        }
 
-
-
-            int numTimesT1Exceeded = 0;
-            for (int i = 0; i < li.Count; i++)
+        protected double checkExceeded(double value, double threshold)
+        {
+            if (value > 2 * threshold)
             {
-                if (li[i] > SPEEDTHRESHOLD)
-                {
-                    numTimesT1Exceeded++;
-                }
+                return 2;
+            }
+            if (value > threshold)
+            {
+                return 1;
+            }
+            return 0;
+
+
+
             }
 
-            double exceedingScore = numTimesT1Exceeded;
-
-            return numTimesT1Exceeded;
-        }
-
-        protected double countBadX()
-        {
-            return countBad(getAllX());
-        }
-        protected double countBadY()
-        {
-            return countBad(getAllY());
-
-        }
-        protected double countBadZ()
-        {
-            return countBad(getAllZ());
-        }
-
-        protected double countBad(List<double> li)
-        {
-            double mean = li.Average();
-            double threshold1 = mean + 1*getStandardDeviation(li);
-            double threshold2 = mean + 2 * getStandardDeviation(li);
-
-
-            int numTimesT1Exceeded = 0;
-            int numTimesT2Exceeded = 0;
-            for (int i = 0; i < li.Count; i++)
-            {
-                if (li[i] >= threshold2)
-                {
-                    numTimesT2Exceeded++;
-                }
-                else if (li[i] >= threshold1)
-                {
-                    numTimesT1Exceeded++;
-                }
-            }
-
-            double exceedingScore = numTimesT1Exceeded + 2 * numTimesT2Exceeded;
-
-            return exceedingScore;
-
-        }
+        
 
 
         protected List<double> getAllX()
