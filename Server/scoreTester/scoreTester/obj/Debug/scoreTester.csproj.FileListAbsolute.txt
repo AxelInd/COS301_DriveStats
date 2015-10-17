@@ -7,3 +7,12 @@ c:\users\zander\documents\visual studio 2012\Projects\scoreTester\scoreTester\ob
 c:\users\zander\documents\visual studio 2012\Projects\scoreTester\scoreTester\obj\Debug\scoreTester.exe
 c:\users\zander\documents\visual studio 2012\Projects\scoreTester\scoreTester\obj\Debug\scoreTester.pdb
 c:\users\zander\documents\visual studio 2012\Projects\scoreTester\scoreTester\obj\Debug\scoreTester.Form1.resources
+C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\Server\scoreTester\scoreTester\bin\Debug\scoreTester.exe.config
+C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\Server\scoreTester\scoreTester\obj\Debug\scoreTester.exe
+C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\Server\scoreTester\scoreTester\obj\Debug\scoreTester.pdb
+C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\Server\scoreTester\scoreTester\bin\Debug\scoreTester.exe
+C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\Server\scoreTester\scoreTester\bin\Debug\scoreTester.pdb
+C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\Server\scoreTester\scoreTester\obj\Debug\scoreTester.csprojResolveAssemblyReference.cache
+C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\Server\scoreTester\scoreTester\obj\Debug\scoreTester.Form1.resources
+C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\Server\scoreTester\scoreTester\obj\Debug\scoreTester.Properties.Resources.resources
+C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\Server\scoreTester\scoreTester\obj\Debug\scoreTester.csproj.GenerateResource.Cache

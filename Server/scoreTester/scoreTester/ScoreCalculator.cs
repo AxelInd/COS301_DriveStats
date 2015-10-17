@@ -15,17 +15,23 @@ namespace scoreTester
 
     class ScoreCalculator
     {
-        bool debugging = true;
-        List<tripData> trips;
-
+        protected bool debugging = true;
+        protected List<tripData> trips;
+        public ScoreCalculator()
+        {
+        }
         public ScoreCalculator(List<tripData> trips, double interval)
         {
+
             //MessageBox.Show(trips.Count.ToString());
             this.trips = trips;
+            replaceStopsWithCommas();
 
-            debugMessageBox("Mean x " + getMeanX() + "");
-            debugMessageBox("Mean Y " + getMeanY() + "");
-            debugMessageBox("Mean Z " + getMeanZ() + "");
+
+            
+
+            string means = "Means\n" + "Mean x : " + getMeanX() + "\n" + "Mean Y : " + getMeanY() + "\n" + "Mean Z : " + getMeanZ();
+            debugMessageBox(means);
             //first we need mean and standard deviation for each variable
             List<double> allx = getAllX();
             List<double> ally = getAllY();
@@ -49,7 +55,35 @@ namespace scoreTester
 
 
         }
-        private void debugMessageBox (string message)
+
+
+        /** 
+ * Returns the height of the normal distribution at the specified z-score
+ */
+        protected double getNormalProbabilityAtZ(double z)
+        {
+            return Math.Exp(-Math.Pow(z, 2) / 2) / Math.Sqrt(2 * Math.PI);
+        }
+
+        /**
+  * Returns the area under the normal curve between the z-scores z1 and z2
+  */
+        protected double getAreaUnderNormalCurve(double z1, double z2)
+        {
+    double area = 0.0;
+     int rectangles = 100000; // more rectangles = more precise, less rectangles = quicker execution
+     double width = (z2 - z1) / rectangles;
+    for(int i = 0; i < rectangles; i++)
+        area += width * getNormalProbabilityAtZ(width * i + z1);
+    return area;
+}
+
+
+
+
+
+
+        protected void debugMessageBox(string message)
         {
             if (debugging==true)
             {
@@ -68,25 +102,24 @@ namespace scoreTester
             //average bad things of database as a whole
             // @TODO
             double TRUEAVERAGENUMBEROFBADTHINGSPERSECOND = 0.4;
-            double score;
-            double prob = normalDistribution(badThingsPerSecond, TRUEAVERAGENUMBEROFBADTHINGSPERSECOND);
+            double STANDARDDEVIATIONOFPOPULATION = 0.4;
+            //getStandardDeviationScorePerSecond() this population needs to be called locally.
+
+            double prob = normalDistribution(badThingsPerSecond, TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION);
             debugMessageBox("probability is " + prob);
             debugMessageBox("Standard deviation of scores per second is " + getStandardDeviationScorePerSecond());
-            debugMessageBox("zScore is " + getZScore(TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, getStandardDeviationScorePerSecond(), badThingsPerSecond));
-            score = 5 + ((1 - prob) * 5);
-            if (badThingsPerSecond < TRUEAVERAGENUMBEROFBADTHINGSPERSECOND)
-            {
-                prob = prob * -1;
-                score = 5 + ((prob) * 5);
-            }
-            
-            return Math.Round(score,5);
+            debugMessageBox("zScore is " + getZScore(TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION, badThingsPerSecond));
+
+            double zScore = getZScore(TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION, badThingsPerSecond);
+            double area = 0.5 + getAreaUnderNormalCurve(0, zScore);
+
+            return area * 10;
         }
 
-        private double getZScore(double mu, double standardDeviation, double badThingsPerSecond)
+        protected double getZScore(double mu, double standardDeviation, double badThingsPerSecond)
         {
 
-            double zScore = (mu - badThingsPerSecond) / standardDeviation;
+            double zScore = (badThingsPerSecond-mu) / standardDeviation;
             return zScore;
         }
         
@@ -94,17 +127,17 @@ namespace scoreTester
 
         //=======================================================================================================================
 
-       
-        private double normalDistribution(double personAv, double trueAv)
+
+        protected double normalDistribution(double personAv, double trueAv, double standardDeviationOfPopulation)
         {
-            double normalDist1 = 1.0 / (Math.Sqrt(2 * Math.PI));
-            double normalDist2 = Math.Pow(Math.E, Math.Pow(personAv - trueAv,2)/(2*Math.Sqrt(trueAv)));
+            double normalDist1 = 1.0 / (standardDeviationOfPopulation * Math.Sqrt(2 * Math.PI));
+            double normalDist2 = Math.Pow(Math.E, Math.Pow(personAv - trueAv, 2) / (-2 * standardDeviationOfPopulation*standardDeviationOfPopulation));
             double normalDist = normalDist1 * normalDist2;
 
             return normalDist;
         }
 
-        private double weightedTotalofBadThingsPerSecond()
+        protected double weightedTotalofBadThingsPerSecond()
         {
             if (timeOfTripInSeconds() == 0)
             {
@@ -113,119 +146,124 @@ namespace scoreTester
             return weightedTotalOfBadThings() / timeOfTripInSeconds();
         }
 
-        private double timeOfTripInSeconds()
+        protected double timeOfTripInSeconds()
         {
             return trips.Count / 3;
         }
 
-        private double weightedTotalOfBadThings()
+        protected double weightedTotalOfBadThings()
         {
             double weightX = 1;
             double weightY = 0.6;
             double weightZ = 0.4;
             double badSpeedWeight = 7;
 
-            double totalWeightOfBadThings = weightX * countBadX() + weightY * countBadY() + weightZ * countBadZ() + badSpeedWeight * countBadSpeed();
+            double totalWeightOfBadThings = 0;
+
+            List<double> allX = getAllX();
+            List<double> allY = getAllY();
+            List<double> allZ = getAllZ();
+            List<double> allSpeed = getAllZ();
+            for (int i = 0; i < trips.Count; i++)
+            {
+                totalWeightOfBadThings += weightX * xExceeded(allX[i]) + weightY * yExceeded(allY[i]) + weightZ * zExceeded(allZ[i]) + badSpeedWeight * speedExceeded(allSpeed[i]);
+            
+
+            }
+
             debugMessageBox("Weighted total of bad things is " + totalWeightOfBadThings);
             
+
+
             return totalWeightOfBadThings;
         }
-        private double countBadSpeed()
+
+        protected double getWeightedTotalOfOneData(int pos)
         {
-            double SPEEDTHRESHOLD = 35;
-            List<double> li = getAllSpeed();
-            double mean = li.Average();
+            double weightX = 1;
+            double weightY = 0.6;
+            double weightZ = 0.4;
+            double badSpeedWeight = 7;
 
+            double totalWeightOfBadThings = weightX * xExceeded(getAllX()[pos]) + weightY * yExceeded(getAllY()[pos]) + weightZ * zExceeded(getAllZ()[pos]) + badSpeedWeight * speedExceeded(getAllSpeed()[pos]);
+            return totalWeightOfBadThings;
+        }
 
+        double MAXX = 4.2;
+        double MAXY = 3;
+        double MAXZ = 2;
+        double MAXSPEED = 36;
+        protected double speedExceeded (double speed)
+        {
+            return checkExceeded(Math.Abs(speed), MAXSPEED);
+        }
+        protected double xExceeded(double x)
+        {
+            return checkExceeded(Math.Abs(x), MAXX);
+        }
+        protected double yExceeded(double y)
+        {
+            return checkExceeded(Math.Abs(y), MAXY);
+        }
+        protected double zExceeded(double z)
+        {
+            return checkExceeded(Math.Abs(z), MAXZ);
+        }
 
-            int numTimesT1Exceeded = 0;
-            for (int i = 0; i < li.Count; i++)
+        protected double checkExceeded(double value, double threshold)
+        {
+            if (value > 2 * threshold)
             {
-                if (li[i] > SPEEDTHRESHOLD)
-                {
-                    numTimesT1Exceeded++;
-                }
+                return 2;
+            }
+            if (value > threshold)
+            {
+                return 1;
+            }
+            return 0;
+
+
+
             }
 
-            double exceedingScore = numTimesT1Exceeded;
-
-            return numTimesT1Exceeded;
-        }
-
-        private double countBadX()
-        {
-            return countBad(getAllX());
-        }
-        private double countBadY()
-        {
-            return countBad(getAllY());
-
-        }
-        private double countBadZ()
-        {
-            return countBad(getAllZ());
-        }
-
-        private double countBad(List<double> li)
-        {
-            double mean = li.Average();
-            double threshold1 = mean + 1*getStandardDeviation(li);
-            double threshold2 = mean + 2 * getStandardDeviation(li);
+        
 
 
-            int numTimesT1Exceeded = 0;
-            int numTimesT2Exceeded = 0;
-            for (int i = 0; i < li.Count; i++)
-            {
-                if (li[i] >= threshold2)
-                {
-                    numTimesT2Exceeded++;
-                }
-                else if (li[i] >= threshold1)
-                {
-                    numTimesT1Exceeded++;
-                }
-            }
-
-            double exceedingScore = numTimesT1Exceeded + 2 * numTimesT2Exceeded;
-
-            return exceedingScore;
-
-        }
-
-
-        private List<double> getAllX()
+        protected List<double> getAllX()
         {
             List<double> allX = new List<double>();
             for (int i = 0; i < trips.Count; i++)
             {
-                trips[i].maxXAcelerometer = trips[i].maxXAcelerometer.Replace('.', ',');
-                allX.Add(Math.Abs(Convert.ToDouble(trips[i].maxXAcelerometer)));
+                
+                //allX.Add(Math.Abs(Convert.ToDouble(trips[i].maxXAcelerometer)));
+                allX.Add(Convert.ToDouble(trips[i].maxXAcelerometer));
             }
             return allX;
         }
 
-        private List<double> getAllY()
+        protected List<double> getAllY()
         {
             List<double> allY = new List<double>();
             for (int i = 0; i < trips.Count; i++)
             {
-                trips[i].maxYAcelerometer = trips[i].maxYAcelerometer.Replace('.', ',');
-                allY.Add(Math.Abs(Convert.ToDouble(trips[i].maxYAcelerometer)));
+                
+                //allY.Add(Math.Abs(Convert.ToDouble(trips[i].maxYAcelerometer)));
+                allY.Add(Convert.ToDouble(trips[i].maxYAcelerometer));
             }
             return allY;
         }
-        private List<double> getAllZ()
+        protected List<double> getAllZ()
         {
             List<double> allZ = new List<double>();
             for (int i = 0; i < trips.Count; i++)
             {
-                trips[i].maxZAcelerometer = trips[i].maxZAcelerometer.Replace('.', ',');
-                allZ.Add(Math.Abs(Convert.ToDouble(trips[i].maxZAcelerometer)) - 9.8);
+                //9.8 refers to gravity
+                //allZ.Add(Math.Abs(Convert.ToDouble(trips[i].maxZAcelerometer)) - 9.8);
+                allZ.Add(Convert.ToDouble(trips[i].maxZAcelerometer) - 9.8);
             }
             return allZ;
         }
-        private List<double> getAllSpeed()
+        protected List<double> getAllSpeed()
         {
             List<double> allspeed = new List<double>();
             for (int i = 0; i < trips.Count; i++)
@@ -236,7 +274,17 @@ namespace scoreTester
             return allspeed;
         }
 
-        private List<double> getAllScorePerSecond()
+        protected void replaceStopsWithCommas ()
+        {
+            for (int i = 0; i < trips.Count; i++)
+            {
+                trips[i].maxXAcelerometer = trips[i].maxXAcelerometer.Replace('.', ',');
+                trips[i].maxZAcelerometer = trips[i].maxZAcelerometer.Replace('.', ',');
+                trips[i].maxYAcelerometer = trips[i].maxYAcelerometer.Replace('.', ',');
+            }
+        }
+
+        protected List<double> getAllScorePerSecond()
         {
             List<double> allspeed = new List<double>();
             for (int i = 0; i < trips.Count; i++)
@@ -247,71 +295,73 @@ namespace scoreTester
             return allspeed;
         }
 
-        private double getWeightedTotalOfOneData(int pos)
-        {
-            double weightX = 1;
-            double weightY = 0.6;
-            double weightZ = 0.4;
-            double badSpeedWeight = 7;
 
-            double totalWeightOfBadThings = weightX * getAllX()[pos] + weightY * getAllY()[pos] + weightZ * getAllZ()[pos] + badSpeedWeight * getAllSpeed()[pos];
-            return totalWeightOfBadThings;
-        }
 
         /**
  * Mean of the X acceleration
  **/
-        private double getMeanSpeed()
+        protected double getMeanSpeed()
         {
-            return getAllSpeed().Average();
+            return average(getAllSpeed());
         }
 
         /**
          * Mean of the X acceleration
          **/
-        private double getMeanX()
+        protected double getMeanX()
         {
-            return getAllX().Average();
+            
+            return average(getAllX());
         }
 
         /**
  * Mean of the Y acceleration
  **/
-        private double getMeanY()
+        protected double getMeanY()
         {
-            return getAllY().Average();
+            return average(getAllY());
         }
 
 
         /**
 * Mean of the Z acceleration
 **/
-        private double getMeanZ()
+        protected double getMeanZ()
         {
-            return getAllZ().Average();
+            return average(getAllZ());
+        }
+        protected double average(List<double> li)
+        {
+            double total = 0;
+
+            for (int i = 0; i < li.Count; i++)
+            {
+                total += li[i];
+            }
+            return total / li.Count;
         }
 
 
-        private double getStandardDeviation(List<double> l)
+        protected double getStandardDeviation(List<double> l)
         {
-            double avg = l.Average();
+            double avg = average(l);
             return Math.Sqrt(l.Average(v => Math.Pow(v - avg, 2)));
 
         }
 
-        private double getStandardDeviationX()
+        protected double getStandardDeviationX()
         {
             return getStandardDeviation(getAllX());
         }
-        private double getStandardDeviationY()
+        protected double getStandardDeviationY()
         {
             return getStandardDeviation(getAllY());
         }
-        private double getStandardDeviationZ()
+        protected double getStandardDeviationZ()
         {
             return getStandardDeviation(getAllZ());
         }
-        private double getStandardDeviationScorePerSecond()
+        protected double getStandardDeviationScorePerSecond()
         {
             return getStandardDeviation(getAllScorePerSecond());
         }
