@@ -1,0 +1,9 @@
+c:\users\zander\documents\visual studio 2012\Projects\scoreTester\scoreTester\bin\Debug\scoreTester.exe.config
+c:\users\zander\documents\visual studio 2012\Projects\scoreTester\scoreTester\bin\Debug\scoreTester.exe
+c:\users\zander\documents\visual studio 2012\Projects\scoreTester\scoreTester\bin\Debug\scoreTester.pdb
+c:\users\zander\documents\visual studio 2012\Projects\scoreTester\scoreTester\obj\Debug\scoreTester.csprojResolveAssemblyReference.cache
+c:\users\zander\documents\visual studio 2012\Projects\scoreTester\scoreTester\obj\Debug\scoreTester.Properties.Resources.resources
+c:\users\zander\documents\visual studio 2012\Projects\scoreTester\scoreTester\obj\Debug\scoreTester.csproj.GenerateResource.Cache
+c:\users\zander\documents\visual studio 2012\Projects\scoreTester\scoreTester\obj\Debug\scoreTester.exe
+c:\users\zander\documents\visual studio 2012\Projects\scoreTester\scoreTester\obj\Debug\scoreTester.pdb
+c:\users\zander\documents\visual studio 2012\Projects\scoreTester\scoreTester\obj\Debug\scoreTester.Form1.resources

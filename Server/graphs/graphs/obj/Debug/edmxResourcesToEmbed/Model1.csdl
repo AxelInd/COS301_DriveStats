@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="drivestatsdbModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="drivestatsdbEntities" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="tripDatas" EntityType="drivestatsdbModel.tripData" />
+    <EntitySet Name="trips" EntityType="drivestatsdbModel.trip" />
+    <EntitySet Name="users" EntityType="drivestatsdbModel.user" />
+    <AssociationSet Name="FK__trips__userID__38996AB5" Association="drivestatsdbModel.FK__trips__userID__38996AB5">
+      <End Role="users" EntitySet="users" />
+      <End Role="trips" EntitySet="trips" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="tripData">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="tripID" Type="Int32" />
+    <Property Name="latitude" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+    <Property Name="longitude" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+    <Property Name="speed" Type="Double" />
+    <Property Name="maxXAcelerometer" Type="Double" />
+    <Property Name="maxYAcelerometer" Type="Double" />
+    <Property Name="maxZAcelerometer" Type="Double" />
+  </EntityType>
+  <EntityType Name="trip">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="userID" Type="Int32" />
+    <Property Name="tripDate" Type="String" MaxLength="40" Unicode="false" FixedLength="false" />
+    <Property Name="startTime" Type="String" MaxLength="6" Unicode="false" FixedLength="false" />
+    <Property Name="score" Type="Double" />
+    <NavigationProperty Name="user" Relationship="drivestatsdbModel.FK__trips__userID__38996AB5" FromRole="trips" ToRole="users" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="email" Type="String" Nullable="false" MaxLength="60" Unicode="false" FixedLength="false" />
+    <Property Name="joinDate" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+    <Property Name="averageScore" Type="Double" />
+    <NavigationProperty Name="trips" Relationship="drivestatsdbModel.FK__trips__userID__38996AB5" FromRole="users" ToRole="trips" />
+  </EntityType>
+  <Association Name="FK__trips__userID__38996AB5">
+    <End Role="users" Type="drivestatsdbModel.user" Multiplicity="0..1" />
+    <End Role="trips" Type="drivestatsdbModel.trip" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="trips">
+        <PropertyRef Name="userID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

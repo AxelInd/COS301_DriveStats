@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="drivestatsdbModelStoreContainer" CdmEntityContainer="drivestatsdbEntities">
+    <EntitySetMapping Name="tripDatas">
+      <EntityTypeMapping TypeName="drivestatsdbModel.tripData">
+        <MappingFragment StoreEntitySet="tripData">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="tripID" ColumnName="tripID" />
+          <ScalarProperty Name="latitude" ColumnName="latitude" />
+          <ScalarProperty Name="longitude" ColumnName="longitude" />
+          <ScalarProperty Name="speed" ColumnName="speed" />
+          <ScalarProperty Name="maxXAcelerometer" ColumnName="maxXAcelerometer" />
+          <ScalarProperty Name="maxYAcelerometer" ColumnName="maxYAcelerometer" />
+          <ScalarProperty Name="maxZAcelerometer" ColumnName="maxZAcelerometer" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="trips">
+      <EntityTypeMapping TypeName="drivestatsdbModel.trip">
+        <MappingFragment StoreEntitySet="trips">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="userID" ColumnName="userID" />
+          <ScalarProperty Name="tripDate" ColumnName="tripDate" />
+          <ScalarProperty Name="startTime" ColumnName="startTime" />
+          <ScalarProperty Name="score" ColumnName="score" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="users">
+      <EntityTypeMapping TypeName="drivestatsdbModel.user">
+        <MappingFragment StoreEntitySet="users">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="joinDate" ColumnName="joinDate" />
+          <ScalarProperty Name="averageScore" ColumnName="averageScore" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

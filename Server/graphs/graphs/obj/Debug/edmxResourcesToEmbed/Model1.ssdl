@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="drivestatsdbModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="drivestatsdbModelStoreContainer">
+    <EntitySet Name="tripData" EntityType="drivestatsdbModel.Store.tripData" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="trips" EntityType="drivestatsdbModel.Store.trips" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="users" EntityType="drivestatsdbModel.Store.users" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK__trips__userID__38996AB5" Association="drivestatsdbModel.Store.FK__trips__userID__38996AB5">
+      <End Role="users" EntitySet="users" />
+      <End Role="trips" EntitySet="trips" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="tripData">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="tripID" Type="int" />
+    <Property Name="latitude" Type="varchar" MaxLength="20" />
+    <Property Name="longitude" Type="varchar" MaxLength="20" />
+    <Property Name="speed" Type="float" />
+    <Property Name="maxXAcelerometer" Type="float" />
+    <Property Name="maxYAcelerometer" Type="float" />
+    <Property Name="maxZAcelerometer" Type="float" />
+  </EntityType>
+  <EntityType Name="trips">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="userID" Type="int" />
+    <Property Name="tripDate" Type="varchar" MaxLength="40" />
+    <Property Name="startTime" Type="varchar" MaxLength="6" />
+    <Property Name="score" Type="float" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="email" Type="varchar" Nullable="false" MaxLength="60" />
+    <Property Name="joinDate" Type="varchar" Nullable="false" MaxLength="20" />
+    <Property Name="averageScore" Type="float" />
+  </EntityType>
+  <Association Name="FK__trips__userID__38996AB5">
+    <End Role="users" Type="drivestatsdbModel.Store.users" Multiplicity="0..1" />
+    <End Role="trips" Type="drivestatsdbModel.Store.trips" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="trips">
+        <PropertyRef Name="userID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
