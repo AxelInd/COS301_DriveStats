@@ -101,8 +101,9 @@ namespace scoreTester
             debugMessageBox("The number of bad things per second " + badThingsPerSecond.ToString());
             //average bad things of database as a whole
             // @TODO
-            double TRUEAVERAGENUMBEROFBADTHINGSPERSECOND = 0.4;
-            double STANDARDDEVIATIONOFPOPULATION = 0.4;
+            double TRUEAVERAGENUMBEROFBADTHINGSPERSECOND = 5;
+            double STANDARDDEVIATIONOFPOPULATION = TRUEAVERAGENUMBEROFBADTHINGSPERSECOND;
+            
             //getStandardDeviationScorePerSecond() this population needs to be called locally.
 
             double prob = normalDistribution(badThingsPerSecond, TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION);

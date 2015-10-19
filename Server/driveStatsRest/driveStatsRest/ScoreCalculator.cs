@@ -101,7 +101,7 @@ namespace driveStatsRest
             debugMessageBox("The number of bad things per second " + badThingsPerSecond.ToString());
             //average bad things of database as a whole
             // @TODO
-            double TRUEAVERAGENUMBEROFBADTHINGSPERSECOND = 0.4;
+            double TRUEAVERAGENUMBEROFBADTHINGSPERSECOND = 7;
             double STANDARDDEVIATIONOFPOPULATION = 0.4;
             //getStandardDeviationScorePerSecond() this population needs to be called locally.
 
