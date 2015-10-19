@@ -12,148 +12,97 @@ namespace scoreTester
         {  
             testAll();
         }
-        public void testAll()
+        public bool testGenericFunctions()
+        {
+            bool conversion = testConverstions();
+            bool extraction = testDataExtractions();
+
+            return !(conversion || extraction);
+        }
+        public bool basicCalculationsOnData()
+        {
+            bool means = testMeans();
+            bool stdDev = testStdDevs();
+            bool BTPS = testBTPS();
+
+            return !(means || stdDev || BTPS);
+        }
+        public bool testStatsFunctions()
+        {
+            //@TODO must be improved
+            bool normalDis = testNormalDistribution();
+            bool zScore = testZScores();
+            bool areaUnderCurve = testAreaUnderCurve();
+            return !(normalDis || zScore || areaUnderCurve);
+        }
+
+        public bool testAll()
         {
             debugMessageBox("UNIT TESTING....");
-            trips = createMockData();
-            
-            //=============================================================================
-            //=============================TESTING CONVERSIONS=============================
-            try
-            {
-                replaceStopsWithCommas();
-                
-            }
-            catch (Exception e)
-            {
-                debugMessageBox(">> Replacing fullstops with commas failed\n" + e.StackTrace);
-            }
-            //=============================================================================
-            //===========================TESTING DATA EXTRACTION===========================
-            try
-            {
-                List<double>lix = getAllX();
-                List<double> liy = getAllY();
-                List<double> liz = getAllZ();
+            bool genericFunctions = testGenericFunctions();
+            bool basicCalculculations = basicCalculationsOnData();
+            bool statsFunctions = testStatsFunctions();
 
-                if (lix.Count != liy.Count || lix.Count != liz.Count || liy.Count != liz.Count || lix.Count != trips.Count)
-                {
-                    debugMessageBox("Length of x, y, z lists do not match");
-                }
+            return !(genericFunctions || basicCalculculations || statsFunctions);
+        }
 
-
-            }
-            catch (Exception e)
-            {
-                debugMessageBox(">> Data extraction failed\n" + e.StackTrace);
-            }
-            //=============================================================================
-            //================================TESTING MEANS================================
-            try
-            {
-                //NB: Don't forget that the mean is @TODO to be calculated with absolute values
-                double avX = getMeanX();
-                double avY = getMeanY();
-                double avZ = Math.Round(getMeanZ(),5);
-
-                double expectedAvX = -3.8814;
-                double expectedAvY = -1.2117;
-                double expectedAvZ = -0.78;
-
-
-                string means = "--Observed:: \n" + "Mean x : " + avX + "\n" + "Mean Y : " + avY + "\n" + "Mean Z : " + avZ + "\n";
-                means += "--Expected:: \n" + "Mean x : " + expectedAvX + "\n" + "Mean Y : " + expectedAvY + "\n" + "Mean Z : " + expectedAvZ + "\n";
-
-                if (avX != expectedAvX || avY != expectedAvY || avZ != expectedAvZ)
-                {
-                    debugMessageBox(">> Logical failure in calculating averages\n" + means);
-                }
-            }
-            catch (Exception e)
-            {
-                debugMessageBox(">> Testing means failed\n" + e.StackTrace);
-            }
-            //=============================================================================
-            //===============================TESTING STDDEV================================
-            try
-            {
-                double stdX = Math.Round(getStandardDeviationX(),5);
-                double stdY = Math.Round(getStandardDeviationY(),5);
-                double stdZ = Math.Round(getStandardDeviationZ(),5);
-
-                double expectedAvX = Math.Round(0.009941831,5);
-                double expectedAvY = Math.Round(0.015969033, 5);
-                double expectedAvZ = Math.Round(0.018574176, 5);
-
-                string stds = "--Observed:: \n" + "Standard Dev x : " + stdX + "\n" + "Standard Dev Y : " + stdY + "\n" + "Standard Dev Z : " + stdZ + "\n";
-                stds += "--Expected:: \n" + "Standard Dev x : " + expectedAvX + "\n" + "Standard Dev Y : " + expectedAvY + "\n" + "Standard Dev Z : " + expectedAvZ + "\n";
-                if (stdX != expectedAvX || stdY != expectedAvY || stdZ != expectedAvZ)
-                {
-                    debugMessageBox(">> Logical failure in standard deviation\n" + stds);
-                }
-            }
-            catch (Exception e)
-            {
-                debugMessageBox(">> Getting standard deviations failed\n" + e.StackTrace);
-            }
-
-            //=============================================================================
-            //===============================TESTING BTPS==================================
-            try
-            {
-                double observedTotalofBadThingsPerSecond = Math.Round(weightedTotalofBadThingsPerSecond(), 5);
-                double expectedTotalOfBadThingsPerSecond = 1.13333;
-                string to = "Expected number of bad things : " + expectedTotalOfBadThingsPerSecond + "\nObserved total of bad things per second : " + observedTotalofBadThingsPerSecond;
-                if (observedTotalofBadThingsPerSecond != expectedTotalOfBadThingsPerSecond)
-                {
-                    debugMessageBox(">> Logical failure in errors per second\n" + to);
-                }
-            }
-            catch (Exception e)
-            {
-                debugMessageBox(">>Bad things per second failed\n" + e.StackTrace);
-            }
-
-            //=============================================================================
-            //============================TESTING NORMAL DIST==============================
-            try
-            {
-                double expectedProbabilityValue = Math.Round(normalDistribution(weightedTotalofBadThingsPerSecond(),0.4,0.4), 5);
-                double observedProbabilityValue = 0.81657;
-                string to = "Expected probability value : " + expectedProbabilityValue + "\nObserved probability value : " + observedProbabilityValue;
-                if (observedProbabilityValue != expectedProbabilityValue)
-                {
-                    debugMessageBox(">> Normal distribution \n" + to);
-                }
-            }
-            catch (Exception e)
-            {
-                debugMessageBox(">>Bad things per second failed\n" + e.StackTrace);
-            }
+        private bool testZScores()
+        {
             //=============================================================================
             //============================CALCULATE Z-SCORE================================
             try
             {
-                double badThingsPerSecond=weightedTotalofBadThingsPerSecond();
-                    double TRUEAVERAGENUMBEROFBADTHINGSPERSECOND=0.4;
-                    double STANDARDDEVIATIONOFPOPULATION = 0.4;
-                    double observedZScore = getZScore(badThingsPerSecond, TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION);
-                    double expectedZScore = 2;
+                double badThingsPerSecond = weightedTotalofBadThingsPerSecond();
+                double TRUEAVERAGENUMBEROFBADTHINGSPERSECOND = 0.4;
+                double STANDARDDEVIATIONOFPOPULATION = 0.4;
+                double observedZScore = getZScore(badThingsPerSecond, TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION);
+                double expectedZScore = 2;
 
-                    string to = "Expected z score : " + expectedZScore + "\nObserved z score : " + observedZScore;
-                    if (observedZScore != expectedZScore)
+                string to = "Expected z score : " + expectedZScore + "\nObserved z score : " + observedZScore;
+                if (observedZScore != expectedZScore)
                 {
                     debugMessageBox(">> Z Score \n" + to);
+                    return false;
                 }
             }
             catch (Exception e)
             {
                 debugMessageBox(">>Z-Score fail\n" + e.StackTrace);
+                return false;
             }
+            return true;
+
+        }
+        private bool testNormalDistribution()
+        {
+
+
+            //=============================================================================
+            //============================TESTING NORMAL DIST==============================
+            try
+            {
+                double expectedProbabilityValue = Math.Round(normalDistribution(weightedTotalofBadThingsPerSecond(), 0.4, 0.4), 5);
+                double observedProbabilityValue = 0.81657;
+                string to = "Expected probability value : " + expectedProbabilityValue + "\nObserved probability value : " + observedProbabilityValue;
+                if (observedProbabilityValue != expectedProbabilityValue)
+                {
+                    debugMessageBox(">> Normal distribution \n" + to);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                debugMessageBox(">>Bad things per second failed\n" + e.StackTrace);
+                return false;
+            }
+            return true;
+        }
+        private bool testAreaUnderCurve()
+        {
 
             //=============================================================================
             //========================CALCULATE AREA UNDER CURVE===========================
-            
+
 
             try
             {
@@ -166,18 +115,146 @@ namespace scoreTester
                 if (observedNormalPob != expectedNormalProb)
                 {
                     debugMessageBox(">> Z Score \n" + to);
+                    return false;
                 }
             }
             catch (Exception e)
             {
                 debugMessageBox(">>Area fail\n" + e.StackTrace);
+                return false;
             }
-
-
-
+            return true;
         }
 
+        private bool testStdDevs()
+        {
+            //=============================================================================
+            //===============================TESTING STDDEV================================
+            try
+            {
+                double stdX = Math.Round(getStandardDeviationX(), 5);
+                double stdY = Math.Round(getStandardDeviationY(), 5);
+                double stdZ = Math.Round(getStandardDeviationZ(), 5);
 
+                double expectedAvX = Math.Round(0.009941831, 5);
+                double expectedAvY = Math.Round(0.015969033, 5);
+                double expectedAvZ = Math.Round(0.018574176, 5);
+
+                string stds = "--Observed:: \n" + "Standard Dev x : " + stdX + "\n" + "Standard Dev Y : " + stdY + "\n" + "Standard Dev Z : " + stdZ + "\n";
+                stds += "--Expected:: \n" + "Standard Dev x : " + expectedAvX + "\n" + "Standard Dev Y : " + expectedAvY + "\n" + "Standard Dev Z : " + expectedAvZ + "\n";
+                if (stdX != expectedAvX || stdY != expectedAvY || stdZ != expectedAvZ)
+                {
+                    debugMessageBox(">> Logical failure in standard deviation\n" + stds);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                debugMessageBox(">> Getting standard deviations failed\n" + e.StackTrace);
+                return false;
+            }
+            return true;
+        }
+        private bool testMeans()
+        {
+            //=============================================================================
+            //================================TESTING MEANS================================
+            try
+            {
+                //NB: Don't forget that the mean is @TODO to be calculated with absolute values
+                double avX = getMeanX();
+                double avY = getMeanY();
+                double avZ = Math.Round(getMeanZ(), 5);
+
+                double expectedAvX = -3.8814;
+                double expectedAvY = -1.2117;
+                double expectedAvZ = -0.78;
+
+
+                string means = "--Observed:: \n" + "Mean x : " + avX + "\n" + "Mean Y : " + avY + "\n" + "Mean Z : " + avZ + "\n";
+                means += "--Expected:: \n" + "Mean x : " + expectedAvX + "\n" + "Mean Y : " + expectedAvY + "\n" + "Mean Z : " + expectedAvZ + "\n";
+
+                if (avX != expectedAvX || avY != expectedAvY || avZ != expectedAvZ)
+                {
+                    debugMessageBox(">> Logical failure in calculating averages\n" + means);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                debugMessageBox(">> Testing means failed\n" + e.StackTrace);
+                return false;
+            }
+            return true;
+        }
+        private bool testBTPS()
+        {
+
+
+            //=============================================================================
+            //===============================TESTING BTPS==================================
+            try
+            {
+                double observedTotalofBadThingsPerSecond = Math.Round(weightedTotalofBadThingsPerSecond(), 5);
+                double expectedTotalOfBadThingsPerSecond = 1.13333;
+                string to = "Expected number of bad things : " + expectedTotalOfBadThingsPerSecond + "\nObserved total of bad things per second : " + observedTotalofBadThingsPerSecond;
+                if (observedTotalofBadThingsPerSecond != expectedTotalOfBadThingsPerSecond)
+                {
+                    debugMessageBox(">> Logical failure in errors per second\n" + to);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                debugMessageBox(">>Bad things per second failed\n" + e.StackTrace);
+                return false;
+            }
+            return false;
+        }
+
+        private bool testDataExtractions()
+        {
+            //=============================================================================
+            //===========================TESTING DATA EXTRACTION===========================
+            try
+            {
+                List<double> lix = getAllX();
+                List<double> liy = getAllY();
+                List<double> liz = getAllZ();
+
+                if (lix.Count != liy.Count || lix.Count != liz.Count || liy.Count != liz.Count || lix.Count != trips.Count)
+                {
+                    debugMessageBox("Length of x, y, z lists do not match");
+                    return false;
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                debugMessageBox(">> Data extraction failed\n" + e.StackTrace);
+                return false;
+            }
+            return true;
+        }
+        private bool testConverstions()
+        {
+            trips = createMockData();
+
+            //=============================================================================
+            //=============================TESTING CONVERSIONS=============================
+            try
+            {
+                replaceStopsWithCommas();
+
+            }
+            catch (Exception e)
+            {
+                debugMessageBox(">> Replacing fullstops with commas failed\n" + e.StackTrace);
+                return false;
+            }
+            return true;
+        }
 
         private List<tripData> createMockData()
         {
