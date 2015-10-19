@@ -39,6 +39,10 @@ namespace scoreTester
         public bool testAll()
         {
             debugMessageBox("UNIT TESTING....");
+            trips = createMockData();
+            init();
+
+
             bool genericFunctions = testGenericFunctions();
             bool basicCalculculations = basicCalculationsOnData();
             bool statsFunctions = testStatsFunctions();
@@ -46,17 +50,20 @@ namespace scoreTester
             return !(genericFunctions || basicCalculculations || statsFunctions);
         }
 
+        /**
+         * WORKS
+        **/ 
         private bool testZScores()
         {
             //=============================================================================
             //============================CALCULATE Z-SCORE================================
             try
             {
-                double badThingsPerSecond = weightedTotalofBadThingsPerSecond();
-                double TRUEAVERAGENUMBEROFBADTHINGSPERSECOND = 0.4;
-                double STANDARDDEVIATIONOFPOPULATION = 0.4;
+                double badThingsPerSecond = 5;
+                double TRUEAVERAGENUMBEROFBADTHINGSPERSECOND = 4;
+                double STANDARDDEVIATIONOFPOPULATION = 4;
                 double observedZScore = getZScore(badThingsPerSecond, TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION);
-                double expectedZScore = 2;
+                double expectedZScore = -0.25;
 
                 string to = "Expected z score : " + expectedZScore + "\nObserved z score : " + observedZScore;
                 if (observedZScore != expectedZScore)
@@ -71,8 +78,10 @@ namespace scoreTester
                 return false;
             }
             return true;
-
         }
+        /**
+        * WORKS
+        **/ 
         private bool testNormalDistribution()
         {
 
@@ -81,8 +90,13 @@ namespace scoreTester
             //============================TESTING NORMAL DIST==============================
             try
             {
-                double expectedProbabilityValue = Math.Round(normalDistribution(weightedTotalofBadThingsPerSecond(), 0.4, 0.4), 5);
-                double observedProbabilityValue = 0.81657;
+                double personAv=3; //x
+                double trueAv=5; //mu
+                double standardDeviationOfPopulation = 5; //delta
+
+
+                double observedProbabilityValue  = Math.Round(normalDistribution(personAv, trueAv, standardDeviationOfPopulation), 5);
+                double expectedProbabilityValue  = 0.07365;
                 string to = "Expected probability value : " + expectedProbabilityValue + "\nObserved probability value : " + observedProbabilityValue;
                 if (observedProbabilityValue != expectedProbabilityValue)
                 {
@@ -97,6 +111,8 @@ namespace scoreTester
             }
             return true;
         }
+
+
         private bool testAreaUnderCurve()
         {
 
@@ -106,10 +122,10 @@ namespace scoreTester
 
             try
             {
-                double ZScore = 1;
+                double ZScore = 1.2;
 
-                double observedNormalPob = getAreaUnderNormalCurve(0, ZScore);
-                double expectedNormalProb = 0.5414;
+                double observedNormalPob = Math.Round(getAreaUnderNormalCurve(0, ZScore),5);
+                double expectedNormalProb = 0.38493;
 
                 string to = "Area under curve\nObserved area = " + observedNormalPob + "\nExpected normal prob = " + expectedNormalProb;
                 if (observedNormalPob != expectedNormalProb)
@@ -212,6 +228,9 @@ namespace scoreTester
             return false;
         }
 
+        /**
+        * WORKS
+        **/ 
         private bool testDataExtractions()
         {
             //=============================================================================
@@ -237,9 +256,13 @@ namespace scoreTester
             }
             return true;
         }
+
+        /**
+        * WORKS
+        **/ 
         private bool testConverstions()
         {
-            trips = createMockData();
+            
 
             //=============================================================================
             //=============================TESTING CONVERSIONS=============================
