@@ -27,7 +27,7 @@ namespace scoreTester
          **/ 
         private bool runWithTestData()
         {
-            scoreTesterDefined st = new scoreTesterDefined();
+            scoreTesterDefined st = new scoreTesterDefined("dbData.txt");
             return false;
         }
 

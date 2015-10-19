@@ -188,9 +188,7 @@ namespace scoreTester
             List<double> allSpeed = getAllSpeed();
             for (int i = 0; i < trips.Count; i++)
             {
-                totalWeightOfBadThings += weightX * xExceeded(allX[i]) + weightY * yExceeded(allY[i]) + weightZ * zExceeded(allZ[i]) + badSpeedWeight * speedExceeded(allSpeed[i]);
-            
-
+                totalWeightOfBadThings += getWeightedTotalOfOneData(i);
             }
             debugMessageBox("Weighted total of bad things is " + totalWeightOfBadThings);
 
@@ -314,7 +312,7 @@ namespace scoreTester
         protected double getMeanX()
         {
             
-            return average(getAllX());
+            return average(allX);
         }
 
         /**
@@ -322,7 +320,7 @@ namespace scoreTester
  **/
         protected double getMeanY()
         {
-            return average(getAllY());
+            return average(allY);
         }
 
 
@@ -331,7 +329,7 @@ namespace scoreTester
 **/
         protected double getMeanZ()
         {
-            return average(getAllZ());
+            return average(allZ);
         }
         protected double average(List<double> li)
         {
@@ -354,15 +352,15 @@ namespace scoreTester
 
         protected double getStandardDeviationX()
         {
-            return getStandardDeviation(getAllX());
+            return getStandardDeviation(allX);
         }
         protected double getStandardDeviationY()
         {
-            return getStandardDeviation(getAllY());
+            return getStandardDeviation(allY);
         }
         protected double getStandardDeviationZ()
         {
-            return getStandardDeviation(getAllZ());
+            return getStandardDeviation(allZ);
         }
         protected double getStandardDeviationScorePerSecond()
         {

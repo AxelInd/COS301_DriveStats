@@ -9,9 +9,17 @@ namespace scoreTester
     class scoreTesterDefined : ScoreCalculator
     {
         public scoreTesterDefined()
-        {  
+        {
+            trips = createMockData();
             testAll();
         }
+        public scoreTesterDefined(string fileName)
+        {
+            runFromFile(fileName);
+            testAll();
+        }
+
+
         public bool testGenericFunctions()
         {
             bool conversion = testConverstions();
@@ -39,13 +47,23 @@ namespace scoreTester
         public bool testAll()
         {
             debugMessageBox("UNIT TESTING....");
-            trips = createMockData();
+            
             init();
 
 
             bool genericFunctions = testGenericFunctions();
             bool basicCalculculations = basicCalculationsOnData();
             bool statsFunctions = testStatsFunctions();
+
+
+            List<double> allbadThings = getAllScorePerSecond();
+            for (int i = 0; i < 1000; i++)
+            {
+                debugMessageBox("" + allbadThings[i]);
+            }
+
+
+
 
             return !(genericFunctions || basicCalculculations || statsFunctions);
         }
@@ -148,21 +166,42 @@ namespace scoreTester
             //===============================TESTING STDDEV================================
             try
             {
-                double stdX = Math.Round(getStandardDeviationX(), 5);
-                double stdY = Math.Round(getStandardDeviationY(), 5);
-                double stdZ = Math.Round(getStandardDeviationZ(), 5);
+                List<double> values = new List<double>();
+                values.Add(600);
+                values.Add(470);
+                values.Add(170);
+                values.Add(430);
+                values.Add(300);
 
-                double expectedAvX = Math.Round(0.009941831, 5);
-                double expectedAvY = Math.Round(0.015969033, 5);
-                double expectedAvZ = Math.Round(0.018574176, 5);
 
-                string stds = "--Observed:: \n" + "Standard Dev x : " + stdX + "\n" + "Standard Dev Y : " + stdY + "\n" + "Standard Dev Z : " + stdZ + "\n";
-                stds += "--Expected:: \n" + "Standard Dev x : " + expectedAvX + "\n" + "Standard Dev Y : " + expectedAvY + "\n" + "Standard Dev Z : " + expectedAvZ + "\n";
-                if (stdX != expectedAvX || stdY != expectedAvY || stdZ != expectedAvZ)
+                double expectedDeviation = 147;
+                double observedDeviation = Math.Round(getStandardDeviation(values));
+
+
+                string stds = "--Observed:: \n" + "Standard Dev : " + observedDeviation + "\n" + "Standard Dev Y : " + expectedDeviation;
+
+
+
+                if (expectedDeviation != observedDeviation)
                 {
                     debugMessageBox(">> Logical failure in standard deviation\n" + stds);
                     return false;
                 }
+
+
+                /**
+                double stdX = Math.Round(getStandardDeviationX(), 5);
+                double stdY = Math.Round(getStandardDeviationY(), 5);
+                double stdZ = Math.Round(getStandardDeviationZ(), 5);
+
+                
+                double expectedAvY = Math.Round(0.015969033, 5);
+                double expectedAvZ = Math.Round(0.018574176, 5);
+
+
+                 **/
+
+
             }
             catch (Exception e)
             {
@@ -307,6 +346,39 @@ namespace scoreTester
 
             return t;
 
+        }
+        private void runFromFile(string filename)
+        {
+            int counter = 0;
+            string line;
+            System.IO.StreamReader file = new System.IO.StreamReader(filename);
+            List<tripData> li = new List<tripData>();
+            while ((line = file.ReadLine()) != null)
+            {
+                tripData d = new tripData();
+                counter++;
+                string lat = line.Substring(1, line.IndexOf(',') - 1);
+                line = line.Remove(0, lat.Length + 3);
+                string lon = line.Substring(0, line.IndexOf(']'));
+                line = line.Remove(0, lon.Length + 2);
+                string speed = line.Substring(0, line.IndexOf(';'));
+                line = line.Remove(0, speed.Length + 1);
+                string x = line.Substring(0, line.IndexOf(';'));
+                line = line.Remove(0, x.Length + 1);
+                string y = line.Substring(0, line.IndexOf(';'));
+                line = line.Remove(0, y.Length + 1);
+                string z = line.Substring(0, line.IndexOf(';'));
+                d.latitude = lat;
+                d.longitude = lon;
+                d.speed = speed;
+                d.maxXAcelerometer = x;
+                d.maxYAcelerometer = y;
+                d.maxZAcelerometer = z;
+                li.Add(d);
+            }
+
+
+            trips = li;
         }
     }
 }
