@@ -18,11 +18,7 @@ public class TripScore implements Response {
         return addTripResult;
     }
 
-//    public double getTripScore() {
-//        return Double.parseDouble(addTripResult);
-//    }
-
-    public void setAddTripResult(String addTripResult) {
-        this.addTripResult = addTripResult;
+    public void setAddTripResult(Double addTripResult) {
+        this.addTripResult = Double.toString(addTripResult);
     }
 }

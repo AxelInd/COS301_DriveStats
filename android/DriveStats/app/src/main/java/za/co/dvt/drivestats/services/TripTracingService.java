@@ -18,7 +18,7 @@ public class TripTracingService {
     public void saveTripScore(String date, String time, String score, FileOutputStream writer) throws IOException {
         String line = date + "," + time + "," + score + "\n";
         writer.write(line.getBytes());
-        Inject.userProfile().addTrip(Double.parseDouble(score));
+        Inject.userProfile().addTrip(Double.parseDouble(score.replace(",", ".")));
     }
 
     public void getTripList(List<String> scores, FileInputStream stream) throws IOException {

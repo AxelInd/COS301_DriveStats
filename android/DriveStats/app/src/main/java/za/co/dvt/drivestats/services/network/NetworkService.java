@@ -42,6 +42,7 @@ public class NetworkService {
         final HttpRequest<TripScore> uploadRequest = new HttpPostRequest<>(tripInfo, TripScore.class, Methods.ADD_TRIP, new Callback<TripScore>() {
             @Override
             public void invoke(TripScore result) throws IOException {
+                result.setAddTripResult(Math.floor(Double.parseDouble(result.getAddTripResult()) * 10f) / 10f);
                 try{
                     Inject.currentContext().deleteFile(Constants.OFFLINE_FILE_NAME);
                 } catch (Throwable t) {}

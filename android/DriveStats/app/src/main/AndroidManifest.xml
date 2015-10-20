@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="za.co.dvt.drivestats" >
+    package="za.co.dvt.drivestats">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-feature
         android:name="android.hardware.location"
@@ -19,10 +20,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activities.SignInActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,21 +33,17 @@
         <activity
             android:name=".activities.TripActivity"
             android:label="@string/title_activity_trip"
-            android:launchMode="standard" >
-        </activity>
+            android:launchMode="standard"></activity>
         <activity
             android:name=".activities.SettingsActivity"
             android:label="SettingsActivity"
-            android:launchMode="standard" >
-        </activity>
+            android:launchMode="standard"></activity>
         <activity
             android:name=".activities.ProfileActivity"
-            android:label="@string/title_activity_profile" >
-        </activity>
+            android:label="@string/title_activity_profile"></activity>
         <activity
             android:name=".activities.Summary"
-            android:label="@string/title_activity_summary" >
-        </activity>
+            android:label="@string/title_activity_summary"></activity>
     </application>
 
 </manifest>

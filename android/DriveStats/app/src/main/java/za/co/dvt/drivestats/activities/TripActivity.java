@@ -8,8 +8,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +21,18 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,6 +45,7 @@ import za.co.dvt.drivestats.services.network.NetworkService;
 import za.co.dvt.drivestats.threadmanagment.ThreadManager;
 import za.co.dvt.drivestats.threadmanagment.ThreadState;
 import za.co.dvt.drivestats.utilities.Constants;
+import za.co.dvt.drivestats.utilities.UserProfile;
 import za.co.dvt.drivestats.utilities.sensormontiors.OfflineWriter;
 
 public class TripActivity extends Activity {
@@ -47,7 +63,17 @@ public class TripActivity extends Activity {
         ButterKnife.bind(this);
         Inject.setCurrentContext(this);
         checkMustStop();
-        Log.d("onCreate", getIntent().getStringExtra(EXTRA_VALUE) + "");
+    }
+
+//    @Override
+//    protected void onPost(Bundle savedInstanceState) {
+//        super.onPostCreate(savedInstanceState);
+//    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        setProfile();
     }
 
     @Override
@@ -91,9 +117,8 @@ public class TripActivity extends Activity {
 
     @Override
     protected void onStop() {
-        //TODO: Confirm this happens when it has to
         super.onStop();
-        za.co.dvt.drivestats.utilities.Settings.getInstance().saveSettings();
+        Inject.settings().saveSettings();
     }
 
 
@@ -112,6 +137,11 @@ public class TripActivity extends Activity {
                 }
             }
         }
+    }
+
+    @OnClick(R.id.profilePictureSmall)
+    public void profilePictureSmallClick() {
+        startActivity(new Intent(this, ProfileActivity.class));
     }
 
     @OnClick(R.id.settings)
@@ -151,6 +181,9 @@ public class TripActivity extends Activity {
     ImageButton tripButton;
 
     private void mainCoinFlip(final View view, final boolean running) {
+
+        ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(50);
+
         final Animation flipBack = AnimationUtils.loadAnimation(this, R.anim.anim_flip_to_back);
         final Animation back = AnimationUtils.loadAnimation(this, R.anim.anim_back);
         final Animation flipFront = AnimationUtils.loadAnimation(this, R.anim.anim_flip_to_front);
@@ -324,56 +357,107 @@ public class TripActivity extends Activity {
         view.startAnimation(flipBack);
     }
 
+    @Bind(R.id.profilePictureSmall)
+    ImageView profilePicture;
+
+    @Bind(R.id.userNameTrip)
+    TextView userName;
+
+    @Bind(R.id.averageScoreTrip)
+    TextView averageScore;
+
+
+    @Bind(R.id.tripCountTrip)
+    TextView numberTrips;
+
+    private void setProfile() {
+        UserProfile profile = Inject.userProfile();
+        userName.setText(profile.getUserName());
+        averageScore.setText(Double.toString(profile.getAverageScore()));
+        numberTrips.setText(Long.toString(profile.getNumberOfTrips()));
+        final String picture = Inject.userProfile().getProfilePicture() + "0";
+        try {
+            profilePicture.setImageBitmap(getBitmapThreaded(picture));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Bitmap getBitmapThreaded(final String url) throws ExecutionException, InterruptedException {
+        return Executors.newSingleThreadExecutor().submit(new Callable<Bitmap>() {
+            @Override
+            public Bitmap call() throws Exception {
+                return getBitmap(url);
+            }
+        }).get();
+    }
+
+    private static Bitmap getBitmap(String url) throws IOException {
+        InputStream stream = openStream(url);
+        Bitmap bitmap = BitmapFactory.decodeStream(stream, null, null);
+        stream.close();
+        return bitmap;
+    }
+
+    private static InputStream openStream(String url) throws IOException {
+        InputStream stream = null;
+        URLConnection connection = new URL(url).openConnection();
+        HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
+        httpURLConnection.setRequestMethod("GET");
+        httpURLConnection.connect();
+
+        if (httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            stream = httpURLConnection.getInputStream();
+        }
+        return stream;
+    }
+
     private void start() {
         Constants.OFFLINE_FILE_NAME = "offlineStorage-" + System.currentTimeMillis() + ".dat";
         manager.start();
-        Notification notification = new Notification.Builder(Inject.currentContext())
-                .setContentTitle("Drive Stats is running")
-                .setContentText("Your trip is being recorded.")
-                .setSmallIcon(Inject.currentContext().getApplicationInfo().icon)
-                .setContentIntent(getPendingIntent(false))
-                .addAction(17301552, "Stop recording", getPendingIntent(true))
-                .setOngoing(true)
-                .build();
-        ((NotificationManager) getSystemService(Inject.currentContext().NOTIFICATION_SERVICE)).notify(0, notification);
-    }
-
-    private PendingIntent getPendingIntent(boolean stop) {
-        Intent launchIntent = new Intent(Inject.currentContext(), SignInActivity.class);
-        launchIntent.setAction(Intent.ACTION_SEND);
-        launchIntent.putExtra(EXTRA_VALUE, "stop");
-        return PendingIntent.getActivity(
-                Inject.currentContext(),
-                (int) System.currentTimeMillis(),
-                launchIntent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
+        notifyUser("Drive Stats is running", "Your trip is being recorded.", true, false, TripActivity.class);
     }
 
     private void stop() {
         manager.stop(new OfflineWriter.WritingStop() {
             @Override
             public void onStopWriting() {
+                Toast.makeText(TripActivity.this, "Your trip is being uploaded, you will be notified of your score", Toast.LENGTH_LONG).show();
+                notifyUser("Trip is being uploaded", "Your score will appear here shortly", false, false, TripActivity.class);
                 NetworkService.uploadTrip(new Callback<TripScore>() {
                     @Override
                     public void invoke(TripScore result) {
-                        Intent intent = new Intent(Inject.currentContext(), SignInActivity.class);
-                        PendingIntent pendingIntent = PendingIntent.getActivity(
-                                Inject.currentContext(),
-                                12026442,
-                                intent,
-                                PendingIntent.FLAG_CANCEL_CURRENT);
-
-                        Notification notification = new Notification.Builder(Inject.currentContext())
-                                .setContentTitle("Trip score: " + result.getAddTripResult())
-                                .setContentText("Your trip was successfully uploaded")
-                                .setSmallIcon(Inject.currentContext().getApplicationInfo().icon)
-                                .setContentIntent(pendingIntent)
-                                .build();
-                        ((NotificationManager) getSystemService(Inject.currentContext().NOTIFICATION_SERVICE)).notify(0, notification);
+                        final String title = "Trip Score: " + result.getAddTripResult();
+                        final String content = "Your trip was successfully uploaded";
+                        notifyUser(title, content, false, true, Summary.class);
                     }
                 });
             }
         });
+    }
+
+    private void notifyUser(String title, String content, boolean onGoing, boolean ring, Class clazz) {
+        final Intent intent = new Intent(Inject.currentContext(), clazz);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                Inject.currentContext(),
+                12026442,
+                intent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+
+        Notification notification = new Notification.Builder(Inject.currentContext())
+                .setContentTitle(title)
+                .setContentText(content)
+                .setSmallIcon(Inject.currentContext().getApplicationInfo().icon)
+                .setContentIntent(pendingIntent)
+                .setOngoing(onGoing)
+                .build();
+        if (ring) {
+            notification.defaults |= Notification.DEFAULT_VIBRATE;
+            notification.defaults |= Notification.DEFAULT_SOUND;
+        }
+        ((NotificationManager) getSystemService(Inject.currentContext().NOTIFICATION_SERVICE)).notify(0, notification);
     }
 
     // This is because for some reason any alert message and activity change can only take place in another activity
