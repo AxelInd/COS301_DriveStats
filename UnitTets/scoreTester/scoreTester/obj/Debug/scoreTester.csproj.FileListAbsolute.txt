@@ -25,6 +25,11 @@ C:\Users\Zander\Documents\GitHub\COS301_DriveStats\Server\scoreTester\scoreTeste
 C:\Users\Zander\Documents\GitHub\COS301_DriveStats\Server\scoreTester\scoreTester\obj\Debug\scoreTester.Form1.resources
 C:\Users\Zander\Documents\GitHub\COS301_DriveStats\Server\scoreTester\scoreTester\obj\Debug\scoreTester.Properties.Resources.resources
 C:\Users\Zander\Documents\GitHub\COS301_DriveStats\Server\scoreTester\scoreTester\obj\Debug\scoreTester.csproj.GenerateResource.Cache
+<<<<<<< HEAD
+C:\Users\Zander\Documents\GitHub\COS301_DriveStats\UnitTets\scoreTester\scoreTester\bin\Debug\scoreTester.exe.config
+C:\Users\Zander\Documents\GitHub\COS301_DriveStats\UnitTets\scoreTester\scoreTester\obj\Debug\scoreTester.exe
+C:\Users\Zander\Documents\GitHub\COS301_DriveStats\UnitTets\scoreTester\scoreTester\obj\Debug\scoreTester.pdb
+=======
 C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\UnitTets\scoreTester\scoreTester\bin\Debug\scoreTester.exe.config
 C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\UnitTets\scoreTester\scoreTester\obj\Debug\scoreTester.exe
 C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\UnitTets\scoreTester\scoreTester\obj\Debug\scoreTester.pdb
@@ -34,3 +39,4 @@ C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\UnitTets\scoreTester\sc
 C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\UnitTets\scoreTester\scoreTester\obj\Debug\scoreTester.Form1.resources
 C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\UnitTets\scoreTester\scoreTester\obj\Debug\scoreTester.Properties.Resources.resources
 C:\Users\Axel\Documents\GitHub\COS 301\COS301_DriveStats\UnitTets\scoreTester\scoreTester\obj\Debug\scoreTester.csproj.GenerateResource.Cache
+>>>>>>> origin/master
