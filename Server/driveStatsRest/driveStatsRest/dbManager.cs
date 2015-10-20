@@ -7,15 +7,6 @@ namespace driveStatsRest
 {
     public class dbManager
     {
-        public double getAverageScore()
-        {
-            double score = 0;
-            using (var context = new drivestatsEntities())
-            {
-                score = (double)context.users.Select(u => u.averageScore).Average();
-            }
-            return score;
-        }
 
         private void addUser(string email)
         {

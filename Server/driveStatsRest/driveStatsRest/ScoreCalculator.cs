@@ -17,41 +17,57 @@ namespace driveStatsRest
     {
         protected bool debugging = false;
         protected List<tripData> trips;
+
+        List<double> allX;
+        List<double> allY;
+        List<double> allZ;
+
+        double MAXX = 6.4;
+        double MAXY = 4.5;
+        double MAXZ = 3;
+        double MAXSPEED = 36;
+
+
+        double weightX = 1;
+        double weightY = 0.6;
+        double weightZ = 0.4;
+        double badSpeedWeight = 7;
         public ScoreCalculator()
         {
+
+            //init();
+        }
+        protected void init()
+        {
+            replaceStopsWithCommas();
+            allX = getAllX();
+            allY = getAllY();
+            allZ = getAllZ();
         }
         public ScoreCalculator(List<tripData> trips, double interval)
         {
 
-            //MessageBox.Show(trips.Count.ToString());
             this.trips = trips;
-            replaceStopsWithCommas();
+            init();
+
 
 
 
 
             string means = "Means\n" + "Mean x : " + getMeanX() + "\n" + "Mean Y : " + getMeanY() + "\n" + "Mean Z : " + getMeanZ();
             debugMessageBox(means);
-            //first we need mean and standard deviation for each variable
-            List<double> allx = getAllX();
-            List<double> ally = getAllY();
-            List<double> allz = getAllZ();
 
-
-
-            string listSize = "Size of list x is " + allx.Count + "\n";
-            listSize += "Size of list y is " + ally.Count + "\n";
-            listSize += "Size of list z is " + allz.Count + "\n";
-
-
+            //string listSize = "Size of list x is " + allX.Count + "\n";
+            //listSize += "Size of list y is " + allY.Count + "\n";
+            //listSize += "Size of list z is " + allZ.Count + "\n";
 
             string stddev = "stddev of list x is " + getStandardDeviationX() + "\n";
             stddev += "stddev of list y is " + getStandardDeviationY() + "\n";
             stddev += "stddev of list z is " + getStandardDeviationZ() + "\n";
+            stddev += "Over standard deviation is : " + getStandardDeviationScorePerSecond() + "\n";
 
-
-            debugMessageBox("Standard deviations are " + stddev);
-            debugMessageBox("List size is " + listSize);
+            //debugMessageBox("Standard deviations are " + stddev);
+            //debugMessageBox("List size is " + listSize);
 
 
         }
@@ -104,7 +120,6 @@ namespace driveStatsRest
             double TRUEAVERAGENUMBEROFBADTHINGSPERSECOND = 5;
             double STANDARDDEVIATIONOFPOPULATION = TRUEAVERAGENUMBEROFBADTHINGSPERSECOND;
 
-            //getStandardDeviationScorePerSecond() this population needs to be called locally.
 
             double prob = normalDistribution(badThingsPerSecond, TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION);
             debugMessageBox("probability is " + prob);
@@ -112,7 +127,17 @@ namespace driveStatsRest
             debugMessageBox("zScore is " + getZScore(TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION, badThingsPerSecond));
 
             double zScore = getZScore(TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION, badThingsPerSecond);
-            double area = 0.5 + getAreaUnderNormalCurve(0, zScore);
+
+            //this is the distance from the midpoint
+            double area;
+            if (badThingsPerSecond < TRUEAVERAGENUMBEROFBADTHINGSPERSECOND)
+            {
+                area = 0.5 - getAreaUnderNormalCurve(0, zScore);
+            }
+            else
+            {
+                area = 0.5 + getAreaUnderNormalCurve(0, Math.Abs(zScore));
+            }
 
             return area * 10;
         }
@@ -131,9 +156,11 @@ namespace driveStatsRest
 
         protected double normalDistribution(double personAv, double trueAv, double standardDeviationOfPopulation)
         {
-            double normalDist1 = 1.0 / (standardDeviationOfPopulation * Math.Sqrt(2 * Math.PI));
-            double normalDist2 = Math.Pow(Math.E, Math.Pow(personAv - trueAv, 2) / (-2 * standardDeviationOfPopulation * standardDeviationOfPopulation));
-            double normalDist = normalDist1 * normalDist2;
+            double x = personAv;
+            double mu = trueAv;
+            double delta = standardDeviationOfPopulation;
+
+            double normalDist = (1.0 / (delta * Math.Sqrt(2 * Math.PI))) * Math.Pow(Math.E,  /*--*/ (-1.0 / 2) * (Math.Pow(x - mu, 2) / Math.Pow(delta, 2)) /*--*/ );
 
             return normalDist;
         }
@@ -154,46 +181,28 @@ namespace driveStatsRest
 
         protected double weightedTotalOfBadThings()
         {
-            double weightX = 1;
-            double weightY = 0.6;
-            double weightZ = 0.4;
-            double badSpeedWeight = 7;
 
             double totalWeightOfBadThings = 0;
 
-            List<double> allX = getAllX();
-            List<double> allY = getAllY();
-            List<double> allZ = getAllZ();
-            List<double> allSpeed = getAllZ();
+
+            List<double> allSpeed = getAllSpeed();
             for (int i = 0; i < trips.Count; i++)
             {
-                totalWeightOfBadThings += weightX * xExceeded(allX[i]) + weightY * yExceeded(allY[i]) + weightZ * zExceeded(allZ[i]) + badSpeedWeight * speedExceeded(allSpeed[i]);
-
-
+                totalWeightOfBadThings += getWeightedTotalOfOneData(i);
             }
-
             debugMessageBox("Weighted total of bad things is " + totalWeightOfBadThings);
-
-
 
             return totalWeightOfBadThings;
         }
 
         protected double getWeightedTotalOfOneData(int pos)
         {
-            double weightX = 1;
-            double weightY = 0.6;
-            double weightZ = 0.4;
-            double badSpeedWeight = 7;
 
-            double totalWeightOfBadThings = weightX * xExceeded(getAllX()[pos]) + weightY * yExceeded(getAllY()[pos]) + weightZ * zExceeded(getAllZ()[pos]) + badSpeedWeight * speedExceeded(getAllSpeed()[pos]);
+            double totalWeightOfBadThings = weightX * xExceeded(allX[pos]) + weightY * yExceeded(allY[pos]) + weightZ * zExceeded(allZ[pos]) + badSpeedWeight * speedExceeded(getAllSpeed()[pos]);
             return totalWeightOfBadThings;
         }
 
-        double MAXX = 4.2;
-        double MAXY = 3;
-        double MAXZ = 2;
-        double MAXSPEED = 36;
+
         protected double speedExceeded(double speed)
         {
             return checkExceeded(Math.Abs(speed), MAXSPEED);
@@ -222,13 +231,7 @@ namespace driveStatsRest
                 return 1;
             }
             return 0;
-
-
-
         }
-
-
-
 
         protected List<double> getAllX()
         {
@@ -247,8 +250,6 @@ namespace driveStatsRest
             List<double> allY = new List<double>();
             for (int i = 0; i < trips.Count; i++)
             {
-
-                //allY.Add(Math.Abs(Convert.ToDouble(trips[i].maxYAcelerometer)));
                 allY.Add(Convert.ToDouble(trips[i].maxYAcelerometer));
             }
             return allY;
@@ -259,7 +260,6 @@ namespace driveStatsRest
             for (int i = 0; i < trips.Count; i++)
             {
                 //9.8 refers to gravity
-                //allZ.Add(Math.Abs(Convert.ToDouble(trips[i].maxZAcelerometer)) - 9.8);
                 allZ.Add(Convert.ToDouble(trips[i].maxZAcelerometer) - 9.8);
             }
             return allZ;
@@ -270,7 +270,7 @@ namespace driveStatsRest
             for (int i = 0; i < trips.Count; i++)
             {
                 trips[i].speed = trips[i].speed.Replace('.', ',');
-                allspeed.Add(Math.Abs(Convert.ToDouble(trips[i].speed)) - 9.8);
+                allspeed.Add(Convert.ToDouble(trips[i].speed) - 9.8);
             }
             return allspeed;
         }
@@ -299,8 +299,8 @@ namespace driveStatsRest
 
 
         /**
- * Mean of the X acceleration
- **/
+        * Mean of the X acceleration
+        **/
         protected double getMeanSpeed()
         {
             return average(getAllSpeed());
@@ -312,7 +312,7 @@ namespace driveStatsRest
         protected double getMeanX()
         {
 
-            return average(getAllX());
+            return average(allX);
         }
 
         /**
@@ -320,7 +320,7 @@ namespace driveStatsRest
  **/
         protected double getMeanY()
         {
-            return average(getAllY());
+            return average(allY);
         }
 
 
@@ -329,7 +329,7 @@ namespace driveStatsRest
 **/
         protected double getMeanZ()
         {
-            return average(getAllZ());
+            return average(allZ);
         }
         protected double average(List<double> li)
         {
@@ -352,15 +352,15 @@ namespace driveStatsRest
 
         protected double getStandardDeviationX()
         {
-            return getStandardDeviation(getAllX());
+            return getStandardDeviation(allX);
         }
         protected double getStandardDeviationY()
         {
-            return getStandardDeviation(getAllY());
+            return getStandardDeviation(allY);
         }
         protected double getStandardDeviationZ()
         {
-            return getStandardDeviation(getAllZ());
+            return getStandardDeviation(allZ);
         }
         protected double getStandardDeviationScorePerSecond()
         {

@@ -4,25 +4,34 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="drivestatsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="drivestatsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="drivestatsModelStoreContainer">
+          <EntitySet Name="tripData" EntityType="drivestatsModel.Store.tripData" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="trips" EntityType="drivestatsModel.Store.trips" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="users" EntityType="drivestatsModel.Store.users" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK__trips__userID__38996AB5" Association="drivestatsModel.Store.FK__trips__userID__38996AB5">
+            <End Role="users" EntitySet="users" />
+            <End Role="trips" EntitySet="trips" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="tripData">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="tripID" Type="int" />
           <Property Name="latitude" Type="varchar" MaxLength="20" />
           <Property Name="longitude" Type="varchar" MaxLength="20" />
-          <Property Name="speed" Type="varchar" MaxLength="4" />
-          <Property Name="maxXAcelerometer" Type="varchar" MaxLength="8" />
-          <Property Name="maxYAcelerometer" Type="varchar" MaxLength="8" />
-          <Property Name="maxZAcelerometer" Type="varchar" MaxLength="8" />
+          <Property Name="speed" Type="float" />
+          <Property Name="maxXAcelerometer" Type="float" />
+          <Property Name="maxYAcelerometer" Type="float" />
+          <Property Name="maxZAcelerometer" Type="float" />
         </EntityType>
         <EntityType Name="trips">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="userID" Type="int" />
           <Property Name="tripDate" Type="varchar" MaxLength="40" />
           <Property Name="startTime" Type="varchar" MaxLength="6" />
@@ -32,14 +41,14 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="email" Type="varchar" MaxLength="60" Nullable="false" />
-          <Property Name="joinDate" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="varchar" Nullable="false" MaxLength="60" />
+          <Property Name="joinDate" Type="varchar" Nullable="false" MaxLength="20" />
           <Property Name="averageScore" Type="float" />
         </EntityType>
-        <Association Name="FK__trips__userID__5EBF139D">
-          <End Role="users" Type="Self.users" Multiplicity="0..1" />
-          <End Role="trips" Type="Self.trips" Multiplicity="*" />
+        <Association Name="FK__trips__userID__38996AB5">
+          <End Role="users" Type="drivestatsModel.Store.users" Multiplicity="0..1" />
+          <End Role="trips" Type="drivestatsModel.Store.trips" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="users">
               <PropertyRef Name="ID" />
@@ -49,15 +58,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="drivestatsModelStoreContainer">
-          <EntitySet Name="tripData" EntityType="Self.tripData" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="trips" EntityType="Self.trips" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__trips__userID__5EBF139D" Association="Self.FK__trips__userID__5EBF139D">
-            <End Role="users" EntitySet="users" />
-            <End Role="trips" EntitySet="trips" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
