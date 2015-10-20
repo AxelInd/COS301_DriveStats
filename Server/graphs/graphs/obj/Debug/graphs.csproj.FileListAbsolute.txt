@@ -1,0 +1,15 @@
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\bin\Debug\graphs.exe.config
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\bin\Debug\graphs.exe
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\bin\Debug\graphs.pdb
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\bin\Debug\EntityFramework.dll
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\bin\Debug\EntityFramework.SqlServer.dll
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\bin\Debug\EntityFramework.xml
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\bin\Debug\EntityFramework.SqlServer.xml
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\obj\Debug\graphs.csprojResolveAssemblyReference.cache
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\obj\Debug\graphs.avgScore.resources
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\obj\Debug\graphs.Form1.resources
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\obj\Debug\graphs.Properties.Resources.resources
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\obj\Debug\graphs.csproj.GenerateResource.Cache
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\obj\Debug\graphs.exe
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\obj\Debug\graphs.pdb
+c:\users\zander\documents\visual studio 2012\Projects\graphs\graphs\obj\Debug\graphs.tripDetails.resources

@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "driveStatsRest", "driveStatsRest\driveStatsRest.csproj", "{98E58D22-DB74-4D3E-8975-1AEF8BB12B67}"
 EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "driveStatsRest.Azure", "driveStatsRest.Azure\driveStatsRest.Azure.ccproj", "{CEAB5E9B-09EE-41A9-810A-DF06A3FF2812}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{98E58D22-DB74-4D3E-8975-1AEF8BB12B67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98E58D22-DB74-4D3E-8975-1AEF8BB12B67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98E58D22-DB74-4D3E-8975-1AEF8BB12B67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEAB5E9B-09EE-41A9-810A-DF06A3FF2812}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEAB5E9B-09EE-41A9-810A-DF06A3FF2812}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEAB5E9B-09EE-41A9-810A-DF06A3FF2812}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEAB5E9B-09EE-41A9-810A-DF06A3FF2812}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
