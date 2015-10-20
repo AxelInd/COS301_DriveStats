@@ -21,10 +21,10 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            var client = new RestClient("http://drivestatsrest.cloudapp.net//RestService.svc/");
+            var client = new RestClient("http://localhost:59991/RestService.svc/");
             //login test
             var reqL = new RestRequest("login/{id}", Method.GET);
-            reqL.AddUrlSegment("id", "Zander.boshoff@gmail.com");
+            reqL.AddUrlSegment("id", "Zander.boshoff");
             Console.WriteLine("contacting server");
             IRestResponse res = client.Execute(reqL);
             Console.WriteLine("Login Successful");

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<serviceModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="driveStatsRest.Azure" generation="1" functional="0" release="0" Id="553999a2-5838-4b6d-84c9-a86c17302197" dslVersion="1.2.0.0" xmlns="http://schemas.microsoft.com/dsltools/RDSM">
+<serviceModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="driveStatsRest.Azure" generation="1" functional="0" release="0" Id="e8c11421-0202-4c9e-9b11-f77037bd65f1" dslVersion="1.2.0.0" xmlns="http://schemas.microsoft.com/dsltools/RDSM">
   <groups>
     <group name="driveStatsRest.AzureGroup" generation="1" functional="0" release="0">
       <componentports>
@@ -70,9 +70,9 @@
     </group>
   </groups>
   <implements>
-    <implementation Id="da8508d2-1107-4c9a-8523-694de437fc0e" ref="Microsoft.RedDog.Contract\ServiceContract\driveStatsRest.AzureContract@ServiceDefinition">
+    <implementation Id="ea4f6c3a-c7ed-432b-b594-f4b772c209ba" ref="Microsoft.RedDog.Contract\ServiceContract\driveStatsRest.AzureContract@ServiceDefinition">
       <interfacereferences>
-        <interfaceReference Id="c2ff2684-eb46-434b-9d21-4044767e6b41" ref="Microsoft.RedDog.Contract\Interface\driveStatsRest:Endpoint1@ServiceDefinition">
+        <interfaceReference Id="142625eb-d4e5-4c01-b227-09c73f9685ba" ref="Microsoft.RedDog.Contract\Interface\driveStatsRest:Endpoint1@ServiceDefinition">
           <inPort>
             <inPortMoniker name="/driveStatsRest.Azure/driveStatsRest.AzureGroup/driveStatsRest:Endpoint1" />
           </inPort>
