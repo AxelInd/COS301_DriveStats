@@ -21,7 +21,7 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            var client = new RestClient("http://localhost:59991/RestService.svc/");
+            var client = new RestClient("http://localhost:1925/RestService.svc/");
             //login test
             var reqL = new RestRequest("login/{id}", Method.GET);
             reqL.AddUrlSegment("id", "Zander.boshoff");
