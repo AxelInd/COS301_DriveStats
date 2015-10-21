@@ -55,7 +55,7 @@ namespace scoreTester
             
 
             string means = "Means\n" + "Mean x : " + getMeanX() + "\n" + "Mean Y : " + getMeanY() + "\n" + "Mean Z : " + getMeanZ();
-            debugMessageBox(means);
+            //debugMessageBox(means);
 
             //string listSize = "Size of list x is " + allX.Count + "\n";
             //listSize += "Size of list y is " + allY.Count + "\n";
