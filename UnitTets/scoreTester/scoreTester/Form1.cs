@@ -19,8 +19,8 @@ namespace scoreTester
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //runFromFile("dbData.txt");
-            runWithTestData();
+            runFromFile("bad.txt");
+            //runWithTestData();
         }
         /**
          * UNIT TESTS

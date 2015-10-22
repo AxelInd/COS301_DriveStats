@@ -55,6 +55,7 @@ namespace scoreTester
             
 
             string means = "Means\n" + "Mean x : " + getMeanX() + "\n" + "Mean Y : " + getMeanY() + "\n" + "Mean Z : " + getMeanZ();
+            
             //debugMessageBox(means);
 
             //string listSize = "Size of list x is " + allX.Count + "\n";
@@ -69,7 +70,35 @@ namespace scoreTester
             //debugMessageBox("Standard deviations are " + stddev);
             //debugMessageBox("List size is " + listSize);
 
+            debugMessageBox("Absolute x average is " + getAbsolutAverageX() + "\n" + "Absolute y average is " + getAbsolutAverageY() + "\n" + "Absolute z average is " + getAbsolutAverageZ());
 
+            debugMessageBox("First trip is " + allX[0] + "  ;  " + allY[0] + " ; " + allZ[0] + " ; ");
+
+
+        }
+
+        protected double getAbsolutAverage(List<double> li)
+        {
+            double total = 0;
+
+            for (int i = 0; i < li.Count; i++)
+            {
+                total += Math.Abs(li[i]);
+            }
+
+            return total / li.Count;
+        }
+        protected double getAbsolutAverageX()
+        {
+            return getAbsolutAverage(allX);
+        }
+        protected double getAbsolutAverageY()
+        {
+            return getAbsolutAverage(allY);
+        }
+        protected double getAbsolutAverageZ()
+        {
+            return getAbsolutAverage(allZ);
         }
 
 
@@ -117,8 +146,8 @@ namespace scoreTester
             debugMessageBox("The number of bad things per second " + badThingsPerSecond.ToString());
             //average bad things of database as a whole
             // @TODO
-            double TRUEAVERAGENUMBEROFBADTHINGSPERSECOND = 5;
-            double STANDARDDEVIATIONOFPOPULATION = TRUEAVERAGENUMBEROFBADTHINGSPERSECOND;
+            double TRUEAVERAGENUMBEROFBADTHINGSPERSECOND = 1.4;
+            double STANDARDDEVIATIONOFPOPULATION = 1;
             
 
             double prob = normalDistribution(badThingsPerSecond, TRUEAVERAGENUMBEROFBADTHINGSPERSECOND, STANDARDDEVIATIONOFPOPULATION);
@@ -130,14 +159,9 @@ namespace scoreTester
 
             //this is the distance from the midpoint
             double area;
-            if (badThingsPerSecond < TRUEAVERAGENUMBEROFBADTHINGSPERSECOND)
-            {
-                area = 0.5 - getAreaUnderNormalCurve(0, zScore);
-            }
-            else
-            {
-                area = 0.5 + getAreaUnderNormalCurve(0, Math.Abs(zScore));
-            }
+
+                area = 0.5 - Math.Abs(getAreaUnderNormalCurve(0, zScore));
+            
 
             return area * 10;
         }
@@ -270,7 +294,7 @@ namespace scoreTester
             for (int i = 0; i < trips.Count; i++)
             {
                 trips[i].speed = trips[i].speed.Replace('.', ',');
-                allspeed.Add(Convert.ToDouble(trips[i].speed) - 9.8);
+                allspeed.Add(Convert.ToDouble(trips[i].speed));
             }
             return allspeed;
         }

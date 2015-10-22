@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="drivestatsModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="drivestatsEntities" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="algorithmDatas" EntityType="drivestatsModel.algorithmData" />
+    <EntitySet Name="tripDatas" EntityType="drivestatsModel.tripData" />
+    <EntitySet Name="trips" EntityType="drivestatsModel.trip" />
+    <EntitySet Name="users" EntityType="drivestatsModel.user" />
+    <AssociationSet Name="FK__trips__userID__38996AB5" Association="drivestatsModel.FK__trips__userID__38996AB5">
+      <End Role="users" EntitySet="users" />
+      <End Role="trips" EntitySet="trips" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="algorithmData">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="Maxx" Type="String" MaxLength="8" Unicode="false" FixedLength="false" />
+    <Property Name="maxy" Type="String" MaxLength="8" Unicode="false" FixedLength="false" />
+    <Property Name="maxz" Type="String" MaxLength="8" Unicode="false" FixedLength="false" />
+    <Property Name="weightx" Type="String" MaxLength="8" Unicode="false" FixedLength="false" />
+    <Property Name="weightSpeed" Type="String" MaxLength="8" Unicode="false" FixedLength="false" />
+    <Property Name="maxSpeed" Type="String" MaxLength="8" Unicode="false" FixedLength="false" />
+    <Property Name="weighty" Type="String" MaxLength="8" Unicode="false" FixedLength="false" />
+    <Property Name="weightz" Type="String" MaxLength="8" Unicode="false" FixedLength="false" />
+    <Property Name="stdDev" Type="String" MaxLength="8" Unicode="false" FixedLength="false" />
+    <Property Name="average" Type="String" MaxLength="8" Unicode="false" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="tripData">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="tripID" Type="Int32" />
+    <Property Name="latitude" Type="String" MaxLength="24" Unicode="false" FixedLength="false" />
+    <Property Name="longitude" Type="String" MaxLength="24" Unicode="false" FixedLength="false" />
+    <Property Name="speed" Type="String" MaxLength="8" Unicode="false" FixedLength="false" />
+    <Property Name="maxXAcelerometer" Type="String" MaxLength="14" Unicode="false" FixedLength="false" />
+    <Property Name="maxYAcelerometer" Type="String" MaxLength="14" Unicode="false" FixedLength="false" />
+    <Property Name="maxZAcelerometer" Type="String" MaxLength="14" Unicode="false" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="trip">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="userID" Type="Int32" />
+    <Property Name="tripDate" Type="String" MaxLength="40" Unicode="false" FixedLength="false" />
+    <Property Name="startTime" Type="String" MaxLength="5" Unicode="false" FixedLength="false" />
+    <Property Name="score" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="user" Relationship="drivestatsModel.FK__trips__userID__38996AB5" FromRole="trips" ToRole="users" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="email" Type="String" Nullable="false" MaxLength="60" Unicode="false" FixedLength="false" />
+    <Property Name="joinDate" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+    <Property Name="averageScore" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="trips" Relationship="drivestatsModel.FK__trips__userID__38996AB5" FromRole="users" ToRole="trips" />
+  </EntityType>
+  <Association Name="FK__trips__userID__38996AB5">
+    <End Role="users" Type="drivestatsModel.user" Multiplicity="0..1" />
+    <End Role="trips" Type="drivestatsModel.trip" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="trips">
+        <PropertyRef Name="userID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

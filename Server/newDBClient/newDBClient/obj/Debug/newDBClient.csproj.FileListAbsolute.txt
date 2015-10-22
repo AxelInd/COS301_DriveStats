@@ -1,0 +1,12 @@
+c:\users\zander\documents\visual studio 2012\Projects\newDBClient\newDBClient\bin\Debug\newDBClient.exe.config
+c:\users\zander\documents\visual studio 2012\Projects\newDBClient\newDBClient\bin\Debug\newDBClient.exe
+c:\users\zander\documents\visual studio 2012\Projects\newDBClient\newDBClient\bin\Debug\newDBClient.pdb
+c:\users\zander\documents\visual studio 2012\Projects\newDBClient\newDBClient\bin\Debug\EntityFramework.dll
+c:\users\zander\documents\visual studio 2012\Projects\newDBClient\newDBClient\bin\Debug\EntityFramework.xml
+c:\users\zander\documents\visual studio 2012\Projects\newDBClient\newDBClient\obj\Debug\newDBClient.csprojResolveAssemblyReference.cache
+c:\users\zander\documents\visual studio 2012\Projects\newDBClient\newDBClient\obj\Debug\newDBClient.Form1.resources
+c:\users\zander\documents\visual studio 2012\Projects\newDBClient\newDBClient\obj\Debug\newDBClient.Properties.Resources.resources
+c:\users\zander\documents\visual studio 2012\Projects\newDBClient\newDBClient\obj\Debug\newDBClient.csproj.GenerateResource.Cache
+c:\users\zander\documents\visual studio 2012\Projects\newDBClient\newDBClient\obj\Debug\newDBClient.exe
+c:\users\zander\documents\visual studio 2012\Projects\newDBClient\newDBClient\obj\Debug\newDBClient.pdb
+C:\Users\Zander\Documents\Visual Studio 2012\Projects\newDBClient\newDBClient\obj\Debug\newDBClient.algorithm.resources
